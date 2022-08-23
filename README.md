@@ -10,6 +10,10 @@ A dashboard using bokeh sever, developed to display data from HMC surveys in an 
 
 
 ## Usage
+* In the top folder execute:
+```
+bokeh serve --show dashboard
+```
 
 
 * Navigate to `http://localhost:8000/` in your browser.
