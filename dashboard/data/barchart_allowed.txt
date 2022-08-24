@@ -1,0 +1,16 @@
+careerLevel
+centerAffiliation
+dataFormats
+dataGenMethodSpec
+dataGenMethod
+Hub
+researchAreaCombined
+yearsInResearch
+software
+servNeeds_sub
+servFormat
+researchArea
+pubMotivation
+pubObstaclesA
+docStructured
+docStandards
