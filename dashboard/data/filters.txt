@@ -1,7 +1,9 @@
 All
-AST
-Earth & Environment
-Energy
-Health
-Information
-Matter
+Chemistry
+Earth Science
+Engineering Science
+Life Science
+Mathematics
+Other
+Physics
+Psychology

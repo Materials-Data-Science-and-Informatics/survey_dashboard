@@ -1,0 +1,78 @@
+[project]
+name = "survey-dashboard"
+description = "A Dashboard displaying survey data interatively."
+authors = [{name = "Jens Broeder", email = "j.broeder@fz-juelich.de"}]
+readme = "README.md"
+license = {file = "LICENSE.txt"}
+classifiers = [
+        "Development Status :: 3 - Alpha",
+        "Intended Audience :: Information Technology",
+        "Intended Audience :: Science/Research",
+        "License :: OSI Approved :: MIT License",
+        "Natural Language :: English",
+        "Operating System :: POSIX :: Linux",
+        "Operating System :: MacOS :: MacOS X",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Topic :: Database :: Front-Ends",
+        "Topic :: Education",
+        "Topic :: Scientific/Engineering",
+        "Topic :: Scientific/Engineering :: Information Analysis",
+        "Topic :: Scientific/Engineering :: Visualization",
+
+]
+keywords = ["dashboard", "data visualization", "survey data", "categorical data", "interactive visualization", "bokeh", "panel"]
+
+
+[tool.poetry]
+name = "survey-dashboard"
+version = "0.1.0"
+description = "A Dashboard displaying survey data interatively."
+authors = ["j.broeder <j.broeder@fz-juelich.de>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pandas = "^1.4.1"
+bokeh = "^2.4.3"
+
+[tool.poetry.dev-dependencies]
+pre-commit = "^2.17.0"
+pytest = "^7.0.1"
+pytest-cov = "^3.0.0"
+pdoc = "^10.0.3"
+yapf = ""
+mypi = ""
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+# pytest.ini replacement (pytest >= 6.0)
+[tool.pytest.ini_options]
+addopts = "--cov-report=term-missing:skip-covered"
+filterwarnings = []
+
+[tool.yapf]
+based_on_style = "google"
+column_limit = 120
+dedent_closing_brackets = true
+coalesce_brackets = true
+align_closing_bracket_with_visual_indent = true
+split_arguments_when_comma_terminated = true
+indent_dictionary_value = false
+
+[tool.mypy]
+show_error_codes = true
+check_untyped_defs = true
+scripts_are_modules = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+no_warn_no_return = true
+show_traceback = true
+plugins = []
+
