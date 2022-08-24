@@ -26,7 +26,8 @@ from .analysis import calculate_crosstab, prepare_data_research_field, filter_da
 pwd = os.getcwd() # todo better use the absolute location of this file...
 datafilepath= join(pwd, 'dashboard/data/20211130_HMCCommSurvey_clean.csv')
 
-desc = Div(text=open(join(dirname(__file__), "description.html")).read(), sizing_mode="stretch_width")
+header = Div(text=open(join(dirname(__file__), "hmc_layout/header_.html")).read(), sizing_mode="stretch_width")
+footer = Div(text=open(join(dirname(__file__), "hmc_layout/footer_.html")).read(), sizing_mode="stretch_width")
 
 pwd = os.getcwd()
 questions = open(join(pwd, 'dashboard/data/barchart_allowed.txt')).read().split('\n')
@@ -218,8 +219,8 @@ inputs_corr = column(*controls_corr, width=200)
 
 
 row1 = row(inputs, fig, fig_corr, inputs_corr)
-first = column(desc, row1, sizing_mode="scale_both")
-layout = column(first, row(button_bar), sizing_mode="scale_both")
+first = column(header, row1, sizing_mode="scale_both")
+layout = column(first, row(button_bar), footer, sizing_mode="scale_both")
 
 curdoc().add_root(layout)
 curdoc().title = "HMC Survey Dashboard"
