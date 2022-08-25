@@ -15,11 +15,9 @@ A dashboard using bokeh sever, developed to display data from HMC surveys in an 
 bokeh serve --show dashboard
 ```
 
-
 * Navigate to `http://localhost:8000/` in your browser.
 
-
-## Development
+## Deployment
 
 To embed the dashboard into any website, first you have to host a bokeh server with this application somewhere and then you can embed it with bokehs `sever_document` function [see](https://docs.bokeh.org/en/latest/docs/user_guide/embed.html#app-documents)
 
