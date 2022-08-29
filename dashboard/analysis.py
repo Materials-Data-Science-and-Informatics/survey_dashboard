@@ -1,4 +1,18 @@
-
+# -*- coding: utf-8 -*-
+###############################################################################
+# Copyright (c), Forschungszentrum Jülich GmbH, IAS-9, Germany.               #
+#                All rights reserved.                                         #
+# This file is part of the survey_dashboard package.                          #
+#                                                                             #
+# The code is hosted on GitHub at                                             #
+# https://github.com/Materials-Data-Science-and-Informatics/survey_dashboard  #
+# For further information on the license, see the LICENSE file                #
+###############################################################################
+"""
+This module contains some function to process survey data in certain way and 
+prepare the data for visualization
+"""
+import math
 import pandas as pd
 from typing import List, Tuple
 
@@ -88,8 +102,8 @@ def prepare_data_research_field(df: pd.DataFrame, key:str, key2:str='researchAre
     all_areas = df[key].value_counts()
     all_areas = all_areas.sort_index()
     research_areas = list(df[key2].value_counts().keys())
-    data = {'All': all_areas.values, key:list(all_areas.keys()), 'x_value': list(all_areas.keys())}
-    y_keys = ['All'] + research_areas
+    data = {'Cum. Sum': all_areas.values, key:list(all_areas.keys()), 'x_value': list(all_areas.keys())}
+    y_keys = ['Cum. Sum'] + research_areas
     for area in research_areas:
         area_counts = df[df[key2] == area][key].value_counts()
         area_counts = area_counts.sort_index()
@@ -117,3 +131,7 @@ def prepare_data_research_field(df: pd.DataFrame, key:str):
     
     return data
 '''
+
+def percentage_to_area(data, scale_m=1.0):
+    radius_data = [2*math.sqrt(val*scale_m/math.pi) for val in data]
+    return radius_data

@@ -1,11 +1,18 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+###############################################################################
+# Copyright (c), Forschungszentrum Jülich GmbH, IAS-9, Germany.               #
+#                All rights reserved.                                         #
+# This file is part of the survey_dashboard package.                          #
+#                                                                             #
+# The code is hosted on GitHub at                                             #
+# https://github.com/Materials-Data-Science-and-Informatics/survey_dashboard  #
+# For further information on the license, see the LICENSE file                #
+###############################################################################
 """
-Created on Tue Jan 25 10:38:52 2022
-
+This file contains color palets which are HMC specific
 @author: s.gerlich
 """
-# import packages
+
 import matplotlib.pyplot as plt
 import cmasher as cmr
 colors = cmr.take_cmap_colors(HMCRamp, None, cmap_range=(0.2, 0.8), return_fmt='hex')
