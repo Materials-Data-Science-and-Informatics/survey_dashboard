@@ -60,8 +60,17 @@ def filter_dataframe(df: pd.DataFrame, include: list=None, exclude: List[Tuple[s
             df = df.loc[~df[key].isna()]
     return df
 
+def get_all_values(df: pd.DataFrame, key: str) -> dict:
+    """
+    Count all values of a given key in a data frame and 
+    return these values in a dictionary sorted.
+    """
+    all_areas = df[key].value_counts()
+    all_areas = all_areas.sort_index()
+    data = {'All': all_areas.values, key:list(all_areas.keys())}
+    return data
 
-def prepare_data_research_field(df: pd.DataFrame, key:str, key2:str='researchArea'):# -> dict, list:
+def prepare_data_research_field(df: pd.DataFrame, key:str, key2:str='researchArea', sort_as=None):# -> dict, list:
     """Creates a dict dictionary with data in the form needed by the plotting functions
     
     We prepare several outputs, i.e y_keys because they can have different length and one should be able to create a 
@@ -73,7 +82,7 @@ def prepare_data_research_field(df: pd.DataFrame, key:str, key2:str='researchAre
 
     example:
     prepare_data_research_field(df, key=careerLevel)
-        {'All': array([  0,   0, 130, 128, 148, 272,   0]),
+        {'Cum. Sum': array([  0,   0, 130, 128, 148, 272,   0]),
          'careerLevel': ['Director (of the institute)',
           'Other',
           'PhD student',
@@ -132,6 +141,12 @@ def prepare_data_research_field(df: pd.DataFrame, key:str):
     return data
 '''
 
-def percentage_to_area(data, scale_m=1.0):
+def percentage_to_area(data: List[float], scale_m: float=1.0) -> List[float]:
+    """
+    Convert numbers in a given array to a radius, 
+    
+    where a circle of with that radius is proportionate to the circle area 
+    Useful for circle plots where the area should be proportional to the value
+    """
     radius_data = [2*math.sqrt(val*scale_m/math.pi) for val in data]
     return radius_data

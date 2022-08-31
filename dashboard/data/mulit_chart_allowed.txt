@@ -1,0 +1,14 @@
+dataGenMethod_
+lsfIdent_
+dataFormats_ 
+pubMethod_ 
+pubMotivation_ 
+pubObstacles_ 
+pubMetadata_ 
+pubStorage_ 
+docMethod_ 
+docMetadata_ 
+docMotivation_ 
+docStandards_ 
+docObstacles_ 
+servNeeds_sub_ 

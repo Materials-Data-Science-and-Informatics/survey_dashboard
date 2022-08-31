@@ -135,13 +135,15 @@ def bokeh_barchart(df, x='x_value', y=['y_value'], factors=None, figure=None, da
     position = [start + i*step for i in range(len(y))]        
     tooltips=[(f'{x}', f'@{x}')]
     bars = []
+
     #for i, y in enumerate(y_keys):
     #    bar = fig.vbar(x=dodge(x, position[i], range=fig.x_range), top=y, source=source,
     #       width=width, color=fill_color[i], legend_label=y, **kwargs)
     for i, y in enumerate(y_keys):
         if orientation=='vertical':
             bar = fig.vbar(x=dodge(x, position[i], range=fig.x_range), top=y, source=source,
-                width=width, color=fill_color[i], legend_label=y, selection_fill_color='black', selection_fill_alpha=0.8,
+                width=width, color=fill_color[i], legend_label=y, selection_fill_color='black', 
+                selection_fill_alpha=0.8,
                 nonselection_fill_alpha=0.2,
                 nonselection_fill_color="blue",
                 selection_line_color="black", fill_alpha=0.8,
@@ -306,7 +308,7 @@ def bokeh_corr_plot(source, x='x_values', y='y_values',  figure=None, title='', 
 
     fig = bokeh_figure(height=600, width=900,
                title=title,
-               toolbar_location='above',
+               toolbar_location='right',
                tools='hover,wheel_zoom,box_zoom,undo,reset,save',
                   y_range=y_range, x_range=x_range, tooltips=tooltips)
 
