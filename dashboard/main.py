@@ -94,7 +94,7 @@ question_select = pn.widgets.Select(name="Select a Question from the survey", va
 
 multi_choice = pn.widgets.MultiChoice(name="Filter by research field", value=["All"], options=FILTER_OPTIONS)#, 
     #description="Select which data subset to be displayed.")
-multi_choice_method = pn.widgets.MultiChoice(name="Filter by data generation method", value=["All"], options=FILTER_OPTIONS_METHOD)
+multi_choice_method = pn.widgets.MultiChoice(name="Filter by data generation method", value=[], options=FILTER_OPTIONS_METHOD)
 
 
 # D: better than a Select would be to use the HMC template for this...
@@ -136,11 +136,19 @@ def select_data():#question_select=question_select, multi_choice=multi_choice):
 
     data_filters = multi_choice.value
     data_filters_method = multi_choice_method.value
-    # need something like [index: index_name, full question: '', title; '', 'key order' : [], 'skipped keys':[]]
+    method_include = []
+    method_exclude = []
+    methods_dict = HCS_MCsubquestions['dataGenMethod_']
+    for method in data_filters_method:
+        for key, val in methods_dict.items():
+            if val == method:
+                method_include.append(key)
+                # Filter out the one who provided False
+                method_exclude.append((key, [False]))
     
     # for now this is greedy, if to slow think of another way
     # we want to display anything in terms of researchArea, todo better was to d filter, generalize this
-    df = filter_dataframe(survey_data, include=[q_index, "researchArea"], exclude=[(q_index, to_exclude)])
+    df = filter_dataframe(survey_data, include=[q_index, "researchArea"]+ method_include, exclude=[(q_index, to_exclude)]+method_exclude)
     #df = filter_dataframe(df, include=[q_index, "researchArea"],  exclude=[(q_index, to_exclude)])
     data_all = get_all_values(df, q_index)
 
@@ -187,10 +195,27 @@ def select_data_corr():#question_select2=question_select2, question_select3=ques
 
     data_filters = multi_choice.value
     data_filters_method = multi_choice_method.value
+    
+    method_include = []
+    method_exclude = []
+    methods_dict = HCS_MCsubquestions['dataGenMethod_']
+    for method in data_filters_method:
+        for key, val in methods_dict.items():
+            if val == method:
+                method_include.append(key)
+                # Filter out the one who provided False
+                method_exclude.append((key, [False]))
+
+    exclude_area = []
+    for field in re:
+        if field not in data_filters:
+            pass
+            #exclude_area.append(("researchArea", [field]))
+    #exclude_areas = ["researchArea", exclude_area]
 
     # If this is slow to calculate each time, it might make sense to calculate all of these 
     # at start up. i.e n^2 tables
-    df = filter_dataframe(survey_data, include=[q1_key, q2_key, "researchArea"], exclude=[])
+    df = filter_dataframe(survey_data, include=[q1_key, q2_key, "researchArea"] + method_include, exclude=[]+method_exclude+exclude_area)
 
     cross_tab = calculate_crosstab(df, q1_key, q2_key)
     # marker size is radius, we want the Area to be proportional to the value
@@ -327,6 +352,6 @@ row1 = pn.Column(desc, md_text_global_filter, pn.Row(inputs), sizing_mode="scale
 row2 =  pn.Row(tabs)
 row3 = pn.Column(inputs_corr, pn.Row(fig_corr, leg_corr))
 row4 = pn.Row(button_bar)
-layout = pn.Column(row1, md_text_barchart, row2, md_text_corrchart, row3, md_text_button, row4, sizing_mode="scale_both")
+layout = pn.Column(row1, md_text_barchart, row2, md_text_corrchart, row3, md_text_button, row4, sizing_mode="scale_both", title='HMC Survey Dashboard')
 
-layout.servable()
+layout.servable(title='HMC Survey Dashboard')
