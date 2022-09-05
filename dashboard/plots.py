@@ -9,7 +9,7 @@
 # For further information on the license, see the LICENSE file                #
 ###############################################################################
 """
-This module contains functions to visualize data in an interactive way with bokeh
+This module contains functions to visualize data in an interactive way with mainly bokeh
 """
 import numpy as np
 from bokeh.models import ColumnDataSource
@@ -77,7 +77,7 @@ def preprocess_bokeh_input(func):
 def bokeh_barchart(df, x='x_value', y=['y_value'], factors=None, figure=None, data_visible=[True], title='', 
                     width=0.1,  xlabel='', ylabel='Number of answers', palette=Category20c, 
                     fill_color=None, legend_labels=None, description='For more information about the HMC survey click here.', 
-                    redirect='https://helmholtz-metadaten.de/en/pages/structure-governance',  orientation='vertical', **kwargs):
+                    redirect='https://helmholtz-metadaten.de/en/pages/structure-governance',  orientation='vertical', x_range=None, **kwargs):
     """Create an interactive bar chart with bokeh
 
     :param df: [description]
@@ -119,7 +119,9 @@ def bokeh_barchart(df, x='x_value', y=['y_value'], factors=None, figure=None, da
     #print(df.column_names)
     help_t = HelpTool(description=description, redirect=redirect)
     tools = 'wheel_zoom,box_zoom,undo,reset,save'
-    fig = bokeh_figure(x_range=source.data[x], title=title, #y_range=(0, 280), 
+    #if x_range is None:
+    #    x_range = source.data[x]
+    fig = bokeh_figure(x_range=x_range, title=title, #y_range=(0, 280), 
            height=550, width=1200, toolbar_location='above', tools=tools)
 
     fig.add_tools(help_t)
@@ -174,7 +176,7 @@ def bokeh_barchart(df, x='x_value', y=['y_value'], factors=None, figure=None, da
     fig.xaxis.major_label_orientation = 1
     fig.yaxis.axis_label = ylabel
     fig.xaxis.axis_label = xlabel
-    fig.title.text_font_size='25px'
+    fig.title.text_font_size='23px'
     fig.yaxis.axis_label_text_font_size = '22px'
     fig.xaxis.axis_label_text_font_size = '22px'
     fig.xaxis.major_label_text_font_size = '18px'

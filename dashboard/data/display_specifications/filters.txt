@@ -5,6 +5,5 @@ Earth Science
 Engineering Science
 Life Science
 Mathematics
-Other
 Physics
 Psychology

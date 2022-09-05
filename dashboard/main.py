@@ -35,9 +35,9 @@ from .plots import bokeh_barchart, bokeh_piechart, add_legend_at, bokeh_corr_plo
 from .plots import create_legend_corr, generate_wordcloud
 from .analysis import calculate_crosstab, prepare_data_research_field, filter_dataframe
 from .analysis import percentage_to_area, get_all_values
-from .data.helpers.hcs_clean_dictionaries import HCSquestions, HCS_orderedCats, HCS_MCsubquestions
-from .data.helpers.hcs_clean_dictionaries import HCS_colnamesDict, abbrevCenterAffilDict, HCS_MCList
-
+from .data.display_specifications.hcs_clean_dictionaries import HCSquestions, HCS_orderedCats, HCS_MCsubquestions
+from .data.display_specifications.hcs_clean_dictionaries import HCS_colnamesDict, abbrevCenterAffilDict, HCS_MCList
+from .data.display_specifications.hcs_clean_dictionaries import HCS_dtypesWOmc
 
 HCS_COLNAMES_REVERT_DICT = {val:key for key, val in HCS_colnamesDict.items()}
 HCSquestions_revert = {}
@@ -55,14 +55,17 @@ def construct_tabs(tab_list):
     return pn.Tabs(*tab_list, dynamic=True)
 
 pwd = os.getcwd() # todo better use the absolute location of this file...
-datafilepath= join(pwd, 'dashboard/data/20211130_HMCCommSurvey_clean.csv')
+datafilepath= join(pwd, 'dashboard/data/hmc_survey_2021_data_cleaned.csv')
+if not os.path.exists(datafilepath):
+    from .data.download_data import download_data
+    download_data()
 desc = Div(text=open(join(dirname(__file__), "description.html")).read(), sizing_mode="stretch_width")
 pwd = os.getcwd()
-questions_keys = open(join(pwd, 'dashboard/data/barchart_allowed.txt')).read().split('\n')
+questions_keys = open(join(pwd, 'dashboard/data/display_specifications/barchart_allowed.txt')).read().split('\n')
 questions = [map_qkey_to_question(key) for key in questions_keys]
 #QUESTION_MAP = {question : i for i, question in enumerate(questions)}
-FILTER_OPTIONS = open(join(pwd, 'dashboard/data/filters.txt')).read().split('\n')
-FILTER_OPTIONS_METHOD = open(join(pwd, 'dashboard/data/filters_methods.txt')).read().split('\n')
+FILTER_OPTIONS = open(join(pwd, 'dashboard/data/display_specifications/filters.txt')).read().split('\n')
+FILTER_OPTIONS_METHOD = open(join(pwd, 'dashboard/data/display_specifications/filters_methods.txt')).read().split('\n')
 
 # Data displayed on startup:
 START_DATA_BAR = map_qkey_to_question("careerLevel")
@@ -82,6 +85,10 @@ ra_colors = {field: re_c[i] for i, field in enumerate(re)}
 
 # Read data
 survey_data = pd.read_csv(datafilepath)
+print(survey_data.columns)
+# Rename columns to something more human Readable:
+survey_data.rename(columns=HCS_colnamesDict, inplace=True)
+print(survey_data.columns)
 source = ColumnDataSource(survey_data)
 source_corr = ColumnDataSource(survey_data)
 
@@ -127,13 +134,22 @@ def select_data():#question_select=question_select, multi_choice=multi_choice):
     """Select the data to display"""
 
     question = question_select.value
-    q_index = map_question_to_qkey(question)  #index = QUESTION_MAP[question]
-    question_full = question#HCSquestions['EN'][HCS_COLNAMES_REVERT_DICT[question]]
+    q_index = map_question_to_qkey(question)
+    question_full = question
     to_exclude = []
-    #TODO map the question to index/key
     #TODO there should be a certain display order, i.e mappings needed
     #TODO, also some things are excluded
 
+    # Enforced order of x and y axis
+    print(q_index)
+    xtype = HCS_dtypesWOmc[q_index]
+    if xtype == 'category':
+        x_range = HCS_orderedCats[q_index]
+        width = 0.1
+    else:
+        x_range = None
+        width = 0.6
+    
     data_filters = multi_choice.value
     data_filters_method = multi_choice_method.value
     method_include = []
@@ -148,7 +164,7 @@ def select_data():#question_select=question_select, multi_choice=multi_choice):
     
     # for now this is greedy, if to slow think of another way
     # we want to display anything in terms of researchArea, todo better was to d filter, generalize this
-    df = filter_dataframe(survey_data, include=[q_index, "researchArea"]+ method_include, exclude=[(q_index, to_exclude)]+method_exclude)
+    df = filter_dataframe(survey_data, include=list(set([q_index, "researchArea"]+ method_include)), exclude=[(q_index, to_exclude)]+method_exclude)
     #df = filter_dataframe(df, include=[q_index, "researchArea"],  exclude=[(q_index, to_exclude)])
     data_all = get_all_values(df, q_index)
 
@@ -174,7 +190,9 @@ def select_data():#question_select=question_select, multi_choice=multi_choice):
     selected = ColumnDataSource(data=data)
     ydata_spec = ColumnDataSource(data=ydata_spec)
 
-    return selected, ydata_spec, question_full
+    display_options = {'x_range' : x_range,
+                       'title': f'Q: {question_full}', 'width': width}
+    return selected, ydata_spec, display_options
 
 
 
@@ -189,8 +207,17 @@ def select_data_corr():#question_select2=question_select2, question_select3=ques
     q2_key = map_question_to_qkey(question2)
 
     # Enforced order of x and y axis 
-    x_range = HCS_orderedCats[q1_key] #list(survey_data[q1_key].value_counts().keys())
-    y_range = HCS_orderedCats[q2_key] #list(survey_data[q2_key].value_counts().keys())
+    xtype = HCS_dtypesWOmc[q1_key]
+    if xtype == 'category':
+        x_range = HCS_orderedCats[q1_key]
+    else:
+        x_range = None
+
+    ytype = HCS_dtypesWOmc[q2_key]
+    if ytype == 'category':
+        y_range = HCS_orderedCats[q2_key]
+    else:
+        y_range = None
 
 
     data_filters = multi_choice.value
@@ -215,7 +242,7 @@ def select_data_corr():#question_select2=question_select2, question_select3=ques
 
     # If this is slow to calculate each time, it might make sense to calculate all of these 
     # at start up. i.e n^2 tables
-    df = filter_dataframe(survey_data, include=[q1_key, q2_key, "researchArea"] + method_include, exclude=[]+method_exclude+exclude_area)
+    df = filter_dataframe(survey_data, include=list(set([q1_key, q2_key, "researchArea"] + method_include)), exclude=[]+method_exclude+exclude_area)
 
     cross_tab = calculate_crosstab(df, q1_key, q2_key)
     # marker size is radius, we want the Area to be proportional to the value
@@ -299,12 +326,12 @@ def update(target, event, charttype=1):
     Here we assume value change, because no others where allowed.
     """
     print(event)
-    df, ydata_spec, question = select_data()
+    df, ydata_spec, display_options = select_data()
     source = df
 
     y_keys = ydata_spec.data['y_keys']
     fill_colors = ydata_spec.data['colors']
-    fig = bokeh_barchart(source, y=y_keys, factors=y_keys, legend_labels=y_keys, fill_color=fill_colors, title=f'Q: {question}', orientation='vertical')#df.data['factors'], legend_labels='legend_labels')#, figure=figure)
+    fig = bokeh_barchart(source, y=y_keys, factors=y_keys, legend_labels=y_keys, fill_color=fill_colors, orientation='vertical', **display_options)#df.data['factors'], legend_labels='legend_labels')#, figure=figure)
     #fig2 = bokeh_barchart(source, y=y_keys, factors=y_keys, legend_labels=y_keys, fill_color=fill_colors, title=question, orientation='horizontal')#'horizontal')#df.data['factors'], legend_labels='legend_labels')#, figure=figure)
 
     #tab1 = ("Vertical Bar chart", pn.pane.Bokeh(fig))
@@ -341,15 +368,15 @@ def update_wordcloud(target, event):
 
 # Generate Start figures
 
-start_display_data, ydata_spec, question= select_data()
+start_display_data, ydata_spec, display_options= select_data()
 y_keys = ydata_spec.data['y_keys']
 fill_colors = ydata_spec.data['colors']
 fig = pn.pane.Bokeh(bokeh_barchart(start_display_data, y=y_keys, factors=y_keys, legend_labels=y_keys, 
-    fill_color=fill_colors, title=f'Q: {question}', orientation='vertical'))#factors=start_display_data.data['factors'])
+    fill_color=fill_colors, orientation='vertical', **display_options))#factors=start_display_data.data['factors'])
 fig2 = pn.pane.Bokeh(bokeh_barchart(start_display_data, y=y_keys, factors=y_keys, legend_labels=y_keys, 
-    fill_color=fill_colors, title=f'Q: {question}', orientation='vertical'))#factors=start_display_data.data['factors'])
+    fill_color=fill_colors, orientation='vertical', **display_options))#factors=start_display_data.data['factors'])
 fig3 = pn.pane.Bokeh(bokeh_barchart(start_display_data, y=y_keys, factors=y_keys, legend_labels=y_keys, 
-    fill_color=fill_colors, title=f'Q: {question}', orientation='vertical'))#factors=start_display_data.data['factors'])
+    fill_color=fill_colors, orientation='vertical', **display_options))#factors=start_display_data.data['factors'])
 
 start_corr_data, display_options, marker_scale = select_data_corr()
 fig_corr_1 = bokeh_corr_plot(start_corr_data, **display_options)

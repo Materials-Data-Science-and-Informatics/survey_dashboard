@@ -53,6 +53,7 @@ def filter_dataframe(df: pd.DataFrame, include: list=None, exclude: List[Tuple[s
         df = df[include].dropna(how = "all", subset = include).astype(as_type)
     
     for key, val in exclude:
+        print(key, val)
         df = df.loc[~df[key].isin(val)]
     
     if exclude_nan:
