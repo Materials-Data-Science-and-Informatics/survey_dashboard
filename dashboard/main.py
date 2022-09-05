@@ -30,9 +30,9 @@ from bokeh.models import CheckboxButtonGroup, CustomJS
 from bokeh.models import MultiChoice
 from bokeh.models import Paragraph
 from bokeh.client import logging
-from masci_tools.vis.bokeh_plots import bokeh_scatter, bokeh_multi_scatter
+#from masci_tools.vis.bokeh_plots import bokeh_scatter, bokeh_multi_scatter
 from .plots import bokeh_barchart, bokeh_piechart, add_legend_at, bokeh_corr_plot#, bokeh_barchart2
-from .plots import create_legend_corr
+from .plots import create_legend_corr, generate_wordcloud
 from .analysis import calculate_crosstab, prepare_data_research_field, filter_dataframe
 from .analysis import percentage_to_area, get_all_values
 from .data.helpers.hcs_clean_dictionaries import HCSquestions, HCS_orderedCats, HCS_MCsubquestions
@@ -241,6 +241,56 @@ def select_data_corr():#question_select2=question_select2, question_select3=ques
                        'tooltips' : tooltips, 'title': title}
     return selected, display_options, marker_scale
 
+def select_data_wordcloud():
+    """
+    Filter data for wordcloud from data filters
+    """
+    word_list = []
+    data_filters = multi_choice.value
+    data_filters_method = multi_choice_method.value
+
+    method_include = []
+    method_exclude = []
+    methods_dict = HCS_MCsubquestions['dataGenMethod_']
+    method_keys = list(methods_dict.keys())
+    for method in data_filters_method:
+        for key in method_keys:
+            if methods_dict[key] == method:
+                method_include.append(key)
+                # Filter out the one who provided False
+                method_exclude.append((key, [False]))
+
+    if len(data_filters_method) == 0:
+        method_include = method_keys
+        method_exclude = []
+
+
+    data_get_methods_spec = []
+    for method in method_include:
+        id_meth = method[-1]
+        data_get_methods_spec.append('dataGenMethodSpec_{}_1'.format(id_meth))
+        data_get_methods_spec.append('dataGenMethodSpec_{}_2'.format(id_meth))
+        data_get_methods_spec.append('dataGenMethodSpec_{}_3'.format(id_meth))
+    
+    df = filter_dataframe(survey_data, include=["researchArea"]+method_include+data_get_methods_spec, exclude=method_exclude, as_type ='str')
+    exclude = []
+    for field in re:
+        if field not in data_filters:
+            exclude.append(field)
+    if 'All' in data_filters:
+        exclude = []
+    for area in exclude:
+        df = df[df["researchArea"] != area]
+    
+    # prepare word list
+    word_list = []
+    for method in data_get_methods_spec:
+        #print(df[method])
+        w_list = [word for word in df[method] if str(word)!='nan']
+        word_list = word_list + w_list #ent.replace(' ', '-') # Add '-'
+        
+    
+    return word_list
 
 def update(target, event, charttype=1):
     """Update the charts
@@ -273,13 +323,20 @@ def update_corr(target, event):
 
     print(event)
     ob_index=1
-    df, display_options, marker_scale = select_data_corr()    
+    df, display_options, marker_scale = select_data_corr()
     fig_corr = bokeh_corr_plot(df, **display_options)
     leg_corr = create_legend_corr(fig_corr, colors=df.data['color'], scale_m=marker_scale)
 
     target.object = fig_corr
 
 
+def update_wordcloud(target, event):
+    """Update the correlation plot"""
+
+    print(event)
+    text_list = select_data_wordcloud()
+    wordcloud = generate_wordcloud(text_list, height=800, width=1200)
+    target.object =  wordcloud.to_svg()
 
 
 # Generate Start figures
@@ -299,6 +356,10 @@ fig_corr_1 = bokeh_corr_plot(start_corr_data, **display_options)
 fig_corr = pn.pane.Bokeh(fig_corr_1)
 leg_corr = pn.pane.Bokeh(create_legend_corr(fig_corr_1, colors=start_corr_data.data['color'], scale_m=marker_scale))
 
+# Wordcloud of tools
+text_list = select_data_wordcloud()
+wordcloud = generate_wordcloud(text_list, height=800, width=1200)
+svg_pane = pn.pane.SVG(wordcloud.to_svg(), width=wordcloud.width, height=wordcloud.height)
 
 def generate_bar_controls():
     controls_bar = [question_select, multi_choice, multi_choice_method]
@@ -319,6 +380,9 @@ md_text_corrchart = ("# Basic Correlations\n Find out about basic correlation of
 
 md_text_button = ("# Further charts\n")
 
+md_text_tools_used = ("# Tools and Methods\n Find out about the tools and methods used in the "
+                    "research area and data generation method you filtered for.")
+
 ####################
 # Dashboard layout #
 ####################
@@ -327,10 +391,11 @@ controls_bar = generate_bar_controls()
 for control in controls_bar:
     #control.param.watch(update, ['value'], onlychanged=True)
     control.link(fig, callbacks={'value': update})
-    control.link(fig2, callbacks={'value': update})
-    control.link(fig3, callbacks={'value': update})
+    #control.link(fig2, callbacks={'value': update})
+    #control.link(fig3, callbacks={'value': update})
     #control.link(tabs, callbacks={'value': update})
-    control.link(fig_corr, callbacks={'value': update_corr})
+    control.link(svg_pane, callbacks={'value': update_wordcloud})
+    #control.link(svg_pane, callbacks={'value': update_corr})
 
 tab1 = ("Vertical Bar chart", fig)
 tab2 = ("Horizontal Bar chart", fig2)
@@ -351,7 +416,9 @@ inputs_corr = pn.Column(*controls_corr, width=800)
 row1 = pn.Column(desc, md_text_global_filter, pn.Row(inputs), sizing_mode="scale_both")
 row2 =  pn.Row(tabs)
 row3 = pn.Column(inputs_corr, pn.Row(fig_corr, leg_corr))
-row4 = pn.Row(button_bar)
-layout = pn.Column(row1, md_text_barchart, row2, md_text_corrchart, row3, md_text_button, row4, sizing_mode="scale_both", title='HMC Survey Dashboard')
+row5 = pn.Row(button_bar)
+row4 = pn.Column(md_text_tools_used, svg_pane)
+layout = pn.Column(row1, md_text_barchart, row2, md_text_corrchart, row3, row4, sizing_mode="scale_both", title='HMC Survey Dashboard')
+#md_text_button, row4, sizing_mode="scale_both", title='HMC Survey Dashboard')
 
 layout.servable(title='HMC Survey Dashboard')

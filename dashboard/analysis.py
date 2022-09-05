@@ -38,7 +38,7 @@ def calculate_crosstab(df: pd.DataFrame, data_key1: str, data_key2: str, id_vars
     return df_crosstab
 
 
-def filter_dataframe(df: pd.DataFrame, include: list=None, exclude: List[Tuple[str, list]]=None, exclude_nan=True) -> pd.DataFrame:
+def filter_dataframe(df: pd.DataFrame, include: list=None, exclude: List[Tuple[str, list]]=None, exclude_nan=True, as_type="category") -> pd.DataFrame:
     """
     Filter pandas dataframe
 
@@ -50,7 +50,7 @@ def filter_dataframe(df: pd.DataFrame, include: list=None, exclude: List[Tuple[s
     """
     
     if include is not None:
-        df = df[include].dropna(how = "all", subset = include).astype("category")
+        df = df[include].dropna(how = "all", subset = include).astype(as_type)
     
     for key, val in exclude:
         df = df.loc[~df[key].isin(val)]

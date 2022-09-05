@@ -23,6 +23,7 @@ from bokeh.transform import transform
 from bokeh.models import HelpTool
 from bokeh.models import HoverTool
 from bokeh.transform import dodge
+from wordcloud import WordCloud
 from .analysis import percentage_to_area
 
 def add_legend_at(fig, position='right'):
@@ -295,7 +296,7 @@ xlabel='Answers', ylabel='Number of answers', alpha=None, **kwargs):
 @preprocess_bokeh_input
 def bokeh_corr_plot(source, x='x_values', y='y_values',  figure=None, title='', x_range=None, y_range=None, 
                     markersize='markersize',  xlabel='', ylabel='', 
-                    alpha=0.8, tooltips=None, leg_color='red', nleg_items=5 , **kwargs):
+                    alpha=0.6, tooltips=None, leg_color='red', nleg_items=5 , **kwargs):
     """Plot an interactive circle with bokeh"""
 
     default_tooltips = [(f"{x}", "@x"), 
@@ -364,7 +365,7 @@ def create_legend_items(number, size_min, color, fig):
     return leg_items
 '''
 
-def create_legend_items(number, size_min, color, fig, steps=None, data=None, scale_m=1.0):
+def create_legend_items(number, size_min, color, fig, steps=None, data=None, scale_m=1.0, alpha=0.6):
     """
     This is the legend for a certain type of plot, Where the size of the circles corresponds to the 
     'precentage', i.e range from 0 to 100
@@ -388,7 +389,7 @@ def create_legend_items(number, size_min, color, fig, steps=None, data=None, sca
     sizes = percentage_to_area(steps, scale_m=scale_m)
     for i in range(number):
         size = sizes[i]
-        circ = fig.circle(size=size, x=3.0, y=y, fill_color=color[i], name='foo', alpha=0.8)
+        circ = fig.circle(size=size, x=3.0, y=y, fill_color=color[i], name='foo', alpha=alpha)
         txt = fig.text(text=[f'{steps[i]}'], x=3.0+x_offset, y=y, text_font_size="18px", 
                        text_align="left", text_baseline="middle")
         y = y - y_step
@@ -426,3 +427,20 @@ def create_legend_corr(fig, colors=['red', 'blue', 'green', 'red', 'red', 'red']
     fig2.outline_line_color = None
     
     return fig2
+
+
+# Try to find an interactive wordcloud
+def generate_wordcloud(word_list, min_font_size=10, max_font_size= 50, max_words=100, background_color='white', **kwargs):
+    """
+    This returns a static svg image of the wordcloud
+
+    """
+    if len(word_list) == 0:
+        # if no words are given, we at least return a wordcloud, importaant as palceholder
+        word_list = ['Empty-word-cloud']
+
+    text = "+".join(ent for ent in word_list)
+    #print(text)
+    wordcloud = WordCloud(max_font_size=max_font_size, max_words=max_words, background_color=background_color, **kwargs).generate(text)
+    
+    return wordcloud
