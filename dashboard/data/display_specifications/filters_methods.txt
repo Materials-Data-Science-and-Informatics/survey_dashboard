@@ -1,6 +1,0 @@
-imaging
-analytical methods
-simulations
-sample synthesis and preparation
-cohort studies
-recordings

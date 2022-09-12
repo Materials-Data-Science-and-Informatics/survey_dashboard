@@ -12,6 +12,7 @@
 This module contains functions to visualize data in an interactive way with mainly bokeh
 """
 import numpy as np
+from collections import Counter
 from bokeh.models import ColumnDataSource
 from bokeh.plotting import figure as bokeh_figure
 from bokeh.palettes import Category20c
@@ -50,8 +51,28 @@ def add_legend_at(fig, position='right'):
 #palette = Category20c[len(ys[0])]
 #fig = bokeh_barchart(df_test3, factors=factors, fill_color=factor_cmap('value', palette=palette, factors=xs[0], start=1, end=2))
 #show(fig)
-def preprocess_bokeh_input(func):
-    """Decorator function to preprocess, modify any bokeh plotting functions
+
+
+default_theme = {
+    "figure_kwargs" : {
+    "x_range.range_padding": 0.1,
+    "xgrid.grid_line_color": None,
+    "xaxis.major_label_orientation": 1,
+    "title.text_font_size": '20px',
+    "yaxis.axis_label_text_font_size": '20px',
+    "xaxis.axis_label_text_font_size": '20px',
+    "xaxis.major_label_text_font_size": '18px',
+    "yaxis.major_label_text_font_size": '18px',
+    "toolbar.logo": None,
+    "toolbar_location": "right",
+    "legend.location": "top_right",
+    "legend.orientation": "vertical",
+    "legend.click_policy": "hide"}
+}
+
+
+def apply_theme(func, theme=default_theme):
+    """Decorator function to pre and post process a bokeh figure
 
     :param func: the function to be decorated
     :type func: function
@@ -66,18 +87,43 @@ def preprocess_bokeh_input(func):
 
        # before adjustments
        fig = func(*args, **kwargs)
-       
        # after adjustments
+       figure_kwargs = theme.get('figure_kwargs', {})
+       for key, val in figure_kwargs.items():
+            rek_set_attr(fig, key, val)
        return fig
 
     return modified_plot
 
 
-@preprocess_bokeh_input
+def rek_set_attr(obj: object, key: str, val:object) -> None:
+    """
+    Rekursively asigns to a given object and a key in dot notation a given value of any form
+
+    Example: 
+    1.
+    rek_set_attr(figure, title, 'my-title')
+    figure.title= 'my-title'
+    2.
+    rek_set_attr(figure, axis.xaxis.label.size, 10)
+    figure.axis.xaxis.label.size = 10
+    """
+    if not '.' in key:
+        return setattr(obj, key, val)
+    else:
+        keys = key.split('.')
+        obj2 = getattr(obj, keys[0])
+        key_new = ".".join(ke for ke in keys[1:])
+        return rek_set_attr(obj2, key_new, val)
+
+
+
+
+@apply_theme
 def bokeh_barchart(df, x='x_value', y=['y_value'], factors=None, figure=None, data_visible=[True], title='', 
                     width=0.1,  xlabel='', ylabel='Number of answers', palette=Category20c, 
                     fill_color=None, legend_labels=None, description='For more information about the HMC survey click here.', 
-                    redirect='https://helmholtz-metadaten.de/en/pages/structure-governance',  orientation='vertical', x_range=None, **kwargs):
+                    redirect='https://helmholtz-metadaten.de/en/pages/structure-governance',  orientation='vertical', x_range=None, y_range=None,**kwargs):
     """Create an interactive bar chart with bokeh
 
     :param df: [description]
@@ -121,8 +167,8 @@ def bokeh_barchart(df, x='x_value', y=['y_value'], factors=None, figure=None, da
     tools = 'wheel_zoom,box_zoom,undo,reset,save'
     #if x_range is None:
     #    x_range = source.data[x]
-    fig = bokeh_figure(x_range=x_range, title=title, #y_range=(0, 280), 
-           height=550, width=1200, toolbar_location='above', tools=tools)
+    fig = bokeh_figure(x_range=x_range, y_range=y_range, title=title, #y_range=(0, 280), 
+           height=550, width=800, toolbar_location='above', tools=tools)
 
     fig.add_tools(help_t)
     
@@ -153,7 +199,7 @@ def bokeh_barchart(df, x='x_value', y=['y_value'], factors=None, figure=None, da
                 nonselection_line_alpha=0.5, hover_fill_alpha=1.0,
                 hover_line_color="black", hover_line_width=5.0, **kwargs)
         else: # orientation=='horizontal':
-            bar = fig.hbar(y=dodge(x, position[i], range=fig.y_range), right=y, source=source,
+            bar = fig.hbar(y=dodge(x, position[i], range=fig.y_range), right=x, source=source,
                 width=width, color=fill_color[i], legend_label=y, selection_fill_color='black', selection_fill_alpha=0.8,
                 nonselection_fill_alpha=0.2,
                 nonselection_fill_color="blue",
@@ -167,32 +213,16 @@ def bokeh_barchart(df, x='x_value', y=['y_value'], factors=None, figure=None, da
 
     # How the data was given, there is not a way for the hover tool to display a single value
     hover = HoverTool(tooltips=tooltips,renderers=bars)
-    fig.add_tools(hover)    
-    fig.x_range.range_padding = 0.1
-    fig.xgrid.grid_line_color = None
-    fig.legend.location = "top_left"
-    fig.legend.orientation = "horizontal"
-    fig.y_range.start = 0
-    fig.xaxis.major_label_orientation = 1
+    fig.add_tools(hover)
     fig.yaxis.axis_label = ylabel
     fig.xaxis.axis_label = xlabel
-    fig.title.text_font_size='23px'
-    fig.yaxis.axis_label_text_font_size = '22px'
-    fig.xaxis.axis_label_text_font_size = '22px'
-    fig.xaxis.major_label_text_font_size = '18px'
-    fig.yaxis.major_label_text_font_size = '18px'
-    fig.toolbar.logo = None
-    fig.legend.location = "top_right"
-    fig.legend.orientation = "vertical"
-    fig.legend.click_policy="hide"
-
-
+    fig.y_range.start =  0
     return fig
 
 
 
 # bokeh piechart
-@preprocess_bokeh_input 
+@apply_theme
 def bokeh_piechart(df, x='value', y='counts', figure=None, radius=0.8, title='', **kwargs):
     """Draw an interactive piechart with bokeh"""
     
@@ -295,7 +325,7 @@ xlabel='Answers', ylabel='Number of answers', alpha=None, **kwargs):
 
 
 
-@preprocess_bokeh_input
+@apply_theme
 def bokeh_corr_plot(source, x='x_values', y='y_values',  figure=None, title='', x_range=None, y_range=None, 
                     markersize='markersize',  xlabel='', ylabel='', 
                     alpha=0.6, tooltips=None, leg_color='red', nleg_items=5 , **kwargs):
@@ -440,9 +470,9 @@ def generate_wordcloud(word_list, min_font_size=10, max_font_size= 50, max_words
     if len(word_list) == 0:
         # if no words are given, we at least return a wordcloud, importaant as palceholder
         word_list = ['Empty-word-cloud']
-
-    text = "+".join(ent for ent in word_list)
+    word_count_dict = Counter(word_list)
+    #text = "+".join(ent for ent in word_list)
     #print(text)
-    wordcloud = WordCloud(max_font_size=max_font_size, max_words=max_words, background_color=background_color, **kwargs).generate(text)
+    wordcloud = WordCloud(max_font_size=max_font_size, max_words=max_words, background_color=background_color, **kwargs).generate_from_frequencies(word_count_dict)
     
     return wordcloud

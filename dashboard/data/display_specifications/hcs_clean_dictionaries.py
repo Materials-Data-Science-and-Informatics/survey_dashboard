@@ -345,18 +345,32 @@ HCS_dtypesWOmc = {
 HCS_MCList = [
         "dataGenMethod_", 
         "lsfIdent_", 
-        "dataFormats_", 
+        "dataFormats_",
         "pubMethod_", 
         "pubMotivation_", 
-        "pubObstacles_", 
+        "pubObstaclesA_",
+        "pubObstaclesB_",
         "pubMetadata_", 
-        "pubStorage_", 
         "docMethod_", 
         "docMetadata_", 
         "docMotivation_", 
         "docStandards_", 
         "docObstacles_", 
-        "servNeeds_sub_" 
+        "servNeeds_sub_",
+        "RSDP2",
+        "RSDP1c",
+        "RSDP3",
+        "DTPUB1b",
+        "DTPUB3",
+        "DTPUB4a",
+        "DTPUB4b",
+        "DTPUB7",
+        "RDMPR3",
+        "RDMPR7",
+        "RDMPR12",
+        "RDMPR6",
+        "RDMPR11",
+        "SERVC1"
         ]
 
 ##########################################
@@ -449,9 +463,10 @@ HCS_MCsubquestions = {
             "dataGenMethod_":{'dataGenMethod_1':"imaging",
                               'dataGenMethod_2':"analytical methods",
                               'dataGenMethod_3':"simulations",
-                              'dataGenMethod_4':"sample synthesis \n and preparation",
+                              'dataGenMethod_4':"sample synthesis and preparation",
                               'dataGenMethod_5':"cohort studies",
-                              'dataGenMethod_6':"recordings"
+                              'dataGenMethod_6':"recordings",
+                              'dataGenMethod_other':"other"
                               },
                               
             "dataStorage_":{'dataStorage_0':"I don't know.", 
@@ -2178,7 +2193,7 @@ HCS_orderedCats = {
 }
 
 
-
+# This what will be displayed in selection widgets and titles
 HCSquestions = {
                 "EN" : {        
                         "PERBG1/_":"Which Helmholtz center do you typically work in?",
@@ -2235,12 +2250,12 @@ HCSquestions = {
                         "RSDP2":"Mit welchen Methoden erheben Sie Ihre Forschungsdaten?",
                         "RSDP2b":"Bitte spezifizieren Sie die Methoden, mit denen Sie Ihre Forschungsdaten erheben.",
                         "RSDP3":"In welchen Datenformaten liegen die Daten vor, die Sie in Ihrem aktuellen Forschungsprojekt generieren bzw. nutzen?",
-                        "RSDP7":"Bitte schätzen Sie, auf welcher Datenmenge eine typische Veröffentlichung von Ihnen beruht.",
+                        "RSDP7/_":"Bitte schätzen Sie, auf welcher Datenmenge eine typische Veröffentlichung von Ihnen beruht.",
                         "RSDP4/_":"Wie viel Zeit vergeht durchschnittlich von der Planung bis zum Abschluss der Datenaufnahme für Ihre Forschungsprojekte? (in Monaten)",
                         "RSDP8/_":"Meine Experimente nehmen ___ Zeit in Anspruch als eine durchnittliche Untersuchung in meinem Forschungsbereich.",
                         "RSDP11/_":"Meine Datenanalysen nehmen ___ Zeit in Anspruch als eine durchschnittliche Untersuchung in meinem Forschungsbereich.",
                         "RSDP10/_":"Speichern Sie Rohdaten, die nicht publiziert werden, langfristig (10 Jahre und länger)?",
-                        "DTPUB6_1":"Bitte schätzen Sie, welchen relativen Anteil Ihrer Datensätze Sie publizieren. (Angabe in Prozent)",
+                        "DTPUB6/1":"Bitte schätzen Sie, welchen relativen Anteil Ihrer Datensätze Sie publizieren. (Angabe in Prozent)",
                         "DTPUB1b":"Wie haben Sie Ihre Daten publiziert?",
                         "DTPUB5":"In welchen Repositorien haben Sie Ihre Daten veröffentlicht?",
                         "DTPUB3":"Was motivierte Sie dazu, Ihre Forschungsdaten zu veröffentlichen? (Bitte wählen Sie bis zu 3 Antworten)",
@@ -2265,5 +2280,93 @@ HCSquestions = {
                     }
 
 
+# Dashboard specific white lists
+# for now all bar charts
+visualization_per_question = {}
 
-QUESTION_MAP_SHORTDISPLAY_KEY = {}
+
+BARCHART_ALLOWED = [
+"researchFieldHGF",
+"researchArea",
+"yearsInResearch",
+"careerLevel",
+"orcid",
+"fairFamiliarity",
+"dataAmount_lsf",
+"dataInPublication",
+"dataGatherTime",
+"experimentDuration_sub",
+"dataAnalDuration_sub",
+"longtermStorage",
+"pubAmount",
+"docStructured",
+"docDefSchema",
+"dataGenMethod_",
+"lsfIdent_",
+"dataFormats_",
+"pubMethod_",
+"pubMotivation_",
+"pubObstaclesA_",
+"pubObstaclesB_",
+"pubMetadata_",
+"docMethod_",
+"docMetadata_",
+"docMotivation_",
+"docStandards_",
+"docObstacles_",
+"servNeeds_sub_"]
+
+corr_chart_allowed = [
+"researchFieldHGF",
+"researchArea",
+"yearsInResearch",
+"careerLevel",
+"orcid",
+"fairFamiliarity",
+"dataAmount_lsf",
+"dataInPublication",
+"dataGatherTime",
+"experimentDuration_sub",
+"dataAnalDuration_sub",
+"longtermStorage",
+"pubAmount",
+"docStructured",
+"docDefSchema"]
+
+multi_chart_allowed = [
+"dataGenMethod_",
+"lsfIdent_",
+"dataFormats_", 
+"pubMethod_", 
+"pubMotivation_", 
+"pubObstacles_", 
+"pubMetadata_", 
+"pubStorage_", 
+"docMethod_", 
+"docMetadata_", 
+"docMotivation_", 
+"docStandards_", 
+"docObstacles_",
+"servNeeds_sub_"
+]
+
+
+FILTER_OPTIONS = [
+"All",
+"Cum. Sum",
+"Chemistry",
+"Earth Science",
+"Engineering Science",
+"Life Science",
+"Mathematics",
+"Physics",
+"Psychology"]
+
+FILTER_OPTIONS_METHOD = [
+"imaging",
+"analytical methods",
+"simulations",
+"sample synthesis and preparation",
+"cohort studies",
+"recordings"
+]
