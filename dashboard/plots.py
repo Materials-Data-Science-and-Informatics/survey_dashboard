@@ -12,6 +12,7 @@
 This module contains functions to visualize data in an interactive way with mainly bokeh
 """
 import numpy as np
+from functools import wraps
 from collections import Counter
 from bokeh.models import ColumnDataSource
 from bokeh.plotting import figure as bokeh_figure
@@ -75,31 +76,53 @@ default_theme = {
     "width": DEFAULT_FIGURE_WIDTH,
     "height": DEFAULT_FIGURE_HEIGHT}
 }
+corr_theme = {
+    "figure_kwargs" : {
+    "x_range.range_padding": 0.1,
+    "xgrid.grid_line_color": None,
+    "xaxis.major_label_orientation": 1,
+    "title.text_font_size": '18px',
+    "yaxis.axis_label_text_font_size": '18px',
+    "xaxis.axis_label_text_font_size": '18px',
+    "xaxis.major_label_text_font_size": '16px',
+    "yaxis.major_label_text_font_size": '16px',
+    "toolbar.logo": None,
+    "toolbar_location": "right",
+    "legend.location": "top_right",
+    "legend.orientation": "vertical",
+    "legend.click_policy": "hide",
+    "width": int(DEFAULT_FIGURE_WIDTH*1.5),
+    "height": int(DEFAULT_FIGURE_HEIGHT*1.5)}
+}
 
 
-def apply_theme(func, theme=default_theme):
+
+
+def apply_theme(theme=default_theme):
     """Decorator function to pre and post process a bokeh figure
 
     :param func: the function to be decorated
     :type func: function
     """
-    def modified_plot(*args, **kwargs):
-       """Modifed plot functions"""
-
-       # check if pandas data frame, if yes convert
-       # pack figure_kwargs
-       # set style?bokeh_barchart
-       # plot function kwargs
-
-       # before adjustments
-       fig = func(*args, **kwargs)
-       # after adjustments
-       figure_kwargs = theme.get('figure_kwargs', {})
-       for key, val in figure_kwargs.items():
-            rek_set_attr(fig, key, val)
-       return fig
-
-    return modified_plot
+    def decorator(func):
+        @wraps(func)
+        def modified_plot(*args, **kwargs):
+           """Modifed plot functions"""
+    
+           # check if pandas data frame, if yes convert
+           # pack figure_kwargs
+           # set style?bokeh_barchart
+           # plot function kwargs
+    
+           # before adjustments
+           fig = func(*args, **kwargs)
+           # after adjustments
+           figure_kwargs = theme.get('figure_kwargs', {})
+           for key, val in figure_kwargs.items():
+                rek_set_attr(fig, key, val)
+           return fig
+        return modified_plot
+    return decorator
 
 
 def rek_set_attr(obj: object, key: str, val:object) -> None:
@@ -125,7 +148,7 @@ def rek_set_attr(obj: object, key: str, val:object) -> None:
 
 
 
-@apply_theme
+@apply_theme()
 def bokeh_barchart(df, x='x_value', y=['y_value'], factors=None, figure=None, data_visible=[True], title='', 
                     width=0.1,  xlabel='', ylabel='Number of answers', palette=Category20c, 
                     fill_color=None, legend_labels=None, description='For more information about the HMC survey click here.', 
@@ -227,7 +250,7 @@ def bokeh_barchart(df, x='x_value', y=['y_value'], factors=None, figure=None, da
     return fig
 
 # bokeh piechart
-@apply_theme
+@apply_theme()
 def bokeh_piechart(df, x='x_value', y=['counts'], figure=None, outer_radius=0.7, inner_radius=0.4, 
                    title='', fill_color=None, legend_labels=None, line_color='black', **kwargs):
     """Draw an interactive piechart with bokeh
@@ -328,7 +351,7 @@ def bokeh_piechart(df, x='x_value', y=['counts'], figure=None, outer_radius=0.7,
                toolbar_location='above',
                tools=tools,
                tooltips=[('Data', f'@{x}'),
-                         ('Percent', '@percent{0.00%}'), 
+                         ('Percentage', '@percent{0.00%}'), 
                          ('Count', f'@count')])
     else:
         fig = figure
@@ -594,16 +617,19 @@ xlabel='Answers', ylabel='Number of answers', alpha=None, **kwargs):
 
 
 
-#@apply_theme
+@apply_theme(theme=corr_theme)
 def bokeh_corr_plot(source, x='x_values', y='y_values',  figure=None, title='', x_range=None, y_range=None, 
                     markersize='markersize',  xlabel='', ylabel='', 
                     alpha=0.6, tooltips=None, leg_color='red', nleg_items=5 , **kwargs):
     """Plot an interactive circle with bokeh"""
 
+    #TODO: make this work with Multiple choice, i.e multiple x, y given
+    #TODO: make this work with 
+
     default_tooltips = [(f"{x}", "@x"), 
                     (f"{y}", "@y"),
-                  ("total", "@total"),
-                  ("percentage", "@percentage")]
+                  ("Total", "@total"),
+                  ("Percentage", "@percentage")]
     if tooltips is None:
         tooltips = default_tooltips
 
@@ -625,12 +651,12 @@ def bokeh_corr_plot(source, x='x_values', y='y_values',  figure=None, title='', 
     fig.outline_line_color = None
     fig.yaxis.axis_label = ylabel
     fig.xaxis.axis_label = xlabel
-    fig.title.text_font_size='18px'
-    fig.yaxis.axis_label_text_font_size = '18px'
-    fig.xaxis.axis_label_text_font_size = '18px'
-    fig.xaxis.major_label_text_font_size = '16px'
-    fig.yaxis.major_label_text_font_size = '16px'
-    fig.toolbar.logo = None
+    #fig.title.text_font_size='18px'
+    #fig.yaxis.axis_label_text_font_size = '18px'
+    #fig.xaxis.axis_label_text_font_size = '18px'
+    #fig.xaxis.major_label_text_font_size = '16px'
+    #fig.yaxis.major_label_text_font_size = '16px'
+    #fig.toolbar.logo = None
 
     # Or draw legend by hand as in, i.e a new plot/figure with no axis and text
     # https://docs.bokeh.org/en/latest/docs/gallery/burtin.html
@@ -699,12 +725,13 @@ def create_legend_items(number, size_min, color, fig, steps=None, data=None, sca
         leg_items.append(txt)
     return leg_items
 
-def create_legend_corr(fig, colors=['red', 'blue', 'green', 'red', 'red', 'red'], width_ratio=5, scale_m=1.0):
+def create_legend_corr(fig, colors=['red', 'blue', 'green', 'red', 'red', 'red'], 
+    title="Rel. amount\nof answers [%]", width_ratio=5, scale_m=1.0):
     
     height = fig.height
     width = int(fig.width/width_ratio)
     fig2 = bokeh_figure(height=height, width=width,
-               title="Rel. amount\nof answers [%]",
+               title=title,
                toolbar_location=None,
                tools='')
     leg_items = create_legend_items(5, size_min=0, color=colors, fig=fig2, scale_m=scale_m) #[("circle", [circle])]
