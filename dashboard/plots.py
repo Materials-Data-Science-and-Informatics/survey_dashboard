@@ -16,16 +16,20 @@ from collections import Counter
 from bokeh.models import ColumnDataSource
 from bokeh.plotting import figure as bokeh_figure
 from bokeh.palettes import Category20c
-from bokeh.transform import factor_cmap
+#from bokeh.transform import factor_cmap
 from bokeh.transform import cumsum
-from bokeh.models import FactorRange, Legend
-from bokeh.models import LinearColorMapper
-from bokeh.transform import transform
+#from bokeh.models import FactorRange, Legend
+#from bokeh.models import LinearColorMapper
+#from bokeh.transform import transform
 from bokeh.models import HelpTool
 from bokeh.models import HoverTool
 from bokeh.transform import dodge
 from wordcloud import WordCloud
 from .analysis import percentage_to_area
+
+DEFAULT_FIGURE_WIDTH = 600
+ASPECT_RATIO = 4./3.
+DEFAULT_FIGURE_HEIGHT = int(DEFAULT_FIGURE_WIDTH/ASPECT_RATIO) # functions expect an int
 
 def add_legend_at(fig, position='right'):
     """
@@ -58,16 +62,18 @@ default_theme = {
     "x_range.range_padding": 0.1,
     "xgrid.grid_line_color": None,
     "xaxis.major_label_orientation": 1,
-    "title.text_font_size": '20px',
-    "yaxis.axis_label_text_font_size": '20px',
-    "xaxis.axis_label_text_font_size": '20px',
-    "xaxis.major_label_text_font_size": '18px',
-    "yaxis.major_label_text_font_size": '18px',
+    "title.text_font_size": '18px',
+    "yaxis.axis_label_text_font_size": '18px',
+    "xaxis.axis_label_text_font_size": '18px',
+    "xaxis.major_label_text_font_size": '16px',
+    "yaxis.major_label_text_font_size": '16px',
     "toolbar.logo": None,
     "toolbar_location": "right",
     "legend.location": "top_right",
     "legend.orientation": "vertical",
-    "legend.click_policy": "hide"}
+    "legend.click_policy": "hide",
+    "width": DEFAULT_FIGURE_WIDTH,
+    "height": DEFAULT_FIGURE_HEIGHT}
 }
 
 
@@ -98,7 +104,7 @@ def apply_theme(func, theme=default_theme):
 
 def rek_set_attr(obj: object, key: str, val:object) -> None:
     """
-    Rekursively asigns to a given object and a key in dot notation a given value of any form
+    Recursively assigns to a given object and a key in dot notation a given value of any form
 
     Example: 
     1.
@@ -168,7 +174,7 @@ def bokeh_barchart(df, x='x_value', y=['y_value'], factors=None, figure=None, da
     #if x_range is None:
     #    x_range = source.data[x]
     fig = bokeh_figure(x_range=x_range, y_range=y_range, title=title, #y_range=(0, 280), 
-           height=550, width=800, toolbar_location='above', tools=tools)
+           height=DEFAULT_FIGURE_HEIGHT, width=DEFAULT_FIGURE_WIDTH, toolbar_location='above', tools=tools)
 
     fig.add_tools(help_t)
     
@@ -198,15 +204,16 @@ def bokeh_barchart(df, x='x_value', y=['y_value'], factors=None, figure=None, da
                 selection_line_color="black", fill_alpha=0.8,
                 nonselection_line_alpha=0.5, hover_fill_alpha=1.0,
                 hover_line_color="black", hover_line_width=5.0, **kwargs)
+            fig.y_range.start =  0
         else: # orientation=='horizontal':
-            bar = fig.hbar(y=dodge(x, position[i], range=fig.y_range), right=x, source=source,
-                width=width, color=fill_color[i], legend_label=y, selection_fill_color='black', selection_fill_alpha=0.8,
+            bar = fig.hbar(y=dodge(x, position[i], range=fig.y_range), right=y, source=source,
+                height=width, color=fill_color[i], legend_label=y, selection_fill_color='black', selection_fill_alpha=0.8,
                 nonselection_fill_alpha=0.2,
                 nonselection_fill_color="blue",
                 selection_line_color="black", fill_alpha=0.8,
                 nonselection_line_alpha=0.5, hover_fill_alpha=1.0,
                 hover_line_color="black", hover_line_width=5.0, **kwargs)   
-
+            fig.x_range.start =  0
 
         tooltips.append((f'{y}', '@{' + str(y) + '}'))
         bars.append(bar)
@@ -216,51 +223,131 @@ def bokeh_barchart(df, x='x_value', y=['y_value'], factors=None, figure=None, da
     fig.add_tools(hover)
     fig.yaxis.axis_label = ylabel
     fig.xaxis.axis_label = xlabel
-    fig.y_range.start =  0
+    
     return fig
-
-
 
 # bokeh piechart
 @apply_theme
-def bokeh_piechart(df, x='value', y='counts', figure=None, radius=0.8, title='', **kwargs):
-    """Draw an interactive piechart with bokeh"""
+def bokeh_piechart(df, x='x_value', y=['counts'], figure=None, outer_radius=0.7, inner_radius=0.4, 
+                   title='', fill_color=None, legend_labels=None, line_color='black', **kwargs):
+    """Draw an interactive piechart with bokeh
+    
+    using annular_wedge
+    
+    """
+    # TODO refactor all the data processing out and create a plot interface for nested piechart.
+    # This became way to specific...
     
     from math import pi
+    plot_outer = False
+    start_angle_inner = 'angle'
+    start_angle_outer = 'angle'
+    #if legend_labels is None: # must be string, given arry does not work
+    #    legend_labels = x
+    # The coloring has to be different now
+    if 'All' in y:
+        # If all is given, we use that as total
+        ydata_all = np.array(df.data['All'])
+        all_sum = sum(ydata_all)
 
-    if isinstance(df, ColumnDataSource):
-        ydata = df.data[y]
-        if not 'color' in df.column_names:
-            if not len(ydata) > 20:
-                df.data['color'] = Category20c[len(ydata)] # ! if len(xdata)>20 this fails
+    elif 'Cum. Sum' in y:
+        # this becomes the total then
+        ydata_all = np.array(df.data['All'])
+        all_sum = sum(ydata_all)        
     else:
-        ydata = df[y]
-        if not 'color' in df.columns:
-            df['color'] = Category20c[len(ydata)] # ! if len(xdata)>20 this fails
+        all_sum = 0
+        ydata_all = []
+        for i, data in enumerate(df.data[y[0]]):
+            ydata_sum = 0
+            for key in y:
+                # add up new total.
+                ydata_sum = ydata_sum + np.array(df.data[key][i])
+            ydata_all.append(ydata_sum)
+            all_sum = all_sum + ydata_sum
 
-    ydata = np.array(ydata)
-    df.data['percent'] = ydata / sum(ydata)
-    df.data['angle'] = ydata / sum(list(ydata)) * 2 * pi
+    df.data['percent'] = ydata_all / all_sum
+    df.data['count'] = ydata_all
+    df.data['angle'] = ydata_all / all_sum * 2 * pi
+    df.data['color_outer'] = ['#3182bd' for i in ydata_all] #light blue
+    df.data['legend_field'] = ['Total' for i in ydata_all]
+    
+    y_clean = list(y) #copy list
+    fill_color_outer = list(fill_color)
+    legend_labels_clean = list(legend_labels)
+    if 'All' in y_clean:
+        index = y_clean.index('All')
+        y_clean.remove('All')
+        fill_color_outer.pop(index)
+        legend_labels_clean.pop(index)
+    if 'Cum. Sum' in y_clean:
+        index = y_clean.index('Cum. Sum')
+        y_clean.remove('Cum. Sum')
+        fill_color_outer.pop(index)
+        legend_labels_clean.pop(index)
+    if len(y_clean)>1: # As soon as there is more then one different key do a nested chart
+        ydata_outer = []
+        data_outer_label = []
+        data_outer_color = []
+        hover_display = []
+        plot_outer = True
+        # data has to be resorted/matrix inverted
+        # and filled with other, if All or cumsum is present...
+        for i, data in enumerate(ydata_all):
+            ydatasum = 0
+            cat = df.data[x][i]
+            for j, key in enumerate(y_clean):
+                if key == 'All' or key == 'Cum. Sum':
+                    continue
+                ydata = df.data[key]
+                ydata_outer.append(ydata[i])
+                ydatasum = ydatasum + ydata[i]
+                data_outer_color.append(fill_color_outer[j])
+                data_outer_label.append(legend_labels_clean[j])
+                hover_display.append(f'{cat}, {key}')# (Cat, Filter)
+            if ydatasum < data:
+                # fill rest with other
+                diff = data - ydatasum
+                ydata_outer.append(diff)
+                data_outer_color.append('#f0f0f0')
+                data_outer_label.append('Other') 
+                hover_display.append(f'{cat}, Other')
+        df_outer = ColumnDataSource()
+        df_outer.data['percent'] = np.array(ydata_outer) / all_sum
+        df_outer.data['angle'] = np.array(ydata_outer) / all_sum * 2 * pi
+        df_outer.data['color'] = data_outer_color
+        df_outer.data['labels'] = data_outer_label
+        # for hover tool
+        df_outer.data['count'] = np.array(ydata_outer)
+        df_outer.data[x] = hover_display 
 
+
+    tools = 'hover,wheel_zoom,box_zoom,undo,reset,save'
     if figure is None:
-        fig = bokeh_figure(height=600, width=600,
+        fig = bokeh_figure(height=DEFAULT_FIGURE_HEIGHT, width=DEFAULT_FIGURE_WIDTH,
                title=title,
                toolbar_location='above',
-               tools='',#hover',
+               tools=tools,
                tooltips=[('Data', f'@{x}'),
                          ('Percent', '@percent{0.00%}'), 
-                         ('Count', f'@{y}')])
+                         ('Count', f'@count')])
     else:
         fig = figure
+        
+    # As Legend labels total and areas
+    # so it seems it has to be custom...
     #fig.add_layout(Legend(), 'right')
-    fig.wedge(x=0,
+    # outer chart
+    if not plot_outer:
+        inner_radius = outer_radius
+    fig.annular_wedge(x=0,
             y=1,
-            radius=radius,
-            start_angle=cumsum('angle', include_zero=True),
-            end_angle=cumsum('angle'),
-            line_color='white',
-            fill_color='color',
-            legend_field=x,
+            inner_radius=0.0, 
+            outer_radius=inner_radius,
+            start_angle=cumsum(start_angle_inner, include_zero=True),
+            end_angle=cumsum(start_angle_inner),
+            line_color=line_color,
+            fill_color='color_outer',
+            legend_field='legend_field',
             source=df,
             selection_fill_color='black', selection_fill_alpha=1.0,
             nonselection_fill_alpha=0.2,
@@ -268,16 +355,198 @@ def bokeh_piechart(df, x='value', y='counts', figure=None, radius=0.8, title='',
             selection_line_color="black", fill_alpha=0.8,
             nonselection_line_alpha=0.5, hover_fill_alpha=1.0,
             hover_line_color="black", hover_line_width=5.0, **kwargs)
+    
+    # outer chart
+    if plot_outer:
+        fig.annular_wedge(x=0,
+            y=1,
+            inner_radius=inner_radius,# if we start from 0, hover tool highlight will be nice, but we get double hints
+            outer_radius=outer_radius,
+            start_angle=cumsum(start_angle_outer, include_zero=True),
+            end_angle=cumsum(start_angle_outer),
+            line_color=line_color,
+            fill_color='color',
+            legend_field='labels',
+            source=df_outer,
+            selection_fill_color='black', selection_fill_alpha=1.0,
+            nonselection_fill_alpha=0.2,
+            nonselection_fill_color="blue",
+            selection_line_color="black", fill_alpha=0.8,
+            nonselection_line_alpha=0.5, hover_fill_alpha=1.0,
+            hover_line_color="black", hover_line_width=5.0, **kwargs)
+        
+
     fig.toolbar.logo = None
     fig.axis.axis_label = None
     fig.axis.visible = False
     fig.grid.grid_line_color = None
-    fig.legend.location = "right"
+    #fig.legend.location = "right"
     #fig.legend.orientation = "horizontal"
     #fig.legend.click_policy="hide"
 
     return fig
 
+
+'''
+# bokeh piechart
+@apply_theme
+def bokeh_piechart(df, x='x_value', y=['counts'], figure=None, outer_radius=0.6, inner_radius=0.4, 
+                   title='', fill_color=None, legend_labels=None, line_color='black', **kwargs):
+    """Draw an interactive piechart with bokeh
+    
+    using annular_wedge
+    
+    """
+    # TODO refactor all the data processing out and create a plot interface for nested piechart.
+    # This became way to specific...
+    # Also a nice view is a sunburst, this could allow for further filter nesting...
+    
+    from math import pi
+    plot_inner = False
+    start_angle_inner = 'angle'
+    start_angle_outer = 'angle'
+    #if legend_labels is None: # must be string, given arry does not work
+    #    legend_labels = x
+    # The coloring has to be different now
+    if 'All' in y:
+        # If all is given, we use that as total
+        ydata_all = np.array(df.data['All'])
+        all_sum = sum(ydata_all)
+
+    elif 'Cum. Sum' in y:
+        # this becomes the total then
+        ydata_all = np.array(df.data['All'])
+        all_sum = sum(ydata_all)        
+    else:
+        all_sum = 0
+        ydata_all = []
+        for i, data in enumerate(df.data[y[0]]):
+            ydata_sum = 0
+            for key in y:
+                # add up new total.
+                ydata_sum = ydata_sum + np.array(df.data[key][i])
+            ydata_all.append(ydata_sum)
+            all_sum = all_sum + ydata_sum
+
+    df.data['percent'] = ydata_all / all_sum
+    df.data['count'] = ydata_all
+    df.data['angle'] = ydata_all / all_sum * 2 * pi
+    df.data['color_outer'] = ['#3182bd' for i in ydata_all] #light blue
+    df.data['legend_field'] = ['Total' for i in ydata_all]
+    
+    y_clean = list(y) #copy list
+    fill_color_inner = list(fill_color)
+    legend_labels_clean = list(legend_labels)
+    if 'All' in y_clean:
+        index = y_clean.index('All')
+        y_clean.remove('All')
+        fill_color_inner.pop(index)
+        legend_labels_clean.pop(index)
+    if 'Cum. Sum' in y_clean:
+        index = y_clean.index('Cum. Sum')
+        y_clean.remove('Cum. Sum')
+        fill_color_inner.pop(index)
+        legend_labels_clean.pop(index)
+    if len(y_clean)>1: # As soon as there is more then one different key do a nested chart
+        ydata_inner = []
+        data_inner_label = []
+        data_inner_color = []
+        hover_display = []
+        plot_inner = True
+        # data has to be resorted/matrix inverted
+        # and filled with other, if All or cumsum is present...
+        for i, data in enumerate(ydata_all):
+            ydatasum = 0
+            cat = df.data[x][i]
+            for j, key in enumerate(y_clean):
+                if key == 'All' or key == 'Cum. Sum':
+                    continue
+                ydata = df.data[key]
+                ydata_inner.append(ydata[i])
+                ydatasum = ydatasum + ydata[i]
+                data_inner_color.append(fill_color_inner[j])
+                data_inner_label.append(legend_labels_clean[j])
+                hover_display.append(f'{cat}, {key}')# (Cat, Filter)
+            if ydatasum < data:
+                # fill rest with other
+                diff = data - ydatasum
+                ydata_inner.append(diff)
+                data_inner_color.append('gray')
+                data_inner_label.append('other') 
+                hover_display.append(f'{cat}, other')
+        df_inner = ColumnDataSource()
+        df_inner.data['percent'] = np.array(ydata_inner) / all_sum
+        df_inner.data['angle'] = np.array(ydata_inner) / all_sum * 2 * pi
+        df_inner.data['color'] = data_inner_color
+        df_inner.data['labels'] = data_inner_label
+        # for hover tool
+        df_inner.data['count'] = np.array(ydata_inner)
+        df_inner.data[x] = hover_display
+    tools = 'wheel_zoom,box_zoom,undo,reset,save,hover'
+    if figure is None:
+        fig = bokeh_figure(height=DEFAULT_FIGURE_HEIGHT, width=DEFAULT_FIGURE_WIDTH,
+               title=title,
+               toolbar_location='above',
+               tools=tools,
+               tooltips=[('Data', f'@{x}'),
+                         ('Percent', '@percent{0.00%}'), 
+                         ('Count', f'@count')])
+    else:
+        fig = figure
+        
+    # As Legend labels total and areas
+    # so it seems it has to be custom...
+    #fig.add_layout(Legend(), 'right')
+    # outer chart
+    if not plot_inner:
+        inner_radius = 0.1
+    fig.annular_wedge(x=0,
+            y=1,
+            inner_radius=inner_radius, # if we start from 0, hover tool highlight will be nice, but we get double hints
+            outer_radius=outer_radius,
+            start_angle=cumsum(start_angle_outer, include_zero=True),
+            end_angle=cumsum(start_angle_outer),
+            line_color=line_color,
+            fill_color='color_outer',
+            legend_field='legend_field',
+            source=df,
+            selection_fill_color='black', selection_fill_alpha=1.0,
+            nonselection_fill_alpha=0.2,
+            nonselection_fill_color="blue",
+            selection_line_color="black", fill_alpha=0.8,
+            nonselection_line_alpha=0.5, hover_fill_alpha=1.0,
+            hover_line_color="black", hover_line_width=5.0, **kwargs)
+    
+    # inner chart
+    if plot_inner:
+        fig.annular_wedge(x=0,
+            y=1,
+            inner_radius=0.1,
+            outer_radius=inner_radius,
+            start_angle=cumsum(start_angle_inner, include_zero=True),
+            end_angle=cumsum(start_angle_inner),
+            line_color=line_color,
+            fill_color='color',
+            legend_field='labels',
+            source=df_inner,
+            selection_fill_color='black', selection_fill_alpha=1.0,
+            nonselection_fill_alpha=0.2,
+            nonselection_fill_color="blue",
+            selection_line_color="black", fill_alpha=0.8,
+            nonselection_line_alpha=0.5, hover_fill_alpha=1.0,
+            hover_line_color="black", hover_line_width=5.0, **kwargs)
+        
+
+    fig.toolbar.logo = None
+    fig.axis.axis_label = None
+    fig.axis.visible = False
+    fig.grid.grid_line_color = None
+    #fig.legend.location = "right"
+    #fig.legend.orientation = "horizontal"
+    #fig.legend.click_policy="hide"
+
+    return fig
+'''
 # test
 #df_test = pd.DataFrame(data=dict(value=xs[0], counts=ys[0], xlabel=xs[0]))
 #fig = bokeh_piechart(df_test)
@@ -325,7 +594,7 @@ xlabel='Answers', ylabel='Number of answers', alpha=None, **kwargs):
 
 
 
-@apply_theme
+#@apply_theme
 def bokeh_corr_plot(source, x='x_values', y='y_values',  figure=None, title='', x_range=None, y_range=None, 
                     markersize='markersize',  xlabel='', ylabel='', 
                     alpha=0.6, tooltips=None, leg_color='red', nleg_items=5 , **kwargs):
@@ -339,7 +608,7 @@ def bokeh_corr_plot(source, x='x_values', y='y_values',  figure=None, title='', 
         tooltips = default_tooltips
 
 
-    fig = bokeh_figure(height=600, width=900,
+    fig = bokeh_figure(height=DEFAULT_FIGURE_HEIGHT, width=DEFAULT_FIGURE_WIDTH,
                title=title,
                toolbar_location='right',
                tools='hover,wheel_zoom,box_zoom,undo,reset,save',
@@ -356,11 +625,11 @@ def bokeh_corr_plot(source, x='x_values', y='y_values',  figure=None, title='', 
     fig.outline_line_color = None
     fig.yaxis.axis_label = ylabel
     fig.xaxis.axis_label = xlabel
-    fig.title.text_font_size='25px'
-    fig.yaxis.axis_label_text_font_size = '22px'
-    fig.xaxis.axis_label_text_font_size = '22px'
-    fig.xaxis.major_label_text_font_size = '18px'
-    fig.yaxis.major_label_text_font_size = '18px'
+    fig.title.text_font_size='18px'
+    fig.yaxis.axis_label_text_font_size = '18px'
+    fig.xaxis.axis_label_text_font_size = '18px'
+    fig.xaxis.major_label_text_font_size = '16px'
+    fig.yaxis.major_label_text_font_size = '16px'
     fig.toolbar.logo = None
 
     # Or draw legend by hand as in, i.e a new plot/figure with no axis and text

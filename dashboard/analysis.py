@@ -18,6 +18,7 @@ from typing import List, Tuple
 
 def calculate_crosstab(df: pd.DataFrame, data_key1: str, data_key2: str, id_vars: str=None, astype: str="int") -> pd.DataFrame:
     """Calulate the cross table for two keys in a given pandas data frame"""
+
     if id_vars is None:
         id_vars = data_key1
 
@@ -41,12 +42,15 @@ def calculate_crosstab(df: pd.DataFrame, data_key1: str, data_key2: str, id_vars
 def filter_dataframe(df: pd.DataFrame, include: list=None, exclude: List[Tuple[str, list]]=None, 
                 exclude_nan=True, exclude_anonymized=True, as_type="category") -> pd.DataFrame:
     """
-    Filter pandas dataframe
+    Filter a pandas dataframe
 
     example:
     ```
     to_exclude = ['Other', 'Undergraduate / Masters student', 'Director (of the institute)']
     df = filter_dataframe(surveydata, include=["careerLevel", "docStructured", "researchArea"], exclude=[("careerLevel", to_exclude)])
+
+    returns a dataFrame with columns ["careerLevel", "docStructured", "researchArea"], 
+    where rows which contain to_exclude values in the "careerLevel" column are removed
     ```
     """
 
@@ -93,23 +97,25 @@ def get_all_values(df: pd.DataFrame, keylist: List[str], display_dict=None) -> d
             if a.empty:
                 combined[xtick] = 0
             else:
+                # greedy, there is probably a pandas way to do this...
+                # there is a problem if df is empty, i.e temp.value_counts() True 0
                 for i, ke in enumerate(a.keys()):
                     # because other can contain all... others..
-                    ke = ke.lower() # sometimes there are mixed upper and lower case keys...
-                    ke = ke.replace(' \n', '') # some are with and without breaks
+                    #ke = ke.lower() # sometimes there are mixed upper and lower case keys...
+                    #ke = ke.replace(' \n', '') # some are with and without breaks
                     temp_val = combined.get(ke, 0)
                     temp_val = temp_val + a.values[i]
                     combined[ke] = temp_val
-            # greedy, there is probably a pandas way to do this...
-            # there is a problem if df is empty, i.e temp.value_counts() True 0
-            for i, ke in enumerate(a.keys()):
-                ke = ke.lower() # sometimes there are mixed upper and lower case keys...
-                ke = ke.replace(' \n', '') # some are with and without breaks
-                temp_val = combined.get(ke, 0)
-                temp_val = temp_val + a.values[i]
-                combined[ke] = temp_val
+
+            #for i, ke in enumerate(a.keys()):
+            #    ke = ke.lower() # sometimes there are mixed upper and lower case keys...
+            #    ke = ke.replace(' \n', '') # some are with and without breaks
+            #    temp_val = combined.get(ke, 0)
+            #    temp_val = temp_val + a.values[i]
+            #    combined[ke] = temp_val
         data = {'All' : list(combined.values()), key:list(combined.keys())}
     return data
+
 
 def prepare_data_research_field(df: pd.DataFrame, keylist:List[str], key2:str='researchArea', sort_as=None, display_dict= None):# -> dict, list:
     """Creates a dict dictionary with data in the form needed by the plotting functions
@@ -161,7 +167,8 @@ def prepare_data_research_field(df: pd.DataFrame, keylist:List[str], key2:str='r
             area_counts = df[df[key2] == area][key].value_counts()
             area_counts = area_counts.sort_index()
             data[area] = area_counts.values
-    else:        
+    else:
+        # Cum. Sum. is buggy?
         combined = {}
         data = {}
         for key in keylist:
@@ -176,28 +183,30 @@ def prepare_data_research_field(df: pd.DataFrame, keylist:List[str], key2:str='r
             a = temp.value_counts()
             # greedy, there is probably a pandas way to do this...
             # there is a problem if df is empty, i.e temp.value_counts() True 0
-            for i, ke in enumerate(a.keys()):
-                # because other can contain all... others..
-                ke = ke.lower() # sometimes there are mixed upper and lower case keys...
-                ke = ke.replace(' \n', '') # some are with and without breaks
-                temp_val = combined.get(ke, 0)
-                temp_val = temp_val + a.values[i]
-                combined[ke] = temp_val
-        
+            if a.empty:
+                combined[xtick] = 0
+            else:  
+                for i, ke in enumerate(a.keys()):
+                    # because other can contain all... others..
+                    #ke = ke.lower() # sometimes there are mixed upper and lower case keys...
+                    #ke = ke.replace(' \n', '') # some are with and without breaks
+                    temp_val = combined.get(ke, 0)
+                    temp_val = temp_val + a.values[i]
+                    combined[ke] = temp_val
+            
+            # now fill research area specifics
             for area in research_areas:
                 area_counts = df[df[key2] == area][key]
-                temp = data.get(area, [])
-
                 area_counts.replace(to_replace=True, value=xtick, inplace=True)
                 area_counts.replace(to_replace=False, value=None, inplace=True)
-                area_counts.value_counts()
+                area_counts = area_counts.value_counts()
                 area_counts = area_counts.sort_index()
-                
-                print(area_counts)
+                temp = data.get(area, [])
+                #print(area_counts)
                 if area_counts.empty:
                     temp.append(0)
                 else:
-                    temp.append(list(area_counts.values))
+                    temp.append(int(area_counts.values[0]))
                 data[area] = temp
         
         data['Cum. Sum'] = list(combined.values())

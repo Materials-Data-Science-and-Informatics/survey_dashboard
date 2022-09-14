@@ -1,13 +1,13 @@
 [project]
 name = "survey-dashboard"
-description = "A Dashboard displaying survey data in an interative way and allow for interactive exploration."
+description = "A Dashboard displaying survey data in an interactive way and allow for interactive exploration."
 authors = [{name = "Jens Broeder", email = "j.broeder@fz-juelich.de"}, 
-{name = "Silke Gerlich", email = "s.gerlich@fz-juelich.de"},
+{name = "Silke Christine Gerlich", email = "s.gerlich@fz-juelich.de"},
 {name = "Volker Hofmann", email = "v.hofmann@fz-juelich.de"}]
 readme = "README.md"
 license = {file = "LICENSE.txt"}
 classifiers = [
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 3 - Beta",
         "Intended Audience :: Information Technology",
         "Intended Audience :: Science/Research",
         "License :: OSI Approved :: MIT License",
@@ -34,7 +34,7 @@ keywords = ["dashboard", "data visualization", "survey data", "categorical data"
 [tool.poetry]
 name = "survey-dashboard"
 version = "0.1.0"
-description = "A Dashboard displaying survey data interatively."
+description = "A Dashboard displaying survey data interactively."
 authors = ["j.broeder <j.broeder@fz-juelich.de>"]
 license = "MIT"
 

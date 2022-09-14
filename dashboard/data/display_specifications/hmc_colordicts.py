@@ -79,3 +79,5 @@ HMCRamp = make_Ramp(HMCPalette)
 # continuous color scale based on Hub Info color palette
 hubInfoRamp = make_Ramp(hubInfoPalette)
 #cmr.view_cmap(hubInfoRamp)
+
+

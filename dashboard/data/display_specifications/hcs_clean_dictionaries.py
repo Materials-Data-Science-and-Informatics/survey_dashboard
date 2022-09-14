@@ -10,8 +10,6 @@
 ###############################################################################
 """
 A collection of dictionaries/maps to influence the display of certain categorical data
-
-@author: s.gerlich
 """
 
 ##########################################
@@ -2194,7 +2192,7 @@ HCS_orderedCats = {
 
 
 # This what will be displayed in selection widgets and titles
-HCSquestions = {
+HCSquestions_long = {
                 "EN" : {        
                         "PERBG1/_":"Which Helmholtz center do you typically work in?",
                         "PERBG2/_":"Please select the Helmholtz research field you associate yourself with.",
@@ -2235,6 +2233,91 @@ HCSquestions = {
                         "SERVC1":"In which areas of research data management do you perceive a need for supporting services?",
                         "SERVC2":"Please rate your interest in the following service formats.",
                         "SERVC3":"You are almost there! You are welcome to formulate questions, wishes or suggestions in the following free text field:"
+                        },
+                "DE" : {
+                        "PERBG1/_":"In welchem Helmholtz-Zentrum sind Sie in erster Linie tätig?",
+                        "PERBG2/_":"Welchem Helmholtz-Forschungsbereich ordnen Sie sich am ehesten zu?",
+                        "PERBG3/_":"Welcher Forschungsdisziplin ordnen Sie sich am ehesten zu?",
+                        "PERBG4/_":"Wie viele Jahre sind Sie bereits in der Forschung tätig?",
+                        "PERBG6/_":"Was ist Ihre aktuelle Position?",
+                        "PERBG7/_":"Haben Sie eine ORCID iD?",
+                        "PERBG8/_":"Wie vertraut sind Sie mit den FAIR-Data Leitlinien?",
+                        "RSDP1":"Bitte charakterisieren Sie den Ursprung Ihrer Forschungsdaten.",
+                        "RSDP1b/1":"Welcher Anteil Ihrer Datensätze wurde an Großforschungsanlagen (z.B. LHC, PETRA III, KATRIN ELBE, BESSY II) erfasst? (Angabe in Prozent)",
+                        "RSDP1c":"Bitte nennen Sie die genutzte Großforschungseinrichtung:",
+                        "RSDP2":"Mit welchen Methoden erheben Sie Ihre Forschungsdaten?",
+                        "RSDP2b":"Bitte spezifizieren Sie die Methoden, mit denen Sie Ihre Forschungsdaten erheben.",
+                        "RSDP3":"In welchen Datenformaten liegen die Daten vor, die Sie in Ihrem aktuellen Forschungsprojekt generieren bzw. nutzen?",
+                        "RSDP7/_":"Bitte schätzen Sie, auf welcher Datenmenge eine typische Veröffentlichung von Ihnen beruht.",
+                        "RSDP4/_":"Wie viel Zeit vergeht durchschnittlich von der Planung bis zum Abschluss der Datenaufnahme für Ihre Forschungsprojekte? (in Monaten)",
+                        "RSDP8/_":"Meine Experimente nehmen ___ Zeit in Anspruch als eine durchnittliche Untersuchung in meinem Forschungsbereich.",
+                        "RSDP11/_":"Meine Datenanalysen nehmen ___ Zeit in Anspruch als eine durchschnittliche Untersuchung in meinem Forschungsbereich.",
+                        "RSDP10/_":"Speichern Sie Rohdaten, die nicht publiziert werden, langfristig (10 Jahre und länger)?",
+                        "DTPUB6/1":"Bitte schätzen Sie, welchen relativen Anteil Ihrer Datensätze Sie publizieren. (Angabe in Prozent)",
+                        "DTPUB1b":"Wie haben Sie Ihre Daten publiziert?",
+                        "DTPUB5":"In welchen Repositorien haben Sie Ihre Daten veröffentlicht?",
+                        "DTPUB3":"Was motivierte Sie dazu, Ihre Forschungsdaten zu veröffentlichen? (Bitte wählen Sie bis zu 3 Antworten)",
+                        "DTPUB4a":"Auf welche Hindernisse sind Sie bei der Veröffentlichung Ihrer Forschungsdaten gestoßen?",
+                        "DTPUB4b":"Welche Bedenken oder Hindernisse haben Sie bisher davon abgehalten, Ihre Forschungsdaten zu veröffentlichen?",
+                        "RDMPR1":"Wo werden Ihre Forschungsdaten nach Abschluss eine Projekts hauptsächlich gespeichert?",
+                        "RDMPR3":"Wo dokumentieren Sie in Ihrem aktuellen Projekt die Arbeitsschritte, mit denen Ihre Daten erzeugt und verarbeitet werden?",
+                        "RDMPR7":"Mit welchen Informationen (Metadaten) beschreiben Sie normalerweise Ihre Forschungsdaten?",
+                        "RDMPR8/_":"Welche Informationen (Metadaten) davon erfassen Sie in der Regel digital?",
+                        "RDMPR9":"Welche dieser Informationen (Metadaten) erfassen Sie in der Regel automatisiert?",
+                        "RDMPR4/_":"Dokumentieren Sie Ihre Forschungsdaten auf strukturierte Weise? (z.B. mittels Formularen, Vorlagen oder Schemata)",
+                        "RDMPR5/_":"Verwenden Sie hierzu international genutzte Formulare, Schemata oder Standards?",
+                        "DTPUB7":"Welche dieser Metadaten publizieren Sie zusammen mit Ihren Forschungsdaten?",
+                        "RDMPR6":"Welche internationalen Standards nutzen Sie?",
+                        "RDMPR10":"Bitte nennen Sie die drei wichtigsten Softwareanwendungen, die Sie für Ihre Forschung verwenden.",
+                        "RDMPR12":"Was motiviert Sie dazu, Ihre Arbeitsschritte auf strukturierte Weise zu dokumentieren?",
+                        "RDMPR11":"Auf welche Hindernisse oder Schwierigkeiten sind Sie bei der Erfassung von Metadaten im Rahmen Ihrer Arbeit gestoßen?",
+                        "SERVC1":"In welchen Bereichen des Forschungsdatenmanagements haben Sie Bedarf an unterstützenden Angeboten?",
+                        "SERVC2":"Bitte bewerten Sie Ihr Interesse an den folgenden Service-Formaten.",
+                        "SERVC3":"Sie haben es fast geschafft! Gerne können Sie Fragen, Wünsche oder Anregungen im folgenden Freitextfeld formulieren:"
+                        }
+                    }
+# These are used as displays on selection and for titles
+HCSquestions = { # shortened
+                "EN" : {        
+                        "PERBG1/_":"Helmholtz center participants typically work in",
+                        "PERBG2/_":"Helmholtz research field participants associate with.",
+                        "PERBG3/_":"Principle research area of participants.",
+                        "PERBG4/_":"Working years in research.",
+                        "PERBG6/_":"Career level of participants.",
+                        "PERBG7/_":"Do you have an ORCID ID?",
+                        "PERBG8/_":"Familiarity with the FAIR data guidelines",
+                        "RSDP1":"Origin of research data.",
+                        "RSDP1b/1":"Percentage of data sets recorded at large scale facilities.",
+                        "RSDP1c":"Large scale facilities used.",
+                        "RSDP2":"Research data generation methods used (selected).",
+                        "RSDP2b":"Research data generation methods used (specified).",
+                        "RSDP3":"Data formats used in research projects.",
+                        "RSDP7/_":"Amount of data a typical publication is based on.",
+                        "RSDP4/_":"Average time from planning to completion for projects. (months)",
+                        "RSDP8/_":"Experiments take ___ time than on average in my domain.",
+                        "RSDP11/_":"Data analyses take ___ time than on average in my domain.",
+                        "RSDP10/_":"Unpublished raw data kept in long-term storage (>10 years).",
+                        "DTPUB6/1":"Percentage of data sets made publicly available.",
+                        "DTPUB1b":"How data was publised.",
+                        "DTPUB5":"Repositories data is published in.",
+                        "DTPUB3":"Motivations to publish data.",
+                        "DTPUB4a":"Obstacles for publishing research data.",
+                        "DTPUB4b":"Discouragements for publishing data so far.",
+                        "RDMPR1":"Data storage for finished projects.",
+                        "RDMPR3":"Where are data generation and processing are documented.",
+                        "RDMPR7":"Information (metadata) typically used to describe research data.",
+                        "RDMPR8":"Information (metadata) typically documented in digital way.",
+                        "RDMPR9":"Information (metadata) typically gathered in automated way.",
+                        "RDMPR4/_":"Reseach data documented in a structued.",
+                        "RDMPR5/_":"Usage of internationally templates, schemas or standards.",
+                        "DTPUB7":"Metadata published along with research data.",
+                        "RDMPR6":"International standards in use.",
+                        "RDMPR10":"Three most important software applications used in research.",
+                        "RDMPR12":"Motivations to documented work in a structured way.",
+                        "RDMPR11":"Difficulties in collecting metadata as part of work.",
+                        "SERVC1":" Support or services needed by research data management area.",
+                        "SERVC2":"Interest in certain service formats.",
+                        "SERVC3":"Free feedback text field:"
                         },
                 "DE" : {
                         "PERBG1/_":"In welchem Helmholtz-Zentrum sind Sie in erster Linie tätig?",
@@ -2359,6 +2442,7 @@ FILTER_OPTIONS = [
 "Engineering Science",
 "Life Science",
 "Mathematics",
+"Other",
 "Physics",
 "Psychology"]
 

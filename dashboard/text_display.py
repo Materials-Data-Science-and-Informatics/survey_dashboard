@@ -15,11 +15,19 @@ This is the central place for all text from the dashboard which needs to be tran
 
 # Description
 md_text_description = {'EN': ("Explorer interactively the HMC 2021 Survey results. "
-    "The overview sections displays some main results, while you can apply some global filters to these " 
-    "and the tools and software display through selecting global data filters. "
-    "The question explorer allows you do in detail analyize a specific question. "
-    "Interact with the visualizations and widgets on the left to explorer the data."),
+    "The overview sections displays some main results, while you can apply some global filters to these." 
+    "Find out what methods, tools, software and standards are applied by others in your research are. "
+    "The question explorer allows you do in detail analyze a specific question. "
+    "Interact with the visualizations and widgets on the left to explorer the data.\n"
+    "The corresponding Data publication of the survey is available [here](https://doi.org/10.7802/2433).\n"
+    "\n "
+    "DISCLAIMER: Be careful in drawing any conclusions, especially on filtered results! "
+    "The usable sample size of the survey 2021 was 2.3% of all Helmholtz employees at the time "# <3
+    "and therefore is often two small to be an accurate representation of the whole HGF "
+    "and or to unbiased accurately sample the underlying true distributions!"),
     'DE':('Exploriere interakiv die Resultate der HMC 2021 Umfrage.')}
+
+
 
 ## Global data filters\n 
 md_text_global_filter = {'EN': ("Select some data filters to apply. "
@@ -46,7 +54,8 @@ md_text_tools_used = {'EN': ("Find out about the tools and methods used in the "
                     "in welchem Anwendungsbereich genutzt wird.")}
 
 
+
 accordion_titles = {
-    'EN': ['Global Data Filters', 'Overview', 'Methods, Tools and Software', 'Question Explorer'],
+    'EN': ['Global Data Filters', 'Overview', 'Methods, Tools and Software', 'Survey Data Explorer'],
     'DE': ['Globale Datenfilter', 'Überblick', 'Methoden, Werkzeuge und Software', 'Umfrage-explorer']
 }
