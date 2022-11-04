@@ -1,0 +1,62 @@
+{
+    "@context": [
+        "https://raw.githubusercontent.com/codemeta/codemeta/2.0/codemeta.jsonld",
+        "https://w3id.org/software-iodata",
+        "https://raw.githubusercontent.com/schemaorg/schemaorg/main/data/releases/13.0/schemaorgcontext.jsonld",
+        "https://w3id.org/software-types"
+    ],
+    "@id": "/survey-dashboard",
+    "@type": "SoftwareSourceCode",
+    "author": {
+        "@id": "/person/j.broeder",
+        "@type": "Person",
+        "email": "j.broeder@fz-juelich.de",
+        "familyName": "",
+        "givenName": "j.broeder"
+    },
+    "description": "A Dashboard displaying survey data interactively.",
+    "identifier": "survey-dashboard",
+    "license": "http://spdx.org/licenses/MIT",
+    "name": "survey-dashboard",
+    "runtimePlatform": [
+        "Python 3",
+        "Python 3.10",
+        "Python 3.8",
+        "Python 3.9"
+    ],
+    "softwareRequirements": [
+        {
+            "@id": "/dependency/bokeh-ge-2.4.3,-lt-3.0.0",
+            "@type": "SoftwareApplication",
+            "identifier": "bokeh",
+            "name": "bokeh",
+            "runtimePlatform": "Python 3",
+            "version": ">=2.4.3,<3.0.0"
+        },
+        {
+            "@id": "/dependency/pandas-ge-1.4.1,-lt-2.0.0",
+            "@type": "SoftwareApplication",
+            "identifier": "pandas",
+            "name": "pandas",
+            "runtimePlatform": "Python 3",
+            "version": ">=1.4.1,<2.0.0"
+        },
+        {
+            "@id": "/dependency/panel-ge-0.13.1,-lt-0.14.0",
+            "@type": "SoftwareApplication",
+            "identifier": "panel",
+            "name": "panel",
+            "runtimePlatform": "Python 3",
+            "version": ">=0.13.1,<0.14.0"
+        },
+        {
+            "@id": "/dependency/wordcloud-ge-1.8.2.2,-lt-2.0.0.0",
+            "@type": "SoftwareApplication",
+            "identifier": "wordcloud",
+            "name": "wordcloud",
+            "runtimePlatform": "Python 3",
+            "version": ">=1.8.2.2,<2.0.0.0"
+        }
+    ],
+    "version": "1.0.0"
+}
