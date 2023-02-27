@@ -15,7 +15,7 @@ import requests
 #url="https://access.gesis.org/sharing/2433/3778"
 
 def download_data(url="https://access.gesis.org/sharing/2433/3778", 
-    destination="dashboard/data/hmc_survey_2021_data_cleaned.csv"):
+    destination="survey_dashboard/data/hmc_survey_2021_data_cleaned.csv"):
     """
     This function downloads the dataset for a given DOI
     """

@@ -408,10 +408,10 @@ def select_data_wordcloud(data_filters, data_filters_method, content=['dataGenMe
 
 multi_choice = pn.widgets.MultiChoice(name="Filter by research area. (Each selected will be shown)", value=["All"], options=FILTER_OPTIONS['researchArea'])
 multi_choice_method = pn.widgets.MultiChoice(name="Filter by data generation method (Only datasets containing all filters)", value=[], options=FILTER_OPTIONS['method'])
-multi_choice_hgf_field = pn.widgets.MultiChoice(name="Filter by HGF research field (Each selected will be shown)", value=["All"], options=FILTER_OPTIONS['HGFresearchfield'])
+#multi_choice_hgf_field = pn.widgets.MultiChoice(name="Filter by HGF research field (Each selected will be shown)", value=["All"], options=FILTER_OPTIONS['HGFresearchfield'])
 # for careerlevel there can be only one, so we use a Multiselect instead
-select_careerlevel = pn.widgets.Select(name="Filter by career level.", value=[], options=FILTER_OPTIONS['careerLevel'])
-multi_choice_facility = pn.widgets.MultiChoice(name="Filter by career level.", value=[], options=FILTER_OPTIONS['LargeScaleFacility'])
+#select_careerlevel = pn.widgets.Select(name="Filter by career level.", value=[], options=FILTER_OPTIONS['careerLevel'])
+#multi_choice_facility = pn.widgets.MultiChoice(name="Filter by career level.", value=[], options=FILTER_OPTIONS['LargeScaleFacility'])
 
 # Bar chart
 # D: question select could also be a slider?
