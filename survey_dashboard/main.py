@@ -13,10 +13,12 @@ This file contains the main code for the dashboard and its layout.
 """
 import os
 from os.path import dirname, join
+from pathlib import Path
 import pandas as pd
 import panel as pn
 from bokeh.palettes import Category20
 from bokeh.models import ColumnDataSource, Div
+from jinja2 import Environment, FileSystemLoader
 from .plots import bokeh_barchart, bokeh_piechart, add_legend_at, bokeh_corr_plot
 from .plots import create_legend_corr, generate_wordcloud, interactive_wordcloud
 from .plots import DEFAULT_FIGURE_WIDTH, DEFAULT_FIGURE_HEIGHT
@@ -29,6 +31,10 @@ from .text_display import *
 from .data.display_specifications.hcs_clean_dictionaries import FILTER_OPTIONS, BARCHART_ALLOWED
 from .data.display_specifications.hmc_custom_layout import hmc_custom_css_accordion
 
+this_folder = Path(__file__).parent
+env = Environment(loader=FileSystemLoader(this_folder))
+jinja_template = env.get_template('hmc_layout/en_template.html')
+template = pn.Template(jinja_template)
 
 # GLOBAL
 LANGUAGE = 'EN' #'DE'
@@ -105,7 +111,10 @@ if not os.path.exists(datafilepath):
 # For the dashboard presentation, we load some metadata to certain stuff out of the HMC graph.
 # However this gets prepared in before in as a new dataframe
 
-desc = Div(text=open(join(dirname(__file__), "description.html")).read(), sizing_mode="stretch_width")
+#desc = Div(text=open(join(dirname(__file__), "description.html")).read(), sizing_mode="stretch_width")
+#header = Div(text=open(join(dirname(__file__), "hmc_layout/header_.html")).read(), sizing_mode="stretch_width")
+#footer = Div(text=open(join(dirname(__file__), "hmc_layout/footer_.html")).read(), sizing_mode="stretch_width")
+
 pwd = os.getcwd()
 questions_keys = BARCHART_ALLOWED
 questions = [map_qkey_to_question(key) for key in questions_keys]
@@ -767,6 +776,13 @@ overall_accordion.margin = 0
 overall_accordion.width = ACCORDION_WIDTH
 overall_accordion.min_width = ACCORDION_WIDTH
 
-layout = pn.Column(desc, md_text_description[LANGUAGE], overall_accordion)
-layout.servable(title='HMC Survey Data Explorer')
+#layout = pn.Column(desc, md_text_description[LANGUAGE], overall_accordion)
+layout = pn.Column(md_text_description[LANGUAGE], overall_accordion)
+
+template.add_panel('App', layout)
+template.add_variable('app_title', '<h1>HMC Survey Data Explorer</h1>')
+
+#static_path = this_folder / 'hmc_layout' / 'static' / 'en_files'
+template.servable(title='HMC Survey Data Explorer')
+# serve like this: panel serve --port 50006 survey_dashboard/ --static-dirs en_files=./survey_dashboard/hmc_layout/static/en_files
 print('All done')
