@@ -1,0 +1,77 @@
+networks:
+  default:
+    driver: bridge
+    # this is only required in openvswitch networks.
+    driver_opts:
+      com.docker.network.driver.mtu: 1400
+
+services:
+  nginx-proxy:
+    restart: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 50m
+    image: "nginxproxy/nginx-proxy:latest"
+    networks:
+      default:
+        aliases:
+          - $HOST
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "./nginx/conf.d/proxy.conf:/etc/nginx/conf.d/proxy.conf"
+      - "./nginx/vhost.d:/etc/nginx/vhost.d"
+      - "./nginx/ssl/certs:/etc/nginx/certs"
+      - "./nginx/html:/usr/share/nginx/html"
+      - "./nginx/htpasswd:/etc/nginx/htpasswd"
+      - "/var/run/docker.sock:/tmp/docker.sock:ro"
+    labels:
+      com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: "true"
+  letsencrypt-nginx-proxy-companion:
+    image: "nginxproxy/acme-companion"
+    environment:
+      - NGINX_PROXY_CONTAINER=nginx-proxy
+    volumes:
+      - "./nginx/conf.d/proxy.conf:/etc/nginx/conf.d/proxy.conf"
+      - "./nginx/vhost.d:/etc/nginx/vhost.d"
+      - "./nginx/ssl/certs:/etc/nginx/certs"
+      - "./nginx/html:/usr/share/nginx/html"
+      - "./nginx/htpasswd:/etc/nginx/htpasswd"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "le-data:/etc/acme.sh"
+    depends_on:
+      - nginx-proxy
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      default:
+    ports:
+      - "5006:6001"
+    environment:
+      - LANGUAGE_DASHBOARD='EN'
+      - VIRTUAL_HOST=${HOST}
+      - VIRTUAL_PROTO=http
+      - LETSENCRYPT_HOST=${HOST}
+      - LETSENCRYPT_EMAIL="HMC@fz-juelich.de"
+
+
+  dashboard_de:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      default:
+    ports:
+      - "5006:6002"
+    environment:
+      - LANGUAGE_DASHBOARD='DE'
+      - VIRTUAL_HOST=${HOST}
+      - VIRTUAL_PROTO=http
+      - LETSENCRYPT_HOST=${HOST}
+      - LETSENCRYPT_EMAIL="HMC@fz-juelich.de"
+
