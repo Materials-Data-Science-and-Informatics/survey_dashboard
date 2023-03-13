@@ -31,7 +31,7 @@ from .data.display_specifications.hmc_custom_layout import hmc_custom_css_accord
 
 
 # GLOBAL
-LANGUAGE = 'EN' #'DE'
+LANGUAGE = os.environ.get('LANGUAGE_DASHBOARD', 'EN') #'DE'
 ACCORDION_WIDTH = int(DEFAULT_FIGURE_WIDTH*2) # maybe this can be made dynamic. 
 # This is the only width parameter to which everything streches to 
 
