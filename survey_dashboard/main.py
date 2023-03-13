@@ -37,7 +37,7 @@ jinja_template = env.get_template('hmc_layout/en_template.html')
 template = pn.Template(jinja_template)
 
 # GLOBAL
-LANGUAGE = 'EN' #'DE'
+LANGUAGE = os.environ.get('LANGUAGE_DASHBOARD', 'EN') #'DE'
 ACCORDION_WIDTH = int(DEFAULT_FIGURE_WIDTH*2) # maybe this can be made dynamic. 
 # This is the only width parameter to which everything streches to 
 
