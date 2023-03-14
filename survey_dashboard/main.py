@@ -31,15 +31,17 @@ from .text_display import *
 from .data.display_specifications.hcs_clean_dictionaries import FILTER_OPTIONS, BARCHART_ALLOWED
 from .data.display_specifications.hmc_custom_layout import hmc_custom_css_accordion
 
-this_folder = Path(__file__).parent
-env = Environment(loader=FileSystemLoader(this_folder))
-jinja_template = env.get_template('hmc_layout/en_template.html')
-template = pn.Template(jinja_template)
 
 # GLOBAL
 LANGUAGE = os.environ.get('LANGUAGE_DASHBOARD', 'EN') #'DE'
 ACCORDION_WIDTH = int(DEFAULT_FIGURE_WIDTH*2) # maybe this can be made dynamic. 
 # This is the only width parameter to which everything streches to 
+
+this_folder = Path(__file__).parent
+env = Environment(loader=FileSystemLoader(this_folder))
+jinja_template = env.get_template(f'hmc_layout/{LANGUAGE.lower()}_template.html')
+template = pn.Template(jinja_template)
+
 
 pn.config.loading_spinner = 'dots'
 pn.config.loading_color = '#005AA0'
@@ -56,6 +58,13 @@ for key, val in HCS_MCsubquestions.items():
 
 # if LANGUAGE = 'DE', we translate the data entries because these will often be used as tick labels
 
+
+# Overview icons with images:
+assests_path = this_folder / 'hmc_layout' / 'assests'
+people_ic = pn.Row(pn.pane.SVG(assests_path / 'people.svg'), md_text_descriptions_icons['people'][LANGUAGE])
+inst_ic = pn.Row(pn.pane.SVG(assests_path / 'institute.svg'), md_text_descriptions_icons['institution'][LANGUAGE])
+questions_ic = pn.Row(pn.pane.SVG(assests_path / 'quiz_black_48dp.svg'), md_text_descriptions_icons['questions'][LANGUAGE])
+overview_icons = pn.Row(people_ic, inst_ic, questions_ic)
 
 # Small Helpers functions 
 
@@ -538,23 +547,29 @@ fig_ov4 = pn.pane.Bokeh(bokeh_barchart(start_display_data, y=y_keys, factors=y_k
 half_width = int(ACCORDION_WIDTH/2)
 # Wordcloud of methods #RSDP2b
 text_list = select_data_wordcloud(data_filters, data_filters_method, content=["dataGenMethodSpec_"])
-wordcloud = generate_wordcloud(text_list, height=DEFAULT_FIGURE_HEIGHT, width=half_width)
+wordcloud = generate_wordcloud(text_list, height=DEFAULT_FIGURE_HEIGHT, width=ACCORDION_WIDTH)#half_width)
 svg_pane = pn.pane.Bokeh(interactive_wordcloud(wordcloud), width=wordcloud.width, height=wordcloud.height)
 #pn.pane.SVG(wordcloud.to_svg(), width=wordcloud.width, height=wordcloud.height)
 
 # Wordcloud of software #RDMPR10
 text_list = select_data_wordcloud(data_filters, data_filters_method, content=["software_1", "software_2", "software_3"])
-wordcloud_soft = generate_wordcloud(text_list, height=DEFAULT_FIGURE_HEIGHT, width=half_width)
+wordcloud_soft = generate_wordcloud(text_list, height=DEFAULT_FIGURE_HEIGHT, width=ACCORDION_WIDTH)#half_width)
 svg_pane_software = pn.pane.Bokeh(interactive_wordcloud(wordcloud_soft), width=wordcloud.width, height=wordcloud.height)
 #pn.pane.SVG(wordcloud_soft.to_svg(), width=wordcloud_soft.width, height=wordcloud_soft.height)
 
 # Wordcloud of repos #DTPUB5
 text_list = select_data_wordcloud(data_filters, data_filters_method, content=["pubRepo_1", "pubRepo_2", "pubRepo_3", "pubRepo_4", "pubRepo_5"])
-wordcloud_repo = generate_wordcloud(text_list, height=DEFAULT_FIGURE_HEIGHT, width=half_width)
+wordcloud_repo = generate_wordcloud(text_list, height=DEFAULT_FIGURE_HEIGHT, width=ACCORDION_WIDTH)#half_width)
 svg_pane_repo = pn.pane.Bokeh(interactive_wordcloud(wordcloud_repo), width=wordcloud.width, height=wordcloud.height)
 #pn.pane.SVG(wordcloud_repo.to_svg(), width=wordcloud_repo.width, height=wordcloud_repo.height)
 
+# We now do this in tabs:
+methods_tabs = pn.Column(md_text_tools_used[LANGUAGE], 
+               pn.Tabs((md_text_tools_tabs['methods'][LANGUAGE], svg_pane), 
+                       (md_text_tools_tabs['software'][LANGUAGE], svg_pane_software), 
+                       (md_text_tools_tabs['repositories'][LANGUAGE], svg_pane_repo)))
 
+#pn.Column(md_text_tools_used[LANGUAGE], "## Research and Data Generation Methods :\n", svg_pane, "## Main Software in use:\n", svg_pane_software,"## Repositories Data published in:\n", svg_pane_repo)
 #
 
 
@@ -734,9 +749,9 @@ overview_sec = pn.Column(md_text_overview[LANGUAGE], pn.Row(fig_ov1, fig_ov2), p
 
 
 # Tools
-row4 = pn.Column(md_text_tools_used[LANGUAGE], "## Research and Data Generation Methods :\n", svg_pane, "## Main Software in use:\n", svg_pane_software,"## Repositories Data published in:\n", svg_pane_repo)
-methods_tools_sec = row4
-
+#row4 = pn.Column(md_text_tools_used[LANGUAGE], "## Research and Data Generation Methods :\n", svg_pane, "## Main Software in use:\n", svg_pane_software,"## Repositories Data published in:\n", svg_pane_repo)
+#methods_tools_sec = row4
+methods_tools_sec = methods_tabs
 
 # Question Explorer
 # Merge Question explorer and Correlation explorer, allow two questions side by side?
@@ -777,12 +792,15 @@ overall_accordion.width = ACCORDION_WIDTH
 overall_accordion.min_width = ACCORDION_WIDTH
 
 #layout = pn.Column(desc, md_text_description[LANGUAGE], overall_accordion)
-layout = pn.Column(md_text_description[LANGUAGE], overall_accordion)
+layout = pn.Column(overview_icons, md_text_description[LANGUAGE], overall_accordion)
 
 template.add_panel('App', layout)
-template.add_variable('app_title', '<h1>HMC Survey Data Explorer</h1>')
+template.add_variable('app_title', md_text_title[LANGUAGE])
+template.add_variable('image_url', './en_files/Banner.png')
+
+
 
 #static_path = this_folder / 'hmc_layout' / 'static' / 'en_files'
-template.servable(title='HMC Survey Data Explorer')
+template.servable(title=md_text_title[LANGUAGE])
 # serve like this: panel serve --port 50006 survey_dashboard/ --static-dirs en_files=./survey_dashboard/hmc_layout/static/en_files
 print('All done')

@@ -1,5 +1,6 @@
 # custom
 *.csv
+survey_dashboard/hmc_layout/static/en_files/fonts/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -12,6 +12,7 @@
 This is the central place for all text from the dashboard which needs to be translated
 """
 
+md_text_title = {'EN': 'HMC Survey Data Explorer', 'DE': 'HMC Umfrage Ergebnisse'}
 
 # Description
 md_text_description = {'EN': ("Explorer interactively the HMC 2021 Survey results. "
@@ -31,6 +32,12 @@ md_text_description = {'EN': ("Explorer interactively the HMC 2021 Survey result
     'DE':('Exploriere interakiv die Resultate der HMC 2021 Umfrage.')}
 
 
+md_text_descriptions_icons = {
+    'people': {'EN': ("**631** Researchers took part in the survey"), 'DE':("**631** Forschende nahmen an der Umfrage teil")},
+    'institution': {'EN': ("**18** Helmholtz research centers and institutes"), 'DE':("**18** Helmholtz-Zentren und Institute")},
+    'questions': {'EN': ("**49** Survey questions"), 'DE':("**49** Fragen gestellt")},
+}
+
 
 ## Global data filters\n 
 md_text_global_filter = {'EN': ("Select some data filters to apply. "
@@ -40,7 +47,7 @@ md_text_global_filter = {'EN': ("Select some data filters to apply. "
 # Overview\n
 md_text_overview = {'EN': ("Birds eye view of survey results related to research data management."
                     ""),
-                    'DE': ("Überblick")}
+                    'DE': ("Überblick über ausgewählte Resultate der Umfrage zum Forschungsdaten Management.")}
 
 
 # Basic Correlations\n
@@ -56,6 +63,9 @@ md_text_tools_used = {'EN': ("Find out about the tools and methods used in the "
                     "research area and data generation method you filtered for."),
                     'DE': ("Finde heraus welche Methoden, welche Werkzeuge und welche Software "
                     "in welchem Anwendungsbereich genutzt wird.")}
+md_text_tools_tabs = {'methods': {'EN': 'Data generation methods', 'DE': 'Datengenerierungsmethoden'}, 
+                      'software': {'EN': 'Main software in use', 'DE': 'Haupt Software in Benutzung'}, 
+                      'repositories': {'EN': 'Repositories data published in', 'DE': 'Repositorien mit Datenpublikationen'}}
 
 # Question explorer
 
@@ -66,5 +76,5 @@ md_text_barchart = {'EN': ("Use this area to explorer the results for each surve
 
 accordion_titles = {
     'EN': ['Global Data Filters', 'Overview', 'Methods, Tools and Software', 'Survey Data Explorer'],
-    'DE': ['Globale Datenfilter', 'Überblick', 'Methoden, Werkzeuge und Software', 'Umfrage-explorer']
+    'DE': ['Globale Datenfilter', 'Überblick der Umfrage', 'Methoden, Werkzeuge und Software', 'Umfrage-explorer']
 }
