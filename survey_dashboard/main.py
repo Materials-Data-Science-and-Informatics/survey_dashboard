@@ -330,12 +330,14 @@ def select_data_corr(question, question2, data_filters, data_filters_method):
                   ("total", "@total"),
                   ("percentage", "@percentage")]
 
-    title = f'{q1_key[0]} in dependence to {q2_key[0]}'
+    title = f''#{q1_key[0]} in dependence to {q2_key[0]}'
+    xlabel = f'{question}'
+    ylabel = f'{question2}'
 
     # Bokeh plots need a ColumnDataSource, but this can be initialized from a pandas
     selected = ColumnDataSource(cross_tab)
 
-    display_options = {'x_range' : x_range, 'y_range' : y_range, 
+    display_options = {'x_range' : x_range, 'y_range' : y_range, 'xlabel': xlabel, 'ylabel': ylabel,
                         'title': title, 'tooltips' : tooltips}
 
     return selected, display_options, marker_scale
