@@ -64,6 +64,8 @@ def add_legend_at(fig, position='right'):
 
 default_theme = {
     "figure_kwargs" : {
+    "background_fill_color" : '#00000000', #F7F7F7', #transparent
+    "border_fill_color" : '#00000000',
     "x_range.range_padding": 0.1,
     "xgrid.grid_line_color": None,
     "xaxis.major_label_orientation": 1,
@@ -82,6 +84,8 @@ default_theme = {
 }
 corr_theme = {
     "figure_kwargs" : {
+    "border_fill_color" : '#00000000',
+    "background_fill_color" : '#00000000',
     "x_range.range_padding": 0.1,
     "xgrid.grid_line_color": None,
     "xaxis.major_label_orientation": 1,
