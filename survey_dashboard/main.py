@@ -723,7 +723,7 @@ row1 = pn.Column(md_text_global_filter[LANGUAGE], g_filters[0], g_filters[1], si
 global_filters_sec = row1
 
 # Overview part
-overview_sec = pn.Column(md_text_overview[LANGUAGE], pn.Row(fig_ov1, fig_ov2), pn.Row(fig_ov3, fig_ov4))
+overview_sec = pn.Column(md_text_overview[LANGUAGE], pn.Row(fig_ov3, fig_ov2), pn.Row(fig_ov1, fig_ov4))
 
 
 # Tools
