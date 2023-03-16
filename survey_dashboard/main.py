@@ -36,6 +36,7 @@ from .data.display_specifications.hmc_custom_layout import hmc_custom_css_accord
 LANGUAGE = os.environ.get('LANGUAGE_DASHBOARD', 'EN') #'DE'
 ACCORDION_WIDTH = int(DEFAULT_FIGURE_WIDTH*2) # maybe this can be made dynamic. 
 # This is the only width parameter to which everything streches to 
+SIZING_MODE = 'stretch_width' #fixed'
 
 this_folder = Path(__file__).parent
 env = Environment(loader=FileSystemLoader(this_folder))
@@ -569,7 +570,7 @@ svg_pane_repo = pn.pane.Bokeh(interactive_wordcloud(wordcloud_repo), width=wordc
 methods_tabs = pn.Column(md_text_tools_used[LANGUAGE], 
                pn.Tabs((md_text_tools_tabs['methods'][LANGUAGE], svg_pane), 
                        (md_text_tools_tabs['software'][LANGUAGE], svg_pane_software), 
-                       (md_text_tools_tabs['repositories'][LANGUAGE], svg_pane_repo)))
+                       (md_text_tools_tabs['repositories'][LANGUAGE], svg_pane_repo)), sizing_mode=SIZING_MODE)
 
 #pn.Column(md_text_tools_used[LANGUAGE], "## Research and Data Generation Methods :\n", svg_pane, "## Main Software in use:\n", svg_pane_software,"## Repositories Data published in:\n", svg_pane_repo)
 #
@@ -742,12 +743,12 @@ print('Creating layout')
 
 # Global data filters
 
-row1 = pn.Column(md_text_global_filter[LANGUAGE], g_filters[0], g_filters[1], sizing_mode="scale_width")
+row1 = pn.Column(md_text_global_filter[LANGUAGE], g_filters[0], g_filters[1], sizing_mode=SIZING_MODE)
 
 global_filters_sec = row1
 
 # Overview part
-overview_sec = pn.Column(md_text_overview[LANGUAGE], pn.Row(fig_ov3, fig_ov2), pn.Row(fig_ov1, fig_ov4))
+overview_sec = pn.Column(md_text_overview[LANGUAGE], pn.Row(fig_ov3, fig_ov2), pn.Row(fig_ov1, fig_ov4), sizing_mode=SIZING_MODE)
 
 
 # Tools
@@ -772,7 +773,7 @@ row2 =  pn.Column(pn.Row(inputs, inputs2), pn.Row(fig_exp1, fig_exp2))
 #inputs_corr = pn.Column(*controls_corr, width=800)
 row3 = pn.Column(md_text_corrchart[LANGUAGE], pn.Row(fig_corr, leg_corr))
 coree_ex_sec = row3
-question_ex_sec = pn.Column(md_text_barchart[LANGUAGE], row2, row3)
+question_ex_sec = pn.Column(md_text_barchart[LANGUAGE], row2, row3, sizing_mode=SIZING_MODE)
 
 
 #row5 = pn.Row(button_bar)
@@ -794,7 +795,7 @@ overall_accordion.width = ACCORDION_WIDTH
 overall_accordion.min_width = ACCORDION_WIDTH
 
 #layout = pn.Column(desc, md_text_description[LANGUAGE], overall_accordion)
-layout = pn.Column(overview_icons, md_text_description[LANGUAGE], overall_accordion)
+layout = pn.Column(overview_icons, md_text_description[LANGUAGE], overall_accordion, sizing_mode=SIZING_MODE)
 
 template.add_panel('App', layout)
 template.add_variable('app_title', md_text_title[LANGUAGE])
