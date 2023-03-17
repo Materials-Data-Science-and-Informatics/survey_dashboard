@@ -162,7 +162,7 @@ TOOLTIPS=[
 #Engineering Science': "#e2e2e2", 'Life Science': "#dfccce", 'Mathematics': "#ddb7b1", 
 #'Other': "#cc7878", 'Physics': "#933b41", 'Psychology': "#550b1d"}
 # TODo get them from somewhere
-re_fields = ['All', 'Cum. Sum', 'Chemistry', 'Computer Science', 'Earth Science', 'Engineering Science', 'Health', 'Biology', 
+re_fields = ['All', 'Cum. Sum', 'Chemistry',  'Earth Science', 'Engineering Science', 'Life Science', #'Health', 'Biology', 'Computer Science',
       'Mathematics', 'Other', 'Physics', 'Psychology', 'Other']
 re_c = Category20[len(re_fields)]
 ra_colors = {field: re_c[i] for i, field in enumerate(re_fields)}
@@ -552,19 +552,19 @@ half_width = int(ACCORDION_WIDTH/2)
 # Wordcloud of methods #RSDP2b
 text_list = select_data_wordcloud(data_filters, data_filters_method, content=["dataGenMethodSpec_"])
 wordcloud = generate_wordcloud(text_list, height=DEFAULT_FIGURE_HEIGHT, width=ACCORDION_WIDTH)#half_width)
-svg_pane = pn.pane.Bokeh(interactive_wordcloud(wordcloud), width=wordcloud.width, height=wordcloud.height)
+svg_pane = pn.pane.Bokeh(interactive_wordcloud(wordcloud), width=wordcloud.width, height=wordcloud.height+20)
 #pn.pane.SVG(wordcloud.to_svg(), width=wordcloud.width, height=wordcloud.height)
 
 # Wordcloud of software #RDMPR10
 text_list = select_data_wordcloud(data_filters, data_filters_method, content=["software_1", "software_2", "software_3"])
 wordcloud_soft = generate_wordcloud(text_list, height=DEFAULT_FIGURE_HEIGHT, width=ACCORDION_WIDTH)#half_width)
-svg_pane_software = pn.pane.Bokeh(interactive_wordcloud(wordcloud_soft), width=wordcloud.width, height=wordcloud.height)
+svg_pane_software = pn.pane.Bokeh(interactive_wordcloud(wordcloud_soft), width=wordcloud.width, height=wordcloud.height+20)
 #pn.pane.SVG(wordcloud_soft.to_svg(), width=wordcloud_soft.width, height=wordcloud_soft.height)
 
 # Wordcloud of repos #DTPUB5
 text_list = select_data_wordcloud(data_filters, data_filters_method, content=["pubRepo_1", "pubRepo_2", "pubRepo_3", "pubRepo_4", "pubRepo_5"])
 wordcloud_repo = generate_wordcloud(text_list, height=DEFAULT_FIGURE_HEIGHT, width=ACCORDION_WIDTH)#half_width)
-svg_pane_repo = pn.pane.Bokeh(interactive_wordcloud(wordcloud_repo), width=wordcloud.width, height=wordcloud.height)
+svg_pane_repo = pn.pane.Bokeh(interactive_wordcloud(wordcloud_repo), width=wordcloud.width, height=wordcloud.height+20)
 #pn.pane.SVG(wordcloud_repo.to_svg(), width=wordcloud_repo.width, height=wordcloud_repo.height)
 
 # We now do this in tabs:
@@ -642,7 +642,7 @@ def update_wordcloud(target, event, f_choice, m_choice, content):
 
     text_list = select_data_wordcloud(data_filters, data_filters_method, content=content)
     wordcloud = generate_wordcloud(text_list, height=DEFAULT_FIGURE_HEIGHT, width=DEFAULT_FIGURE_WIDTH)
-    wordcloud.align = 'center'
+    #wordcloud.align = 'center'
     target.object = interactive_wordcloud(wordcloud)#wordcloud.to_svg()
 
 
