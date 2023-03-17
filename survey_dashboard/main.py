@@ -161,7 +161,8 @@ TOOLTIPS=[
 #ra_colors = {'All': "#75968f", 'Chemistry': "#a5bab7", 'Earth Science':"#c9d9d3", 
 #Engineering Science': "#e2e2e2", 'Life Science': "#dfccce", 'Mathematics': "#ddb7b1", 
 #'Other': "#cc7878", 'Physics': "#933b41", 'Psychology': "#550b1d"}
-re_fields = ['All', 'Cum. Sum', 'Chemistry', 'Earth Science', 'Engineering Science', 'Life Science', 
+# TODo get them from somewhere
+re_fields = ['All', 'Cum. Sum', 'Chemistry', 'Computer Science', 'Earth Science', 'Engineering Science', 'Health', 'Biology', 
       'Mathematics', 'Other', 'Physics', 'Psychology', 'Other']
 re_c = Category20[len(re_fields)]
 ra_colors = {field: re_c[i] for i, field in enumerate(re_fields)}
@@ -517,8 +518,8 @@ fig_exp2 = pn.pane.Bokeh(bokeh_barchart(start_display_data, y=y_keys, factors=y_
 start_corr_data, display_options_corr, marker_scale = select_data_corr(question_select.value, 
     question_select2.value, data_filters, data_filters_method)
 fig_corr_1 = bokeh_corr_plot(start_corr_data, **display_options_corr)
-fig_corr = pn.pane.Bokeh(fig_corr_1)
-leg_corr = pn.pane.Bokeh(create_legend_corr(fig_corr_1, colors=start_corr_data.data['color'], scale_m=marker_scale))
+fig_corr = pn.pane.Bokeh(fig_corr_1, align='center')
+leg_corr = pn.pane.Bokeh(create_legend_corr(fig_corr_1, colors=start_corr_data.data['color'], scale_m=marker_scale), align='center')
 
 # Overview:
 
@@ -570,7 +571,7 @@ svg_pane_repo = pn.pane.Bokeh(interactive_wordcloud(wordcloud_repo), width=wordc
 methods_tabs = pn.Column(md_text_tools_used[LANGUAGE], 
                pn.Tabs((md_text_tools_tabs['methods'][LANGUAGE], svg_pane), 
                        (md_text_tools_tabs['software'][LANGUAGE], svg_pane_software), 
-                       (md_text_tools_tabs['repositories'][LANGUAGE], svg_pane_repo)), sizing_mode=SIZING_MODE)
+                       (md_text_tools_tabs['repositories'][LANGUAGE], svg_pane_repo)), sizing_mode=SIZING_MODE)#, align='center')
 
 #pn.Column(md_text_tools_used[LANGUAGE], "## Research and Data Generation Methods :\n", svg_pane, "## Main Software in use:\n", svg_pane_software,"## Repositories Data published in:\n", svg_pane_repo)
 #
@@ -641,6 +642,7 @@ def update_wordcloud(target, event, f_choice, m_choice, content):
 
     text_list = select_data_wordcloud(data_filters, data_filters_method, content=content)
     wordcloud = generate_wordcloud(text_list, height=DEFAULT_FIGURE_HEIGHT, width=DEFAULT_FIGURE_WIDTH)
+    wordcloud.align = 'center'
     target.object = interactive_wordcloud(wordcloud)#wordcloud.to_svg()
 
 
@@ -771,7 +773,7 @@ inputs2 = pn.Column(*controls_bar2, width=half_width)
 row2 =  pn.Column(pn.Row(inputs, inputs2), pn.Row(fig_exp1, fig_exp2))
 # Correlation 
 #inputs_corr = pn.Column(*controls_corr, width=800)
-row3 = pn.Column(md_text_corrchart[LANGUAGE], pn.Row(fig_corr, leg_corr))
+row3 = pn.Column(md_text_corrchart[LANGUAGE], pn.Row(pn.layout.VSpacer(), fig_corr, leg_corr, pn.layout.VSpacer()))
 coree_ex_sec = row3
 question_ex_sec = pn.Column(md_text_barchart[LANGUAGE], row2, row3, sizing_mode=SIZING_MODE)
 
@@ -795,7 +797,9 @@ overall_accordion.width = ACCORDION_WIDTH
 overall_accordion.min_width = ACCORDION_WIDTH
 
 #layout = pn.Column(desc, md_text_description[LANGUAGE], overall_accordion)
-layout = pn.Column(overview_icons, md_text_description[LANGUAGE], overall_accordion, sizing_mode=SIZING_MODE)
+#layout = pn.Column(overview_icons, md_text_description[LANGUAGE], overall_accordion, sizing_mode=SIZING_MODE)
+# The text and icons are now in the new template
+layout = pn.Column(overall_accordion, sizing_mode=SIZING_MODE)
 
 template.add_panel('App', layout)
 template.add_variable('app_title', md_text_title[LANGUAGE])
