@@ -12,7 +12,7 @@
     <meta x-if="$color" x-bind:content="$color" />
 
     <meta property="og:type" content="website" />
-    <meta property="og:locale" content="en" />
+    <meta property="og:locale" content="de" />
     <meta property="og:url" content="https://helmholtz-metadaten.de/de" />
 
     <meta name="twitter:card" content="summary_large_image" />
@@ -56,6 +56,48 @@
       
       .d-flex {
         display: flex !important;
+      }
+
+      .infobox {
+        width: 30%;
+        margin-bottom: 1.5rem;
+        color: #ffffff;
+        padding: 12px;
+        margin: auto;
+        font-size: 24px;
+        vertical-align: middle;
+      }
+
+      .infoHeadline {
+        width: auto;
+        color: #ffffff;
+        margin: 1.5rem;
+        font-size: 54px;
+        font-family: halvar;
+        font-weight: normal;
+      }
+
+      .infoText {
+        width: auto;
+        color: #ffffff;
+        margin: 1.5rem;
+        font-size: 24px;
+        font-family: halvar;
+        font-weight: normal;
+      }
+
+      .infobox2 {
+        
+        border-style:solid;
+        border-width: 2px;
+        color: #000000;
+        padding: 12px;
+        margin: auto;
+        font-size: 17px;
+      }
+
+      .highlight {
+        color:#14c8ff;
       }
     
     </style>
@@ -794,7 +836,7 @@
         <!-- TITLE IMAGE: UGLY SOLUTION
         needs to be adjusted as soon as we have an image and URL for the preferred background image-->
 
-        <div class="banner flex-row d-flex" style="background-image: url({{ image_url }});">
+        <div class="banner flex-row d-flex" style="background-image: url(./en_files/Banner2.png);">
           <div class="container mx-auto mb-12">
           <span class="text-2xl sm:text-3xl font-display font-bold uppercase text-white">
             {{ app_title }}
@@ -802,6 +844,70 @@
         </div>
         </div>
         <div class="pt-10 pb-20 lg:pt-20">
+          <section>
+            <div class="container mx-auto mb-24">
+              
+              <p style="margin-left:36px; margin-bottom:2.5rem;">
+                Wer sind die Datenstakeholder in Helmholtz? Welche Tools nutzen sie? Welche Hindernisse liegen auf dem Weg zu besseren Metadaten?
+                Dies sind nur einige der Fragen, die wir mit unserem HMC Community Survey 2021 adressiert haben. Auf dieser Seite können Sie die Ergebnisse der Umfrage interaktiv erforschen und einen tieferen Einblick in die Daten erlangen.
+              </p>
+              
+              <p style="margin-left: 36px; margin-bottom:12px; margin-top: 2.5rem;">
+                Filtern Sie die angezeigten Daten unter <b>Global Data Filters</b> und erforschen Sie 
+                Refine the displayed data with  and explore
+                <ul style="margin-left: 72px;font-size: 17px; list-style-type: disc;">
+                  <li>die Communityprofile unserer Datenstakeholder</li>
+                  <li>Methoden, Tools und Software, die für Datengenerierung und -verarbeitung genutzt werden</li>
+                  <li>Antworten und ihren Bezug untereinander im Survey Data Explorer</li>
+                </ul>
+              </p>
+              <div class="flex" style="margin-top: 5rem; min-width: 1200px; align-items: center;margin-left: 24px" >
+
+                <div class="infobox" style="aspect-ratio: 3/2; background-image: url(./en_files/surveyBG.png); margin-left: 0px">
+                  <div class="infoHeadline" style="margin-bottom: 0px;">
+                    49
+                  </div>
+                  <div class="infoText" style="margin-top: 0px;">
+                    Fragen umfasste die Umfrage insgesamt
+                  </div>
+                </div>
+
+                <div class="infobox" style="aspect-ratio: 3/2; background-image: url(./en_files/peopleBG.png);">
+                  <div class="infoHeadline" style="margin-bottom: 0px;">
+                    631
+                  </div>
+                  <div class="infoText" style="margin-top: 0px;">
+                    Forschende haben an der Umfrage teilgenommen
+                  </div>
+                </div>
+
+                <div class="infobox" style="aspect-ratio: 3/2; background-image: url(./en_files/dataBG.png); margin-right: 0px;">
+                  <div class="infoHeadline" style="margin-bottom: 0px;">
+                    <a href="https://doi.org/10.7802/2433" target="_blank"><img src="./en_files/outline_description_white_48dp.png" style="height: 81px;padding-top: 13.5px; padding-bottom: 13.5px;"></a>
+                  </div>
+                  <div class="infoText" style="margin-top: 0px;">
+                    <a href="https://doi.org/10.7802/2433" target="_blank">Der vollständige Datensatz ist online verfügbar</a>
+                  </div>
+                </div>
+
+              </div>
+              <div class="flex flex-wrap">
+                <div class="infobox2" style="min-width: 1200px; margin-top: 5rem; margin-left: 24px; border-color: #002864;">
+                 
+                  <p style="margin-bottom: 0px">
+                    <b style="color: #002864;">DISCLAIMER</b><br>Die angezeigten Daten sind mit Sorgfalt zu betrachten. Einige Antworten könnten losgelöst vom Kontext
+                    Verzerrungen ausgesetzt sein. Einige Fragen wurden abhängig vom Forschungsbereich der Befragten gestellt. 
+                    <a href="https://doi.org/10.3289/HMC_publ_05" target="_blank">Für nähere Informationen beachten Sie bitte unsere
+                    Umfragepublikation.</a>
+                    </p>
+                  
+                </div>
+                
+              </div>
+              
+            </div>
+          </section>
+
           <section>
             <div class="container mx-auto mb-12">
                 {% block contents %}
@@ -915,6 +1021,16 @@
                         d="M243.747 73.364c-8.454-18.258-20.692-33.617-36.9-46.516.432 8.756 1.374 27.484 1.374 27.484s1.01 1.327 1.42 1.901c16.38 22.876 22.365 48.231 16.91 75.771-10.94 55.222-64.772 88.91-119.325 75.138-47.892-12.091-79.878-61.06-70.82-109.609 7.15-38.327 29.801-63.859 66.584-76.833l1.333-.504 1.046-.774c4.458-6.304 8.808-12.685 13.45-19.422C63.07 2.762 7.003 47.488.58 115.522c-6.216 65.832 38.17 124.541 101.596 137.424 66.096 13.425 129.017-25.57 148.031-87.976 9.508-31.206 7.283-61.924-6.46-91.606zm-157.31 41.172c2.787 26.487 25.745 44.538 52.302 41.603 26.092-2.884 45.166-28.409 40.227-54.232-3.85-20.134-8.105-40.19-12.188-60.279-1.689-8.313-3.398-16.623-5.19-25.391-.707.621-1.035.883-1.334 1.176-8.94 8.764-17.875 17.533-26.815 26.297-10.886 10.673-21.757 21.36-32.669 32.006-10.944 10.677-15.926 23.707-14.334 38.82z"
                       ></path>
                     </svg>
+                  </a>
+                </li>
+                <!-- INSERTED GITHUB LOGO and LINK -->
+                <li class="">
+                  <a
+                    href="https://github.com/Materials-Data-Science-and-Informatics/survey_dashboard"
+                    target="_blank"
+                  >
+                    <img src="./en_files/github-mark-white.png" width="24px" height="24px">
+                    
                   </a>
                 </li>
               </ul>
