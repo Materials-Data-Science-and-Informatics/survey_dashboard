@@ -57,6 +57,48 @@
       .d-flex {
         display: flex !important;
       }
+
+      .infobox {
+        width: 30%;
+        margin-bottom: 1.5rem;
+        color: #ffffff;
+        padding: 12px;
+        margin: auto;
+        font-size: 24px;
+        vertical-align: middle;
+      }
+
+      .infoHeadline {
+        width: auto;
+        color: #ffffff;
+        margin: 1.5rem;
+        font-size: 54px;
+        font-family: halvar;
+        font-weight: normal;
+      }
+
+      .infoText {
+        width: auto;
+        color: #ffffff;
+        margin: 1.5rem;
+        font-size: 24px;
+        font-family: halvar;
+        font-weight: normal;
+      }
+
+      .infobox2 {
+        
+        border-style:solid;
+        border-width: 2px;
+        color: #000000;
+        padding: 12px;
+        margin: auto;
+        font-size: 17px;
+      }
+
+      .highlight {
+        color:#14c8ff;
+      }
     
     </style>
     <!---->
@@ -794,7 +836,7 @@
         <!-- TITLE IMAGE: UGLY SOLUTION
         needs to be adjusted as soon as we have an image and URL for the preferred background image-->
 
-        <div class="banner flex-row d-flex" style="background-image: url({{ image_url }});">
+        <div class="banner flex-row d-flex" style="background-image: url(./en_files/Banner2.png);">
           <div class="container mx-auto mb-12">
           <span class="text-2xl sm:text-3xl font-display font-bold uppercase text-white">
             {{ app_title }}
@@ -802,6 +844,68 @@
         </div>
         </div>
         <div class="pt-10 pb-20 lg:pt-20">
+          <section>
+            <div class="container mx-auto mb-24">
+              
+              <p style="margin-left:36px; margin-bottom:2.5rem;">
+                Who are the data stakeholders in Helmholtz? What tools do they use? What are the roadblocks to better metadata?
+                These were some of the questions that we investigated with our HMC community survey in 2021. Here you can browse the results interactively and dive deeper into the data!
+              </p>
+              
+              <p style="margin-left: 36px; margin-bottom:12px; margin-top: 2.5rem;">
+                Refine the displayed data with <b>Global Data Filters</b> and explore
+                <ul style="margin-left: 72px;font-size: 17px; list-style-type: disc;">
+                  <li>the community profiles of our data stakeholders</li>
+                  <li>the methods, tools and software used for data generation and handling</li>
+                  <li>responses and how they compare to each other between different quesitons in the Survey Data Explorer</li>
+                </ul>
+              </p>
+              <div class="flex" style="margin-top: 2.5rem; min-width: 1200px; align-items: center;margin-left: 24px" >
+
+                <div class="infobox" style="aspect-ratio: 3/2; background-image: url(./en_files/surveyBG.png); margin-left: 0px">
+                  <div class="infoHeadline" style="margin-bottom: 0px;">
+                    49
+                  </div>
+                  <div class="infoText" style="margin-top: 0px;">
+                    questions were included in the survey design
+                  </div>
+                </div>
+
+                <div class="infobox" style="aspect-ratio: 3/2; background-image: url(./en_files/peopleBG.png);">
+                  <div class="infoHeadline" style="margin-bottom: 0px;">
+                    631
+                  </div>
+                  <div class="infoText" style="margin-top: 0px;">
+                    researchers took part in the survey
+                  </div>
+                </div>
+
+                <div class="infobox" style="aspect-ratio: 3/2; background-image: url(./en_files/dataBG.png); margin-right: 0px;">
+                  <div class="infoHeadline" style="margin-bottom: 0px;">
+                    <a href="https://doi.org/10.7802/2433" target="_blank"><img src="./en_files/outline_description_white_48dp.png" style="height: 81px;padding-top: 13.5px; padding-bottom: 13.5px;"></a>
+                  </div>
+                  <div class="infoText" style="margin-top: 0px;">
+                    <a href="https://doi.org/10.7802/2433" target="_blank">Complete dataset is available online</a>
+                  </div>
+                </div>
+
+              </div>
+              <div class="flex flex-wrap">
+                <div class="infobox2" style="min-width: 1200px; margin-top: 2.5rem; margin-left: 24px; border-color: #002864;">
+                 
+                  <p style="margin-bottom: 0px">
+                    <b style="color: #002864;">DISCLAIMER</b><br>Displayed data should be interpreted with care. Responses might be subject to sample bias and some 
+                    questions were specific to the research field of participants. 
+                    Check our written publication for further details.
+                  </p>
+                  
+                </div>
+                
+              </div>
+              
+            </div>
+          </section>
+
           <section>
             <div class="container mx-auto mb-12">
                 {% block contents %}
