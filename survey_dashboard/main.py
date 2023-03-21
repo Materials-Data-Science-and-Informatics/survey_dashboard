@@ -428,8 +428,8 @@ def select_data_wordcloud(data_filters, data_filters_method, content=['dataGenMe
 #tab2 = ("Filter HFG field", fig2)
 #filter_tabs = pn.Tabs(*[tab1, tab2])
 
-multi_choice = pn.widgets.MultiChoice(name="Filter by research area. (Each selected will be shown)", value=["All"], options=FILTER_OPTIONS['researchArea'])
-multi_choice_method = pn.widgets.MultiChoice(name="Filter by data generation method (Only datasets containing all filters)", value=[], options=FILTER_OPTIONS['method'])
+multi_choice = pn.widgets.MultiChoice(name=md_text_global_filters_widgets[0], value=["All"], options=FILTER_OPTIONS['researchArea'])
+multi_choice_method = pn.widgets.MultiChoice(name=md_text_global_filters_widgets[1], value=[], options=FILTER_OPTIONS['method'])
 #multi_choice_hgf_field = pn.widgets.MultiChoice(name="Filter by HGF research field (Each selected will be shown)", value=["All"], options=FILTER_OPTIONS['HGFresearchfield'])
 # for careerlevel there can be only one, so we use a Multiselect instead
 #select_careerlevel = pn.widgets.Select(name="Filter by career level.", value=[], options=FILTER_OPTIONS['careerLevel'])
@@ -438,13 +438,13 @@ multi_choice_method = pn.widgets.MultiChoice(name="Filter by data generation met
 # Bar chart
 # D: question select could also be a slider?
 # TODO: get filter options for question
-question_select = pn.widgets.Select(name="Select a Question from the survey", value=START_DATA_BAR,
+question_select = pn.widgets.Select(name=md_text_select_widgets[0][LANGUAGE], value=START_DATA_BAR,
     options=questions)#, description="Select the survey question, which results should be displayed.")
 
 multi_filter = pn.widgets.MultiChoice(name="Filter by data by question specific filter", value=[], 
     options=FILTER_OPTIONS['method'], visible=False)
 
-question_select2 = pn.widgets.Select(name="Select a Question from the survey", value=START_DATA_BAR2,
+question_select2 = pn.widgets.Select(name=md_text_select_widgets[1][LANGUAGE], value=START_DATA_BAR2,
     options=questions)#, description="Select the survey question, which results should be displayed.")
 
 multi_filter2 = pn.widgets.MultiChoice(name="Filter by data by question specific filter", value=[], 
