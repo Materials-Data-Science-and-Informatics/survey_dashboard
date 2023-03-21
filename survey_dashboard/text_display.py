@@ -47,10 +47,9 @@ md_text_global_filter = {'EN': ("Apply filters to displayed data according to re
 md_text_global_filters_widgets = [{'EN': "Research area", 'DE': "Forschungsfeld"}, {'EN': "Data generation method", 'DE': "Datenerzeugungs Methode"}]
 
 # Overview\n
-md_text_overview = {'EN': ("Birds eye view of survey results related to research data management."
-                    ""),
-                    'DE': ("Übersicht ausgewählter Resultate der Umfrage zum Forschungsdaten Management.")}
 
+md_text_overview = {'EN': "Birds eye view of survey results related to research data management.",
+                    'DE': "Übersicht mit hervorgehobene Fragen zum Forschungsdatenmanagement"}
 
 
 # Tools and Methods\n 
@@ -70,8 +69,8 @@ md_text_barchart = {'EN': ("Select two questions to explore answers and see how 
 
 md_text_select_widgets = [{'EN': "Question 1", 'DE': "Frage 1"}, {'EN': "Question 2", 'DE': "Frage 2"}]
 # Basic Correlations\n
-md_text_corrchart = {'EN': ("Correspondence of selected questions"),
-                    'DE': ("Korrespondenz der ausgewählten Fragen")}
+md_text_corrchart = {'EN': "Correspondence of selected questions",
+                    'DE': "Korrespondenz der ausgewählten Fragen"}
 
 md_text_button = {'EN': ("# Further charts\n")}
 

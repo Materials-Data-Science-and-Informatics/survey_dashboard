@@ -428,8 +428,8 @@ def select_data_wordcloud(data_filters, data_filters_method, content=['dataGenMe
 #tab2 = ("Filter HFG field", fig2)
 #filter_tabs = pn.Tabs(*[tab1, tab2])
 
-multi_choice = pn.widgets.MultiChoice(name=md_text_global_filters_widgets[0], value=["All"], options=FILTER_OPTIONS['researchArea'])
-multi_choice_method = pn.widgets.MultiChoice(name=md_text_global_filters_widgets[1], value=[], options=FILTER_OPTIONS['method'])
+multi_choice = pn.widgets.MultiChoice(name=md_text_global_filters_widgets[0][LANGUAGE], value=["All"], options=FILTER_OPTIONS['researchArea'])
+multi_choice_method = pn.widgets.MultiChoice(name=md_text_global_filters_widgets[1][LANGUAGE], value=[], options=FILTER_OPTIONS['method'])
 #multi_choice_hgf_field = pn.widgets.MultiChoice(name="Filter by HGF research field (Each selected will be shown)", value=["All"], options=FILTER_OPTIONS['HGFresearchfield'])
 # for careerlevel there can be only one, so we use a Multiselect instead
 #select_careerlevel = pn.widgets.Select(name="Filter by career level.", value=[], options=FILTER_OPTIONS['careerLevel'])
