@@ -12,7 +12,7 @@
 This is the central place for all text from the dashboard which needs to be translated
 """
 
-md_text_title = {'EN': 'HMC Survey Data Explorer', 'DE': 'HMC Umfrage Ergebnisse'}
+md_text_title = {'EN': 'HMC Survey Data Explorer', 'DE': 'HMC Survey Data Explorer'}
 
 # Description
 md_text_description = {'EN': ("Explorer interactively the HMC 2021 Survey results. "
@@ -75,6 +75,6 @@ md_text_corrchart = {'EN': "Correspondence of selected questions",
 md_text_button = {'EN': ("# Further charts\n")}
 
 accordion_titles = {
-    'EN': ['Global Data Filters', 'Overview', 'Methods, Tools and Software', 'Survey Data Explorer'],
-    'DE': ['Globale Datenfilter', 'Überblick der Umfrage', 'Methoden, Werkzeuge und Software', 'Umfrage-explorer']
+    'EN': ['Global Data Filters', 'Community Profiles', 'Methods, Tools and Software', 'Survey Data Explorer'],
+    'DE': ['Globale Datenfilter', 'Communityprofile', 'Methoden, Werkzeuge und Software', 'Survey Data Explorer']
 }

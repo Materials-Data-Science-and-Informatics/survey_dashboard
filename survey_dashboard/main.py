@@ -549,22 +549,23 @@ fig_ov4 = pn.pane.Bokeh(bokeh_barchart(start_display_data, y=y_keys, factors=y_k
 # Methods, Software and repos
 
 half_width = int(ACCORDION_WIDTH/2)
+offsetheight_for_tabs = 40
 # Wordcloud of methods #RSDP2b
 text_list = select_data_wordcloud(data_filters, data_filters_method, content=["dataGenMethodSpec_"])
 wordcloud = generate_wordcloud(text_list, height=DEFAULT_FIGURE_HEIGHT, width=ACCORDION_WIDTH)#half_width)
-svg_pane = pn.pane.Bokeh(interactive_wordcloud(wordcloud), width=wordcloud.width, height=wordcloud.height+20)
+svg_pane = pn.pane.Bokeh(interactive_wordcloud(wordcloud), width=wordcloud.width, height=wordcloud.height+offsetheight_for_tabs)
 #pn.pane.SVG(wordcloud.to_svg(), width=wordcloud.width, height=wordcloud.height)
 
 # Wordcloud of software #RDMPR10
 text_list = select_data_wordcloud(data_filters, data_filters_method, content=["software_1", "software_2", "software_3"])
 wordcloud_soft = generate_wordcloud(text_list, height=DEFAULT_FIGURE_HEIGHT, width=ACCORDION_WIDTH)#half_width)
-svg_pane_software = pn.pane.Bokeh(interactive_wordcloud(wordcloud_soft), width=wordcloud.width, height=wordcloud.height+20)
+svg_pane_software = pn.pane.Bokeh(interactive_wordcloud(wordcloud_soft), width=wordcloud.width, height=wordcloud.height+offsetheight_for_tabs)
 #pn.pane.SVG(wordcloud_soft.to_svg(), width=wordcloud_soft.width, height=wordcloud_soft.height)
 
 # Wordcloud of repos #DTPUB5
 text_list = select_data_wordcloud(data_filters, data_filters_method, content=["pubRepo_1", "pubRepo_2", "pubRepo_3", "pubRepo_4", "pubRepo_5"])
 wordcloud_repo = generate_wordcloud(text_list, height=DEFAULT_FIGURE_HEIGHT, width=ACCORDION_WIDTH)#half_width)
-svg_pane_repo = pn.pane.Bokeh(interactive_wordcloud(wordcloud_repo), width=wordcloud.width, height=wordcloud.height+20)
+svg_pane_repo = pn.pane.Bokeh(interactive_wordcloud(wordcloud_repo), width=wordcloud.width, height=wordcloud.height+offsetheight_for_tabs)
 #pn.pane.SVG(wordcloud_repo.to_svg(), width=wordcloud_repo.width, height=wordcloud_repo.height)
 
 # We now do this in tabs:
