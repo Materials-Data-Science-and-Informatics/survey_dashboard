@@ -5,16 +5,41 @@
         "https://raw.githubusercontent.com/schemaorg/schemaorg/main/data/releases/13.0/schemaorgcontext.jsonld",
         "https://w3id.org/software-types"
     ],
-    "@id": "/survey-dashboard",
+    "@id": "https://github.com/Materials-Data-Science-and-Informatics/survey_dashboard/tree/main",
     "@type": "SoftwareSourceCode",
-    "author": {
-        "@id": "/person/j.broeder",
+    "author": [{
+        "@id": "https://orcid.org/0000-0001-7939-226X",
         "@type": "Person",
         "email": "j.broeder@fz-juelich.de",
-        "familyName": "",
-        "givenName": "j.broeder"
+        "familyName": "Bröder",
+        "givenName": "Jens",
+            "affiliation": {
+                "@id": "https://ror.org/02nv7yv05",
+                "name": "Forschungszentrum Jülich GmbH"
+            }
     },
-    "description": "A Dashboard displaying survey data interactively.",
+    {"@id":"https://orcid.org/0000-0003-3043-5657",
+            "@type": "Person",
+            "email": "s.gerlich@fz-juelich.de",
+            "familyName": "Gerlich",
+            "givenName": "Silke Christine",
+            "affiliation": {
+                "@id": "https://ror.org/02nv7yv05",
+                "name": "Forschungszentrum Jülich GmbH"
+            }
+    },
+    {"@id":"https://orcid.org/0000-0002-5149-603X",
+            "@type": "Person",
+            "email": "v.hofmann@fz-juelich.de",
+            "familyName": "Hofmann",
+            "givenName": "Volker",
+            "affiliation": {
+                "@id": "https://ror.org/02nv7yv05",
+                "name": "Forschungszentrum Jülich GmbH"
+            }
+    }
+    ],
+    "description": "A Dashboard displaying survey data in an interactive way and allow for interactive exploration. Written for the data publication of the Helmholtz Metadata collaboration survey 2021: https://doi.org/10.7802/2433. The code could be adapted to visualize other categorical data provided in a table.\n \nAcknowledgements: This project was developed at the Institute for Materials Data Science and Informatics (IAS-9) of the Jülich Research Center and funded by the Helmholtz Metadata Collaboration (HMC), an incubator-platform of the Helmholtz Association within the framework of the Information and Data Science strategic initiative.",
     "identifier": "survey-dashboard",
     "license": "http://spdx.org/licenses/MIT",
     "name": "survey-dashboard",
@@ -58,5 +83,30 @@
             "version": ">=1.8.2.2,<2.0.0.0"
         }
     ],
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "codeRepository": "https://github.com/Materials-Data-Science-and-Informatics/survey_dashboard.git",
+    "dateCreated": "2021-07-09",
+    "dateModified": "2022-12-19",
+    "datePublished": "2023-03-01",
+    "developmentStatus": "https://www.repostatus.org/#active",
+    "programmingLanguage": [
+        "Python"
+    ],
+   "keywords": ["dashboard", "panel", "survey data", "bokeh", "categorical data", "hmc", "interactive visualization", "data visualization", "data exploration"],
+    "copyrightYear" : "2022",
+    "softwareVersion": "1.0.0",
+    "isAccessibleForFree": "True",
+    "readme": "https://github.com/Materials-Data-Science-and-Informatics/survey_dashboard/blob/main/README.md",
+    "buildInstructions": "https://github.com/Materials-Data-Science-and-Informatics/survey_dashboard/blob/main/pyproject.toml",
+    "issueTracker": "https://github.com/Materials-Data-Science-and-Informatics/survey_dashboard/issues",
+    "url":"https://github.com/Materials-Data-Science-and-Informatics/survey_dashboard",
+    "operatingSystem": ["OSX", "Linux"],
+    "targetProduct": {
+	"@id": "https://dashboard.survey.helmholtz-metadaten.de",
+        "@type": "WebApplication",
+	"url": "https://dashboard.survey.helmholtz-metadaten.de",
+        "name": "HMC survey data explorer",
+	"suportingData" : "https://doi.org/10.7802/2433",
+	"screenshot" : "https://user-images.githubusercontent.com/24694833/230306080-9ca68ff8-5b8b-4ac4-b2fa-51e2c5361c7d.png"
+    }
 }
