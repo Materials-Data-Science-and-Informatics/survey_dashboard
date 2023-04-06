@@ -30,6 +30,7 @@ poetry install .
 
 ## Usage
 
+
 After installation you can start the app, i.e the panel server/bokeh server.
 ```shell
 panel serve --port 50006 survey_dashboard/ 
@@ -37,10 +38,10 @@ panel serve --port 50006 survey_dashboard/
 If you have given the dashboard a specific layout like the layout specific to HMC, which is on the hmc_specific branch, you might have to link to to a specific template.
 ```shell
 panel serve --port 50006 survey_dashboard/ --static-dirs en_files=./survey_dashboard/hmc_layout/static/en_files
+
 ```
 
 * Navigate to `http://localhost:50006/` in your browser.
-
 
 ## Deployment
 
