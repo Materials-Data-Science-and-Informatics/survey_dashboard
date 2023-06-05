@@ -31,7 +31,7 @@ from .data.display_specifications.hmc_custom_layout import hmc_custom_css_accord
 
 
 # GLOBAL
-LANGUAGE = 'EN' #'DE'
+LANGUAGE = os.environ.get('LANGUAGE_DASHBOARD', 'EN') #'DE'
 ACCORDION_WIDTH = int(DEFAULT_FIGURE_WIDTH*2) # maybe this can be made dynamic. 
 # This is the only width parameter to which everything streches to 
 
@@ -330,12 +330,14 @@ def select_data_corr(question, question2, data_filters, data_filters_method):
                   ("total", "@total"),
                   ("percentage", "@percentage")]
 
-    title = f'{q1_key[0]} in dependence to {q2_key[0]}'
+    title = f''#{q1_key[0]} in dependence to {q2_key[0]}'
+    xlabel = f'{question}'
+    ylabel = f'{question2}'
 
     # Bokeh plots need a ColumnDataSource, but this can be initialized from a pandas
     selected = ColumnDataSource(cross_tab)
 
-    display_options = {'x_range' : x_range, 'y_range' : y_range, 
+    display_options = {'x_range' : x_range, 'y_range' : y_range, 'xlabel': xlabel, 'ylabel': ylabel,
                         'title': title, 'tooltips' : tooltips}
 
     return selected, display_options, marker_scale
@@ -406,23 +408,23 @@ def select_data_wordcloud(data_filters, data_filters_method, content=['dataGenMe
 #tab2 = ("Filter HFG field", fig2)
 #filter_tabs = pn.Tabs(*[tab1, tab2])
 
-multi_choice = pn.widgets.MultiChoice(name="Filter by research area. (Each selected will be shown)", value=["All"], options=FILTER_OPTIONS['researchArea'])
-multi_choice_method = pn.widgets.MultiChoice(name="Filter by data generation method (Only datasets containing all filters)", value=[], options=FILTER_OPTIONS['method'])
-multi_choice_hgf_field = pn.widgets.MultiChoice(name="Filter by HGF research field (Each selected will be shown)", value=["All"], options=FILTER_OPTIONS['HGFresearchfield'])
+multi_choice = pn.widgets.MultiChoice(name=md_text_global_filters_widgets[0][LANGUAGE], value=["All"], options=FILTER_OPTIONS['researchArea'])
+multi_choice_method = pn.widgets.MultiChoice(name=md_text_global_filters_widgets[1][LANGUAGE], value=[], options=FILTER_OPTIONS['method'])
+#multi_choice_hgf_field = pn.widgets.MultiChoice(name="Filter by HGF research field (Each selected will be shown)", value=["All"], options=FILTER_OPTIONS['HGFresearchfield'])
 # for careerlevel there can be only one, so we use a Multiselect instead
-select_careerlevel = pn.widgets.Select(name="Filter by career level.", value=[], options=FILTER_OPTIONS['careerLevel'])
-multi_choice_facility = pn.widgets.MultiChoice(name="Filter by career level.", value=[], options=FILTER_OPTIONS['LargeScaleFacility'])
+#select_careerlevel = pn.widgets.Select(name="Filter by career level.", value=[], options=FILTER_OPTIONS['careerLevel'])
+#multi_choice_facility = pn.widgets.MultiChoice(name="Filter by career level.", value=[], options=FILTER_OPTIONS['LargeScaleFacility'])
 
 # Bar chart
 # D: question select could also be a slider?
 # TODO: get filter options for question
-question_select = pn.widgets.Select(name="Select a Question from the survey", value=START_DATA_BAR,
+question_select = pn.widgets.Select(name=md_text_select_widgets[0][LANGUAGE], value=START_DATA_BAR,
     options=questions)#, description="Select the survey question, which results should be displayed.")
 
 multi_filter = pn.widgets.MultiChoice(name="Filter by data by question specific filter", value=[], 
     options=FILTER_OPTIONS['method'], visible=False)
 
-question_select2 = pn.widgets.Select(name="Select a Question from the survey", value=START_DATA_BAR2,
+question_select2 = pn.widgets.Select(name=md_text_select_widgets[1][LANGUAGE], value=START_DATA_BAR2,
     options=questions)#, description="Select the survey question, which results should be displayed.")
 
 multi_filter2 = pn.widgets.MultiChoice(name="Filter by data by question specific filter", value=[], 
@@ -721,7 +723,7 @@ row1 = pn.Column(md_text_global_filter[LANGUAGE], g_filters[0], g_filters[1], si
 global_filters_sec = row1
 
 # Overview part
-overview_sec = pn.Column(md_text_overview[LANGUAGE], pn.Row(fig_ov1, fig_ov2), pn.Row(fig_ov3, fig_ov4))
+overview_sec = pn.Column(md_text_overview[LANGUAGE], pn.Row(fig_ov3, fig_ov2), pn.Row(fig_ov1, fig_ov4))
 
 
 # Tools

@@ -4,24 +4,52 @@ A dashboard to display survey data in an interactive way.
 
 ## Overview
 
-A dashboard using bokeh sever, developed to display data from HMC surveys in an interactive explorer way.
+This repository contains a dashboard using Panel and Bokeh, developed to display data from 
+HMC surveys in an interactive exploratory way. It is designed such that the code for the interactive
+visualizations might be reused for other projects.
+Example of a deployed version can be found [here](https://dashboard.survey.helmholtz-metadaten.de/survey_dashboard)
+
+Some impressions:
+![dashboard_overview](https://user-images.githubusercontent.com/24694833/230306080-9ca68ff8-5b8b-4ac4-b2fa-51e2c5361c7d.png)
+![dashboard_methods](https://user-images.githubusercontent.com/24694833/230306091-637188a9-359e-4ea0-8432-4d05a1ccc68f.png)
+![Dashboard_survey_data_explorer](https://user-images.githubusercontent.com/24694833/230306099-4cf71bda-0990-4f9d-be14-9a65812e7ac4.png)
 
 ## Installation
 
+After downloading the git repository you can install the software either with pip or poetry.
+We recommend setting it up in a separate python virtual environment.
+
+```shell
+pip install survey_dashboard
+```
+or
+
+```shell
+poetry install .
+```
 
 ## Usage
-* In the top folder execute:
+
+
+After installation you can start the app, i.e the panel server/bokeh server.
+```shell
+panel serve --port 50006 survey_dashboard/ 
 ```
-bokeh serve --show dashboard
+If you have given the dashboard a specific layout like the layout specific to HMC, which is on the hmc_specific branch, you might have to link to to a specific template.
+```shell
+panel serve --port 50006 survey_dashboard/ --static-dirs en_files=./survey_dashboard/hmc_layout/static/en_files
+
 ```
 
-* Navigate to `http://localhost:8000/` in your browser.
+* Navigate to `http://localhost:50006/` in your browser.
 
 ## Deployment
 
 To embed the dashboard into any website, first you have to host a bokeh server with this application somewhere and then you can embed it with bokehs `sever_document` function [see](https://docs.bokeh.org/en/latest/docs/user_guide/embed.html#app-documents)
 
-Do steps under `usage` above, but for a public exposed URL.
+Do steps under `usage` above, but for a public exposed URL, or what ever is used for deployment.
+The Language verison of the dashboard can be set with the environment variable: 'L
+
 
 Add the code from 'script' to you website:
 

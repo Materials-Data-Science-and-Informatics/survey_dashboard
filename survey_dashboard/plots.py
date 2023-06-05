@@ -64,6 +64,8 @@ def add_legend_at(fig, position='right'):
 
 default_theme = {
     "figure_kwargs" : {
+    "background_fill_color" : '#00000000', #F7F7F7', #transparent
+    "border_fill_color" : '#00000000',
     "x_range.range_padding": 0.1,
     "xgrid.grid_line_color": None,
     "xaxis.major_label_orientation": 1,
@@ -82,8 +84,10 @@ default_theme = {
 }
 corr_theme = {
     "figure_kwargs" : {
+    "border_fill_color" : '#00000000',
+    "background_fill_color" : '#00000000',
     "x_range.range_padding": 0.1,
-    "xgrid.grid_line_color": None,
+    #"xgrid.grid_line_color": None,
     "xaxis.major_label_orientation": 1,
     "title.text_font_size": '18px',
     "yaxis.axis_label_text_font_size": '18px',
@@ -740,6 +744,8 @@ def create_legend_corr(fig, colors=['red', 'blue', 'green', 'red', 'red', 'red']
                tools='')
     leg_items = create_legend_items(5, size_min=0, color=colors, fig=fig2, scale_m=scale_m) #[("circle", [circle])]
 
+    fig2.background_fill_color = '#00000000' #F7F7F7', #transparent
+    fig2.border_fill_color = '#00000000'
     fig2.xaxis.axis_line_alpha= 0
     fig2.yaxis.axis_line_alpha= 0
     fig2.xgrid.grid_line_alpha = 0
@@ -868,5 +874,7 @@ def interactive_wordcloud(wordcloud, **kwargs):
     glyph = Text(x="x", y="y", text="text", angle='angle', angle_units='deg', 
                  text_color="color", text_font_size='font_size', text_font={'value': font_family}, **kwargs)
     fig.add_glyph(source, glyph)
-
+    
+    fig.background_fill_color = '#00000000' #F7F7F7', #transparent
+    fig.border_fill_color = '#00000000'
     return fig
