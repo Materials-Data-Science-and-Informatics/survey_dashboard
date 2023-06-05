@@ -1,5 +1,6 @@
 [project]
 name = "survey-dashboard"
+version = "0.1.0"
 description = "A Dashboard displaying survey data in an interactive way and allow for interactive exploration."
 authors = [{name = "Jens Broeder", email = "j.broeder@fz-juelich.de"}, 
 {name = "Silke Christine Gerlich", email = "s.gerlich@fz-juelich.de"},
@@ -7,7 +8,7 @@ authors = [{name = "Jens Broeder", email = "j.broeder@fz-juelich.de"},
 readme = "README.md"
 license = {file = "LICENSE.txt"}
 classifiers = [
-        "Development Status :: 3 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Information Technology",
         "Intended Audience :: Science/Research",
         "License :: OSI Approved :: MIT License",
@@ -39,7 +40,7 @@ authors = ["Jens Broeder <j.broeder@fz-juelich.de>", "Silke Christine Gerlich <s
 readme = "README.md"
 license = "MIT"
 classifiers = [
-        "Development Status :: 3 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Information Technology",
         "Intended Audience :: Science/Research",
         "License :: OSI Approved :: MIT License",
