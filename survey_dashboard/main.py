@@ -20,32 +20,46 @@ import panel as pn
 from bokeh.palettes import Category20
 from bokeh.models import ColumnDataSource, Div
 from jinja2 import Environment, FileSystemLoader
-from .plots import bokeh_barchart, bokeh_piechart, add_legend_at, bokeh_corr_plot
-from .plots import create_legend_corr, generate_wordcloud, interactive_wordcloud
-from .plots import DEFAULT_FIGURE_WIDTH, DEFAULT_FIGURE_HEIGHT
-from .analysis import calculate_crosstab, prepare_data_research_field, filter_dataframe
-from .analysis import percentage_to_area, get_all_values
-from .data.display_specifications.hcs_clean_dictionaries import (
+from survey_dashboard.plots import (
+    bokeh_barchart,
+    bokeh_piechart,
+    add_legend_at,
+    bokeh_corr_plot,
+)
+from survey_dashboard.plots import (
+    create_legend_corr,
+    generate_wordcloud,
+    interactive_wordcloud,
+)
+from survey_dashboard.plots import DEFAULT_FIGURE_WIDTH, DEFAULT_FIGURE_HEIGHT
+from survey_dashboard.analysis import (
+    calculate_crosstab,
+    prepare_data_research_field,
+    filter_dataframe,
+)
+from survey_dashboard.analysis import percentage_to_area, get_all_values
+from survey_dashboard.data.display_specifications.hcs_clean_dictionaries import (
     HCSquestions,
     HCS_orderedCats,
     HCS_MCsubquestions,
 )
-from .data.display_specifications.hcs_clean_dictionaries import (
+from survey_dashboard.data.display_specifications.hcs_clean_dictionaries import (
     HCS_colnamesDict,
-    abbrevCenterAffilDict,
     HCS_MCList,
 )
-from .data.display_specifications.hcs_clean_dictionaries import (
+from survey_dashboard.data.display_specifications.hcs_clean_dictionaries import (
     HCS_dtypesWOmc,
     HCS_MCList,
     HCS_MCsubquestions,
 )
-from .text_display import *
-from .data.display_specifications.hcs_clean_dictionaries import (
+from survey_dashboard.text_display import *
+from survey_dashboard.data.display_specifications.hcs_clean_dictionaries import (
     FILTER_OPTIONS,
     BARCHART_ALLOWED,
 )
-from .data.display_specifications.hmc_custom_layout import hmc_custom_css_accordion
+from survey_dashboard.data.display_specifications.hmc_custom_layout import (
+    hmc_custom_css_accordion,
+)
 
 
 # GLOBAL
