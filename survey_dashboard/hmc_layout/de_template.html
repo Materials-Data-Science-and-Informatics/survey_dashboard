@@ -1,0 +1,1982 @@
+{% extends base %}
+
+{% block postamble %}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta name="robots" content="index,follow" />
+    <meta name="revisit-after" content="7 days" />
+    <meta name="url" content="https://helmholtz-metadaten.de/de" />
+    <meta name="author" content="Jason Scott" />
+    <meta x-if="$color" x-bind:content="$color" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="de" />
+    <meta property="og:url" content="https://helmholtz-metadaten.de/de" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json">
+        {
+            "@context": [
+                "https://raw.githubusercontent.com/codemeta/codemeta/2.0/codemeta.jsonld",
+                "https://w3id.org/software-iodata",
+                "https://raw.githubusercontent.com/schemaorg/schemaorg/main/data/releases/13.0/schemaorgcontext.jsonld",
+                "https://w3id.org/software-types"
+            ],
+            "@id": "https://github.com/Materials-Data-Science-and-Informatics/survey_dashboard/tree/main",
+            "@type": "SoftwareSourceCode",
+            "author": [{
+                "@id": "https://orcid.org/0000-0001-7939-226X",
+                "@type": "Person",
+                "email": "j.broeder@fz-juelich.de",
+                "familyName": "Bröder",
+                "givenName": "Jens",
+                    "affiliation": {
+                        "@id": "https://ror.org/02nv7yv05",
+                        "name": "Forschungszentrum Jülich GmbH"
+                    }
+            },
+            {"@id":"https://orcid.org/0000-0003-3043-5657",
+                    "@type": "Person",
+                    "email": "s.gerlich@fz-juelich.de",
+                    "familyName": "Gerlich",
+                    "givenName": "Silke Christine",
+                    "affiliation": {
+                        "@id": "https://ror.org/02nv7yv05",
+                        "name": "Forschungszentrum Jülich GmbH"
+                    }
+            },
+            {"@id":"https://orcid.org/0000-0002-5149-603X",
+                    "@type": "Person",
+                    "email": "v.hofmann@fz-juelich.de",
+                    "familyName": "Hofmann",
+                    "givenName": "Volker",
+                    "affiliation": {
+                        "@id": "https://ror.org/02nv7yv05",
+                        "name": "Forschungszentrum Jülich GmbH"
+                    }
+            }
+            ],
+            "description": "A Dashboard displaying survey data in an interactive way and allow for interactive exploration. Written for the data publication of the Helmholtz Metadata collaboration survey 2021: https://doi.org/10.7802/2433. The code could be adapted to visualize other categorical data provided in a table.\n \nAcknowledgements: This project was developed at the Institute for Materials Data Science and Informatics (IAS-9) of the Jülich Research Center and funded by the Helmholtz Metadata Collaboration (HMC), an incubator-platform of the Helmholtz Association within the framework of the Information and Data Science strategic initiative.",
+            "identifier": "survey-dashboard",
+            "license": "http://spdx.org/licenses/MIT",
+            "name": "survey-dashboard",
+            "runtimePlatform": [
+                "Python 3",
+                "Python 3.10",
+                "Python 3.8",
+                "Python 3.9"
+            ],
+            "softwareRequirements": [
+                {
+                    "@id": "/dependency/bokeh-ge-2.4.3,-lt-3.0.0",
+                    "@type": "SoftwareApplication",
+                    "identifier": "bokeh",
+                    "name": "bokeh",
+                    "runtimePlatform": "Python 3",
+                    "version": ">=2.4.3,<3.0.0"
+                },
+                {
+                    "@id": "/dependency/pandas-ge-1.4.1,-lt-2.0.0",
+                    "@type": "SoftwareApplication",
+                    "identifier": "pandas",
+                    "name": "pandas",
+                    "runtimePlatform": "Python 3",
+                    "version": ">=1.4.1,<2.0.0"
+                },
+                {
+                    "@id": "/dependency/panel-ge-0.13.1,-lt-0.14.0",
+                    "@type": "SoftwareApplication",
+                    "identifier": "panel",
+                    "name": "panel",
+                    "runtimePlatform": "Python 3",
+                    "version": ">=0.13.1,<0.14.0"
+                },
+                {
+                    "@id": "/dependency/wordcloud-ge-1.8.2.2,-lt-2.0.0.0",
+                    "@type": "SoftwareApplication",
+                    "identifier": "wordcloud",
+                    "name": "wordcloud",
+                    "runtimePlatform": "Python 3",
+                    "version": ">=1.8.2.2,<2.0.0.0"
+                }
+            ],
+            "version": "1.0.0",
+            "codeRepository": "https://github.com/Materials-Data-Science-and-Informatics/survey_dashboard.git",
+            "dateCreated": "2021-07-09",
+            "dateModified": "2022-12-19",
+            "datePublished": "2023-03-01",
+            "developmentStatus": "https://www.repostatus.org/#active",
+            "programmingLanguage": [
+                "Python"
+            ],
+           "keywords": ["dashboard", "panel", "survey data", "bokeh", "categorical data", "hmc", "interactive visualization", "data visualization", "data exploration"],
+            "copyrightYear" : "2022",
+            "softwareVersion": "1.0.0",
+            "isAccessibleForFree": "True",
+            "readme": "https://github.com/Materials-Data-Science-and-Informatics/survey_dashboard/blob/main/README.md",
+            "buildInstructions": "https://github.com/Materials-Data-Science-and-Informatics/survey_dashboard/blob/main/pyproject.toml",
+            "issueTracker": "https://github.com/Materials-Data-Science-and-Informatics/survey_dashboard/issues",
+            "url":"https://github.com/Materials-Data-Science-and-Informatics/survey_dashboard",
+            "operatingSystem": ["OSX", "Linux"],
+            "targetProduct": {
+            "@id": "https://dashboard.survey.helmholtz-metadaten.de",
+                "@type": "WebApplication",
+            "url": "https://dashboard.survey.helmholtz-metadaten.de",
+                "name": "HMC survey data explorer",
+            "suportingData" : "https://doi.org/10.7802/2433",
+            "screenshot" : "https://user-images.githubusercontent.com/24694833/230306080-9ca68ff8-5b8b-4ac4-b2fa-51e2c5361c7d.png"
+            }
+        }
+        </script>
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="https://helmholtz-metadaten.de/favicon/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="./en_files/SurveyExplorerIcon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="./en_files/SurveyExplorerIcon16.png"
+    />
+    <link
+      rel="manifest"
+      href="https://helmholtz-metadaten.de/favicon/site.webmanifest"
+    />
+    <link
+      rel="shortcut icon"
+      href="https://helmholtz-metadaten.de/favicon/favicon.ico"
+    />
+    <meta name="msapplication-config" content="/favicon/browserconfig.xml" />
+    
+    <!-- Style added for title banner-->
+    <style>
+      .banner {
+        background-position: center top;
+        background-size: cover;
+        height: 320px;
+        background-repeat: no-repeat;
+        align-items: flex-end !important;
+      }
+      
+      .d-flex {
+        display: flex !important;
+      }
+
+      .infobox {
+        width: 30%;
+        margin-bottom: 1.5rem;
+        color: #ffffff;
+        padding: 12px;
+        margin: auto;
+        font-size: 24px;
+        vertical-align: middle;
+      }
+
+      .infoHeadline {
+        width: auto;
+        color: #ffffff;
+        margin: 1.5rem;
+        font-size: 54px;
+        font-family: halvar;
+        font-weight: normal;
+      }
+
+      .infoText {
+        width: auto;
+        color: #ffffff;
+        margin: 1.5rem;
+        font-size: 24px;
+        font-family: halvar;
+        font-weight: normal;
+      }
+
+      .infobox2 {
+        
+        border-style:solid;
+        border-width: 2px;
+        color: #000000;
+        padding: 12px;
+        margin: auto;
+        font-size: 17px;
+      }
+
+      .highlight {
+        color:#14c8ff;
+      }
+    
+    </style>
+    <!---->
+
+    <!-- START BLADE STYLES -->
+    <style>
+      .hmc-page-header {
+        min-height: 320px;
+        position: relative;
+        &__image {
+          .image-container {
+            width: 100%;
+            height: 100%;
+          }
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+        &__headline {
+          @media (max-width: 375px) {
+            font-size: 28px !important;
+            line-height: 40px !important;
+          }
+        }
+      }
+      @media (min-width: 768px) {
+        .hmc-page-header {
+          min-height: 500px;
+        }
+      }
+      @keyframes tickerh {
+        100% {
+          transform: translate3d(100%, 0, 0);
+        }
+      }
+      .image-container {
+        overflow: hidden;
+      }
+      .lazyload,
+      .lazyloading {
+        -webkit-filter: blur(20px);
+        filter: blur(20px);
+      }
+      .lazyloaded {
+        -webkit-filter: blur(0);
+        filter: blur(0);
+      }
+      .lazyload-animation {
+        transition: 0.25s filter ease;
+      }
+      .hmc-burger {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        position: relative;
+        background: white;
+      }
+      .hmc-burger span {
+        position: absolute;
+        top: 50%;
+        left: 10px;
+        height: 2px;
+        width: 20px;
+      }
+      .hmc-burger span:first-child {
+        margin-top: -5px;
+      }
+      .hmc-burger span:last-child {
+        margin-top: 5px;
+      }
+      .hmc-nav-main {
+        transform: translateX(-16px);
+      }
+      @media (min-width: 1024px) {
+        .hmc-nav-main {
+          transform: translateX(24px);
+        }
+      }
+      .hmc-nav-main ul li {
+        position: relative;
+        min-height: 60px;
+      }
+      .hmc-nav-main ul li a {
+        padding-bottom: 0;
+        height: 100%;
+      }
+      .hmc-nav-main ul li a span:nth-child(2) {
+        transition: all 0.3s;
+      }
+      .hmc-nav-main ul li:hover a span:nth-child(2) {
+        transform: rotate(180deg);
+      }
+      .hmc-nav-main ul li:hover a svg polygon {
+        fill: #95c230;
+      }
+      .hmc-nav-main ul li ul {
+        opacity: 0;
+        pointer-events: none;
+        position: absolute;
+        left: 0;
+        top: 60px;
+        transition: all 0.3s;
+        border-top: 4px solid #95c230;
+        min-width: 200px;
+        box-shadow: 2px 2px 6px 2px rgba(0, 0, 0, 0.15);
+      }
+      .hmc-nav-main ul li ul li {
+        min-height: 0;
+      }
+      .hmc-nav-main ul li ul li a {
+        padding: 14px 38px 14px 28px;
+        display: block;
+        white-space: nowrap;
+      }
+      .hmc-nav-main ul li ul li a:hover {
+        background: #dee1e2;
+      }
+      .hmc-nav-main ul li:hover ul {
+        opacity: 1;
+        pointer-events: all;
+      }
+      .hmc-nav-main ul li:last-child ul {
+        left: auto;
+        right: 0;
+      }
+      ul.nav_items button {
+        width: 40px;
+        height: 40px;
+      }
+      ul.nav_items button span {
+        transition: transform 0.3s;
+      }
+      ul.nav_items button.close span {
+        transform: rotate(180deg);
+      }
+      ul.nav_items li {
+        margin-bottom: 4px;
+      }
+      ul.nav_items a {
+        height: 40px;
+        line-height: 40px;
+      }
+      ul.nav_items ul {
+        max-height: 0;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s;
+        margin: 0;
+      }
+      ul.nav_items ul.open {
+        max-height: 2000px;
+        opacity: 1;
+        pointer-events: all;
+        margin: 10px 0 10px 0;
+      }
+      ul.nav_items ul a {
+        text-transform: none;
+        font-size: 14px;
+      }
+      .hmc-nav-mobile {
+        overflow-y: auto;
+        z-index: 3001;
+        width: 100vw;
+        transform: translateX(100%);
+        box-shadow: 0 0 10px 0 rgba(117, 117, 117, 0.5);
+        transition: all 0.3s;
+      }
+      .hmc-nav-mobile.visible {
+        transform: translateX(0);
+      }
+      .hmc-nav-mobile ul ul {
+        padding-left: 0;
+      }
+      .hmc-nav-mobile ul ul ul {
+        padding-left: 20px;
+      }
+      .hmc-close-mobile-nav {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        position: relative;
+        background: white;
+        margin-left: -10px;
+      }
+      .hmc-close-mobile-nav span {
+        position: absolute;
+        top: 50%;
+        left: 10px;
+        background: #005a9a;
+        height: 2px;
+        width: 20px;
+      }
+      .hmc-close-mobile-nav span:first-child {
+        transform: rotate(45deg);
+      }
+      .hmc-close-mobile-nav span:last-child {
+        transform: rotate(-45deg);
+      }
+      main {
+        margin-top: 50px;
+        transition: margin-top 0.3s;
+      }
+      @media (min-width: 768px) {
+        main {
+          margin-top: 93px;
+        }
+      }
+      @media (min-width: 768px) {
+        .scrolled main {
+          margin-top: 62px;
+        }
+      }
+      .hmc-app-header {
+        position: relative;
+        z-index: 1000;
+        display: block;
+        height: 50px;
+        transition: height 0.3s;
+        box-shadow: 0 0 10px 0 rgba(117, 117, 117, 0.5);
+      }
+      @media (min-width: 768px) {
+        .hmc-app-header {
+          height: 93px;
+        }
+      }
+      .scrolled .hmc-app-header {
+        height: 50px;
+      }
+      @media (min-width: 768px) {
+        .scrolled .hmc-app-header {
+          height: 62px;
+        }
+      }
+      .hmc-langswitch__container {
+        top: 0;
+        right: 0;
+        transition: top 0.3s;
+      }
+      .scrolled .hmc-langswitch__container {
+        top: -40px;
+      }
+      .hmc-logo__wrapper {
+        z-index: 1001;
+        transform: scale(0.75) !important;
+        transform-origin: left;
+        transition: transform 0.3s;
+      }
+      @media (min-width: 768px) {
+        .hmc-logo__wrapper {
+          transform: scale(1) !important;
+        }
+        .scrolled .hmc-logo__wrapper {
+          transform: scale(0.8) !important;
+        }
+      }
+    </style>
+    <!-- END BLADE STYLES -->
+    <link rel="stylesheet" href="./en_files/app.css" />
+
+    <style>
+      .carousel__slide {
+        align-items: center;
+        display: flex;
+        flex-shrink: 0;
+        justify-content: center;
+        margin: 0;
+        position: relative;
+        scroll-snap-stop: auto;
+      }
+      .carousel {
+        position: relative;
+      }
+      .carousel,
+      .carousel * {
+        box-sizing: border-box;
+      }
+      .carousel__track {
+        display: flex;
+        margin: 0;
+        padding: 0;
+        position: relative;
+      }
+      .carousel__viewport {
+        overflow: hidden;
+      }
+      :root {
+        --vc-clr-primary: #57666a;
+        --vc-clr-secondary: #bfc3c5;
+        --vc-clr-white: #fff;
+        --vc-icn-width: 1em;
+        --vc-nav-width: 40px;
+        --vc-nav-color: #fff;
+        --vc-nav-background-color: var(--vc-clr-primary);
+        --vc-pgn-width: 8px;
+        --vc-pgn-height: 8px;
+        --vc-pgn-margin: 7px;
+        --vc-pgn-border-radius: 0;
+        --vc-pgn-background-color: var(--vc-clr-secondary);
+        --vc-pgn-active-color: var(--vc-clr-primary);
+      }
+      .carousel__next,
+      .carousel__prev {
+        align-items: center;
+        background-color: #fff;
+        border: 0;
+        border-radius: 9px;
+        color: #005a9a;
+        cursor: pointer;
+        display: none;
+        font-size: calc(var(--vc-nav-width) * 2 / 3);
+        height: var(--vc-nav-width);
+        justify-content: center;
+        padding: 0;
+        position: absolute;
+        text-align: center;
+        width: var(--vc-nav-width);
+      }
+      .carousel__prev {
+        right: 54px;
+        top: calc(100% - 35px);
+      }
+      .carousel__next {
+        right: 0;
+        top: calc(100% - 35px);
+      }
+      .carousel__icon {
+        fill: currentColor;
+        height: var(--vc-icn-width);
+        width: var(--vc-icn-width);
+      }
+      .carousel__pagination {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        list-style: none;
+        margin-left: 0;
+        margin-top: 30px;
+      }
+      @media (min-width: 768px) {
+        .carousel__pagination {
+          display: flex;
+          justify-content: flex-start;
+          list-style: none;
+          margin-left: 8px;
+          margin-top: 30px;
+          max-width: 300px;
+        }
+        .carousel__next,
+        .carousel__prev {
+          display: flex;
+        }
+        .carousel__prev {
+          right: 66px;
+          top: calc(100% - 35px);
+        }
+        .carousel__next {
+          right: 12px;
+          top: calc(100% - 35px);
+        }
+      }
+      .carousel__pagination-button {
+        background-color: var(--vc-pgn-background-color);
+        border: 0;
+        border-radius: var(--vc-pgn-height);
+        cursor: pointer;
+        height: var(--vc-pgn-height);
+        margin: var(--vc-pgn-margin);
+        width: var(--vc-pgn-width);
+      }
+      .carousel__pagination-button--active {
+        background-color: var(--vc-pgn-active-color);
+      }
+    </style>
+    <style>
+      .carousel__slide {
+        align-items: center;
+        display: flex;
+        flex-shrink: 0;
+        justify-content: center;
+        margin: 0;
+        position: relative;
+        scroll-snap-stop: auto;
+      }
+      .carousel {
+        margin-left: -0.75rem;
+        margin-right: -0.75rem;
+        position: relative;
+      }
+      .carousel,
+      .carousel * {
+        box-sizing: border-box;
+      }
+      .carousel__track {
+        display: flex;
+        margin: 0;
+        padding: 0;
+        position: relative;
+      }
+      .carousel__viewport {
+        overflow: hidden;
+      }
+      :root {
+        --vc-clr-primary: #57666a;
+        --vc-clr-secondary: #bfc3c5;
+        --vc-clr-white: #fff;
+        --vc-icn-width: 1em;
+        --vc-nav-width: 40px;
+        --vc-nav-color: #fff;
+        --vc-nav-background-color: var(--vc-clr-primary);
+        --vc-pgn-width: 8px;
+        --vc-pgn-height: 8px;
+        --vc-pgn-margin: 7px;
+        --vc-pgn-border-radius: 0;
+        --vc-pgn-background-color: var(--vc-clr-secondary);
+        --vc-pgn-active-color: var(--vc-clr-primary);
+      }
+      .carousel__next,
+      .carousel__prev {
+        align-items: center;
+        background-color: #fff;
+        border: 0;
+        border-radius: 100%;
+        color: #005a9a;
+        cursor: pointer;
+        display: none;
+        font-size: calc(var(--vc-nav-width) * 2 / 3);
+        height: var(--vc-nav-width);
+        justify-content: center;
+        padding: 0;
+        position: absolute;
+        text-align: center;
+        width: var(--vc-nav-width);
+      }
+      .carousel__prev {
+        right: 54px;
+        top: calc(100% - 35px);
+      }
+      .carousel__next {
+        right: 0;
+        top: calc(100% - 35px);
+      }
+      .carousel__icon {
+        fill: currentColor;
+        height: var(--vc-icn-width);
+        width: var(--vc-icn-width);
+      }
+      .carousel__pagination {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        list-style: none;
+        margin-left: 0;
+        margin-top: 30px;
+      }
+      @media (min-width: 768px) {
+        .carousel__pagination {
+          display: flex;
+          justify-content: flex-start;
+          list-style: none;
+          margin-left: 8px;
+          margin-top: 30px;
+          max-width: 300px;
+        }
+        .carousel__next,
+        .carousel__prev {
+          display: flex;
+        }
+        .carousel__prev {
+          right: 66px;
+          top: calc(100% - 35px);
+        }
+        .carousel__next {
+          right: 12px;
+          top: calc(100% - 35px);
+        }
+      }
+      .carousel__pagination-button {
+        background-color: var(--vc-pgn-background-color);
+        border: 0;
+        border-radius: var(--vc-pgn-height);
+        cursor: pointer;
+        height: var(--vc-pgn-height);
+        margin: var(--vc-pgn-margin);
+        width: var(--vc-pgn-width);
+      }
+      .carousel__pagination-button--active {
+        background-color: var(--vc-pgn-active-color);
+      }
+    </style>
+    <style>
+      .mega-height {
+        height: calc(100vh - 93px);
+      }
+      .scrolled .mega-height {
+        height: calc(100vh - 62px);
+      }
+    </style>
+{% endblock %}
+
+    {% block inner_body %}
+    <div id="app" class="overflow-x-hidden">
+      <header class="fixed top-0 w-screen bg-white hmc-app-header">
+        <div id="app-header" class="relative z-10 h-full bg-white">
+          <div class="container relative flex h-full bg-white xl:items-center">
+            <div
+              class="flex items-center w-2/3 h-full hmc-logo__wrapper lg:w-1/3"
+            >
+              <a
+                href="https://helmholtz-metadaten.de/de"
+                class="transform origin-left scale-75 lg:scale-90 -ml-3"
+              >
+                <svg
+                  width="400"
+                  height="53"
+                  viewBox="0 0 400 53"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M144.776 40.2983L159.642 26.9252L144.776 13.552L150.09 7.6416L169.015 24.7162V29.1341L150.09 46.1491L144.776 40.2983Z"
+                    fill="#14C8FF"
+                  ></path>
+                  <path
+                    d="M28.6569 40.2983L13.7912 26.9252L28.6569 13.552L23.3435 7.6416L4.3584 24.7162V29.1341L23.3435 46.1491L28.6569 40.2983Z"
+                    fill="#14C8FF"
+                  ></path>
+                  <path
+                    d="M57.3136 23.2834V7.6416H64.7166V46.1491H57.3136V30.6267H44.6569V46.1491H37.2539V7.6416H44.6569V23.2834H57.3136Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M104.538 7.70166V46.2091H97.1347V24.8957L91.9407 35.7614C91.7616 36.1196 91.4631 36.2987 91.0452 36.2987H85.2541C84.8959 36.2987 84.5377 36.0599 84.4183 35.7614L79.2243 24.8957V46.2091H71.8213V7.70166H79.2243L88.1795 26.5076L97.1347 7.70166H104.538V7.70166Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M133.433 35.164L138.687 40.358L134.687 44.2983C133.552 45.4923 132 46.2088 130.328 46.2088H120.597C118.985 46.2088 117.373 45.552 116.239 44.4177L112.418 40.5968C111.284 39.4028 110.687 37.7909 110.687 36.1789V17.6715C110.687 16.0595 111.343 14.5073 112.478 13.3132L116.298 9.49235C117.433 8.35802 118.985 7.7013 120.597 7.6416H130.328C132 7.6416 133.552 8.35802 134.687 9.55205L138.687 13.4923L133.433 18.6864L130.149 15.4028C129.91 15.164 129.612 15.0446 129.254 15.0446H121.672C121.373 15.0446 121.015 15.164 120.776 15.4028L118.209 17.7909C117.97 18.0297 117.851 18.3282 117.851 18.6864V35.164C117.851 35.5222 117.97 35.8207 118.209 36.0595L120.597 38.4476C120.836 38.6864 121.134 38.8058 121.492 38.8058H129.075C129.433 38.8058 129.731 38.6864 129.97 38.4476L133.433 35.164Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M191.344 14.328V7.70117H194.508V24.1191H191.344V17.4922H185.732V24.1191H182.567V7.70117H185.732V14.328H191.344Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M200.657 10.8654V14.328H206.687V17.4922H200.657V20.9549H207.881V24.1191H199.105C198.986 24.1191 198.806 24.0594 198.747 23.94L197.732 22.9251C197.612 22.8057 197.553 22.6862 197.553 22.5668V9.25341C197.553 9.13401 197.612 8.9549 197.732 8.8952L198.747 7.88028C198.866 7.76087 198.986 7.70117 199.105 7.70117H207.881V10.8654H200.657Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M220.12 20.9549V24.1191H212.179C212.06 24.1191 211.881 24.0594 211.821 23.94L210.806 22.9251C210.687 22.8057 210.627 22.6862 210.627 22.5668V7.70117H213.791V20.9549H220.12Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M236.836 7.70117V24.1191H233.672V15.0445L231.463 19.7012C231.404 19.8206 231.284 19.94 231.105 19.94H228.598C228.418 19.94 228.299 19.8803 228.239 19.7012L226.03 15.0445V24.1191H222.866V7.70117H226.03L229.851 15.7012L233.672 7.70117H236.836Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M248.836 14.328V7.70117H252V24.1191H248.836V17.4922H243.224V24.1191H240.06V7.70117H243.224V14.328H248.836Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M264.836 8.4775L266.508 10.0894C266.985 10.5671 267.284 11.2238 267.284 11.9402V19.8208C267.284 20.5372 266.985 21.1939 266.508 21.6715L264.836 23.3432C264.358 23.8208 263.702 24.1193 262.985 24.1193H259.284C258.567 24.1193 257.911 23.8805 257.433 23.3432L255.821 21.6715C255.343 21.1939 255.045 20.5372 255.045 19.8208V11.9402C255.045 11.2238 255.343 10.5671 255.821 10.0894L257.433 8.4775C257.97 7.94019 258.627 7.70138 259.284 7.70138H262.985C263.642 7.64168 264.299 7.94019 264.836 8.4775ZM264.06 19.4029V12.3581C264.06 12.2387 264 12.0596 263.881 11.9999L262.866 10.985C262.746 10.8656 262.627 10.8059 262.448 10.8059H259.702C259.582 10.8059 259.463 10.8656 259.343 10.985L258.329 11.9999C258.209 12.1193 258.149 12.2387 258.149 12.3581V19.4029C258.149 19.5223 258.209 19.6417 258.329 19.7611L259.343 20.776C259.463 20.8954 259.582 20.9551 259.702 20.9551H262.508C262.627 20.9551 262.806 20.8954 262.926 20.776L263.94 19.7611C264 19.6417 264.06 19.582 264.06 19.4029Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M279.702 20.9549V24.1191H271.761C271.642 24.1191 271.463 24.0594 271.403 23.94L270.388 22.9251C270.269 22.8057 270.209 22.6862 270.209 22.5668V7.70117H273.373V20.9549H279.702Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M280.06 10.8654V7.70117H291.463V10.8654H287.343V24.1191H284.179V10.8654H280.06Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M303.404 7.70117C303.523 7.70117 303.702 7.76087 303.762 7.88028L304.777 8.8952C304.896 9.0146 304.956 9.13401 304.956 9.25341V10.0295L298.031 20.9549H304.956V24.1191H295.463C295.344 24.1191 295.165 24.0594 295.105 23.94L294.09 22.9251C293.971 22.8057 293.911 22.6862 293.911 22.5668V21.6116L300.717 10.8654H293.971V7.70117H303.404V7.70117Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M195.523 46.1491H193.553V36.0595L189.911 46.1491H188.12L184.478 35.9998V46.1491H182.508V32.2983H185.015L188.956 43.164L192.896 32.2983H195.403V46.1491H195.523Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M206.926 41.6117H200V42.149C200 43.7012 200.956 44.6564 202.567 44.6564C203.941 44.6564 204.956 43.8803 204.956 42.9251H206.866C206.747 45.0146 205.015 46.4475 202.567 46.4475C199.881 46.4475 198.09 44.7758 198.09 42.2087V39.7012C198.09 37.134 199.881 35.4624 202.508 35.4624C205.135 35.4624 206.866 37.134 206.866 39.7012V41.6117H206.926ZM200 39.7012V39.9997H205.015V39.7012C205.015 38.149 204.06 37.134 202.567 37.134C201.015 37.1937 200 38.2087 200 39.7012Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M212.418 32.8354V35.6414H215.881V37.3728H212.418V43.0444C212.418 43.9399 212.836 44.3578 213.672 44.3578H215.344V46.0892H213.612C211.583 46.0892 210.508 45.0146 210.508 43.1041V37.3728H207.762V35.6414H210.03C210.448 35.6414 210.627 35.4623 210.627 35.0444V32.8354H212.418Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M225.672 39.3433V46.209H223.941L223.881 45.3732C223.165 46.0896 222.09 46.4478 220.777 46.4478C218.448 46.4478 217.075 45.3135 217.075 43.403C217.075 41.6717 218.15 40.7165 220.538 40.418L223.762 40V39.3433C223.762 37.9702 222.986 37.2538 221.493 37.2538C220.001 37.2538 219.165 37.9702 219.165 39.2239V39.3433H217.254V39.2239C217.254 36.9553 218.926 35.4627 221.553 35.4627C224.18 35.403 225.672 36.8359 225.672 39.3433ZM223.762 43.2836V41.4926L220.896 41.9105C219.583 42.0896 219.045 42.6269 219.045 43.403C219.045 44.2985 219.762 44.7762 220.956 44.7762C222.15 44.7762 223.224 44.2389 223.762 43.2836Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M234.925 31.4028H236.836V46.1491H235.104L235.045 45.2536C234.328 45.97 233.254 46.3879 232.06 46.3879C229.612 46.3879 228 44.7163 228 42.2088V39.5222C228 37.0148 229.612 35.3431 232.06 35.3431C233.254 35.3431 234.209 35.7013 234.925 36.4178V31.4028ZM234.925 43.2237V38.567C234.448 37.6715 233.493 37.1939 232.418 37.1939C230.866 37.1939 229.91 38.1491 229.91 39.6416V42.2088C229.91 43.7013 230.866 44.6566 232.418 44.6566C233.493 44.5969 234.448 44.1193 234.925 43.2237Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M247.761 39.3433V46.209H246.03L245.97 45.3732C245.254 46.0896 244.179 46.4478 242.866 46.4478C240.537 46.4478 239.164 45.3135 239.164 43.403C239.164 41.6717 240.239 40.7165 242.627 40.418L245.851 40V39.3433C245.851 37.9702 245.075 37.2538 243.582 37.2538C242.089 37.2538 241.254 37.9702 241.254 39.2239V39.3433H239.343V39.2239C239.343 36.9553 241.015 35.4627 243.642 35.4627C246.269 35.403 247.761 36.8359 247.761 39.3433ZM245.851 43.2836V41.4926L242.985 41.9105C241.672 42.0896 241.134 42.6269 241.134 43.403C241.134 44.2985 241.851 44.7762 243.045 44.7762C244.298 44.7762 245.313 44.2389 245.851 43.2836Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M253.552 32.8354V35.6414H257.015V37.3728H253.552V43.0444C253.552 43.9399 253.97 44.3578 254.806 44.3578H256.478V46.0892H254.746C252.716 46.0892 251.642 45.0146 251.642 43.1041V37.3728H248.896V35.6414H251.164C251.582 35.6414 251.761 35.4623 251.761 35.0444V32.8354H253.552Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M266.806 39.3433V46.209H265.075L265.015 45.3732C264.299 46.0896 263.224 46.4478 261.91 46.4478C259.582 46.4478 258.209 45.3135 258.209 43.403C258.209 41.6717 259.284 40.7165 261.672 40.418L264.896 40V39.3433C264.896 37.9702 264.119 37.2538 262.627 37.2538C261.134 37.2538 260.299 37.9702 260.299 39.2239V39.3433H258.388V39.2239C258.388 36.9553 260.06 35.4627 262.687 35.4627C265.313 35.403 266.806 36.8359 266.806 39.3433ZM264.896 43.2836V41.4926L262.03 41.9105C260.716 42.0896 260.179 42.6269 260.179 43.403C260.179 44.2985 260.896 44.7762 262.09 44.7762C263.284 44.7762 264.358 44.2389 264.896 43.2836Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M275.284 41.3134V37.1343C275.284 34.0896 277.433 32 280.598 32C283.702 32 285.851 34.0299 285.851 36.8955V37.4328H283.881V36.8955C283.881 34.9851 282.627 33.8507 280.598 33.8507C278.508 33.8507 277.254 35.1045 277.254 37.194V41.194C277.254 43.3433 278.448 44.5373 280.598 44.5373C282.627 44.5373 283.881 43.403 283.881 41.4925V40.9552H285.851V41.4925C285.851 44.4179 283.702 46.3881 280.598 46.3881C277.433 46.3881 275.284 44.3582 275.284 41.3134Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M288.06 42.1491V39.7013C288.06 37.1342 289.791 35.4028 292.477 35.4028C295.164 35.4028 296.955 37.0745 296.955 39.7013V42.1491C296.955 44.7163 295.224 46.3879 292.477 46.3879C289.851 46.3879 288.06 44.7163 288.06 42.1491ZM295.045 42.0894V39.7013C295.045 38.1491 294.089 37.1342 292.477 37.1342C290.925 37.1342 289.91 38.0894 289.91 39.7013V42.0894C289.91 43.6416 290.925 44.5969 292.477 44.5969C294.089 44.5969 295.045 43.6416 295.045 42.0894Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M299.522 46.1491V31.4028H301.433V46.1491H299.522Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M304.418 46.1491V31.4028H306.328V46.1491H304.418Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M317.433 39.3433V46.209H315.702L315.642 45.3732C314.926 46.0896 313.851 46.4478 312.537 46.4478C310.209 46.4478 308.836 45.3135 308.836 43.403C308.836 41.6717 309.911 40.7165 312.299 40.418L315.523 40V39.3433C315.523 37.9702 314.746 37.2538 313.254 37.2538C311.761 37.2538 310.925 37.9702 310.925 39.2239V39.3433H309.015V39.2239C309.015 36.9553 310.687 35.4627 313.314 35.4627C315.94 35.403 317.433 36.8359 317.433 39.3433ZM315.523 43.2836V41.4926L312.657 41.9105C311.343 42.0896 310.806 42.6269 310.806 43.403C310.806 44.2985 311.523 44.7762 312.717 44.7762C313.97 44.7762 314.985 44.2389 315.523 43.2836Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M328.956 39.5819V42.2685C328.956 44.776 327.344 46.4476 324.896 46.4476C323.702 46.4476 322.628 46.0297 321.911 45.3133L321.851 46.2088H320.12V31.4028H322.031V36.4775C322.747 35.761 323.762 35.4028 324.896 35.4028C327.404 35.4028 328.956 37.0745 328.956 39.5819ZM327.045 39.6416C327.045 38.1491 326.09 37.1939 324.598 37.1939C323.523 37.1939 322.568 37.6715 322.09 38.567V43.2237C322.568 44.1193 323.523 44.5969 324.598 44.5969C326.09 44.5969 327.045 43.6416 327.045 42.1491V39.6416Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M331.045 42.1491V39.7013C331.045 37.1342 332.776 35.4028 335.463 35.4028C338.149 35.4028 339.94 37.0745 339.94 39.7013V42.1491C339.94 44.7163 338.209 46.3879 335.463 46.3879C332.776 46.3879 331.045 44.7163 331.045 42.1491ZM338.03 42.0894V39.7013C338.03 38.1491 337.075 37.1342 335.463 37.1342C333.911 37.1342 332.896 38.0894 332.896 39.7013V42.0894C332.896 43.6416 333.911 44.5969 335.463 44.5969C337.015 44.5969 338.03 43.6416 338.03 42.0894Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M348.239 35.6416V37.3729H346.687C345.613 37.3729 344.777 37.8506 344.299 38.6864V46.0894H342.389V35.6416H344.12L344.18 36.5371C344.836 35.9401 345.732 35.6416 346.747 35.6416H348.239Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M357.732 39.3433V46.209H356L355.941 45.3732C355.224 46.0896 354.15 46.4478 352.836 46.4478C350.508 46.4478 349.135 45.3135 349.135 43.403C349.135 41.6717 350.209 40.7165 352.597 40.418L355.821 40V39.3433C355.821 37.9702 355.045 37.2538 353.553 37.2538C352.06 37.2538 351.224 37.9702 351.224 39.2239V39.3433H349.254V39.2239C349.254 36.9553 350.926 35.4627 353.553 35.4627C356.239 35.403 357.732 36.8359 357.732 39.3433ZM355.821 43.2836V41.4926L352.956 41.9105C351.642 42.0896 351.105 42.6269 351.105 43.403C351.105 44.2985 351.821 44.7762 353.015 44.7762C354.209 44.7762 355.284 44.2389 355.821 43.2836Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M363.463 32.8354V35.6414H366.926V37.3728H363.463V43.0444C363.463 43.9399 363.881 44.3578 364.717 44.3578H366.389V46.0892H364.657C362.628 46.0892 361.553 45.0146 361.553 43.1041V37.3728H358.807V35.6414H361.075C361.493 35.6414 361.672 35.4623 361.672 35.0444V32.8354H363.463Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M368.299 32.7758C368.299 31.9997 368.896 31.4624 369.612 31.4624C370.388 31.4624 370.926 31.9997 370.926 32.7758C370.926 33.4923 370.388 34.0893 369.612 34.0893C368.836 34.0296 368.299 33.4923 368.299 32.7758ZM370.567 46.149H368.657V35.6415H370.567V46.149Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M373.135 42.1491V39.7013C373.135 37.1342 374.866 35.4028 377.553 35.4028C380.239 35.4028 382.03 37.0745 382.03 39.7013V42.1491C382.03 44.7163 380.299 46.3879 377.553 46.3879C374.926 46.3879 373.135 44.7163 373.135 42.1491ZM380.12 42.0894V39.7013C380.12 38.1491 379.165 37.1342 377.553 37.1342C376 37.1342 374.985 38.0894 374.985 39.7013V42.0894C374.985 43.6416 376 44.5969 377.553 44.5969C379.165 44.5969 380.12 43.6416 380.12 42.0894Z"
+                    fill="#002864"
+                  ></path>
+                  <path
+                    d="M393.075 39.5222V46.2088H391.164V39.6416C391.164 38.1491 390.269 37.1939 388.895 37.1939C387.821 37.1939 386.866 37.7312 386.388 38.567V46.1491H384.478V35.6416H386.209L386.269 36.5969C386.985 35.8207 388 35.4028 389.254 35.4028C391.582 35.4028 393.075 36.9551 393.075 39.5222Z"
+                    fill="#002864"
+                  ></path>
+                </svg>
+              </a>
+            </div>
+
+            <div
+              class="flex items-center justify-end w-1/3 h-full text-right lg:w-2/3">
+              <nav
+                class="hmc-nav-mobile fixed bg-white right-0 top-0 h-full p-8"
+              >
+                <div class="flex justify-between items-center mb-8">
+                  <button class="hmc-close-mobile-nav color-blue">
+                    <span></span>
+                    <span></span>
+                  </button>
+                 
+                  To be included later
+                  <div>
+                    <ul class="flex">
+                      <li class="ml-2">
+                        <a
+                          class="text-blue-dark text-sm uppercase hover:opacity-100 transition-opacity duration-300"
+                          href="https://dashboard.survey.helmholtz-metadaten.de/en"
+                        >
+                          en
+                        </a>
+                      </li>
+                      <li class="ml-2">
+                        <a
+                          class="text-blue-dark text-sm uppercase opacity-25 hover:opacity-100 transition-opacity duration-300"
+                          href="https://dashboard.survey.helmholtz-metadaten.de/de/survey_dashboard"
+                        >
+                          de
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  
+                </div>
+                
+               
+            </div>
+
+            <div
+              class="absolute hidden pr-6 mt-2 hmc-langswitch__container lg:pr-12 xl:block"
+            >
+              <div>
+                <ul class="flex">
+                  <li class="ml-2">
+                    <a
+                      class="text-blue-dark text-sm uppercase hover:opacity-100 transition-opacity duration-300"
+                      href="https://dashboard.survey.helmholtz-metadaten.de/en"
+                    >
+                      en
+                    </a>
+                  </li>
+                  <li class="ml-2">
+                    <a
+                      class="text-blue-dark text-sm uppercase opacity-25 hover:opacity-100 transition-opacity duration-300"
+                      href="https://dashboard.survey.helmholtz-metadaten.de/de/survey_dashboard"
+                    >
+                      de
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>  
+
+
+        </div>
+      </header>
+      
+      <main class="pb-20 bg-gray-100">   
+
+        <!-- TITLE IMAGE: UGLY SOLUTION
+        needs to be adjusted as soon as we have an image and URL for the preferred background image-->
+
+        <div class="banner flex-row d-flex" style="background-image: url(./en_files/Banner2.png);">
+          <div class="container mx-auto mb-12" style="display: flex;padding-left: 72px;">
+            <span class="text-2xl sm:text-3xl font-display font-bold uppercase text-white" style="display: inline-block; align-self: flex-end;">
+            {{ app_title }}
+            </span>
+           
+            <img src="./en_files/SurveyExplorerLogoInverted.png" style="margin-left:auto; height: 13rem">
+           
+          </div>
+        </div>
+        <div class="pt-10 pb-20 lg:pt-20">
+          <section>
+            <div class="container mx-auto mb-24">
+              
+              <p style="margin-left:36px; margin-bottom:2.5rem;">
+                Wer sind die Datenstakeholder in Helmholtz? Welche Tools nutzen sie? Welche Hindernisse liegen auf dem Weg zu besseren Metadaten?
+                Dies sind nur einige der Fragen, die wir mit unserem HMC Community Survey 2021 adressiert haben. Auf dieser Seite können Sie die Ergebnisse der Umfrage interaktiv erforschen und einen tieferen Einblick in die Daten erlangen.
+              </p>
+              
+              <p style="margin-left: 36px; margin-bottom:12px; margin-top: 2.5rem;">
+                Filtern Sie die angezeigten Daten unter <b>Globale Datafilter</b> und erforschen Sie
+                <ul style="margin-left: 72px;font-size: 17px; list-style-type: disc;">
+                  <li>die Communityprofile unserer Datenstakeholder</li>
+                  <li>Methoden, Tools und Software, die für Datengenerierung und -verarbeitung genutzt werden</li>
+                  <li>Antworten und ihren Bezug untereinander im Umfrage-Explorer</li>
+                </ul>
+              </p>
+              <div class="flex" style="margin-top: 5rem; min-width: 1200px; align-items: center;margin-left: 24px" >
+
+                <div class="infobox" style="aspect-ratio: 3/2; background-image: url(./en_files/surveyBG.png); margin-left: 0px">
+                  <div class="infoHeadline" style="margin-bottom: 0px;">
+                    49
+                  </div>
+                  <div class="infoText" style="margin-top: 0px;">
+                    Fragen umfasste die Umfrage insgesamt
+                  </div>
+                </div>
+
+                <div class="infobox" style="aspect-ratio: 3/2; background-image: url(./en_files/peopleBG.png);">
+                  <div class="infoHeadline" style="margin-bottom: 0px;">
+                    631
+                  </div>
+                  <div class="infoText" style="margin-top: 0px;">
+                    Forschende haben an der Umfrage teilgenommen
+                  </div>
+                </div>
+
+                <div class="infobox" style="aspect-ratio: 3/2; background-image: url(./en_files/dataBG.png); margin-right: 0px;">
+                  <div class="infoHeadline" style="margin-bottom: 0px;">
+                    <a href="https://doi.org/10.7802/2433" target="_blank"><img src="./en_files/outline_description_white_48dp.png" style="height: 81px;padding-top: 13.5px; padding-bottom: 13.5px;"></a>
+                  </div>
+                  <div class="infoText" style="margin-top: 0px;">
+                    <a href="https://doi.org/10.7802/2433" target="_blank">Der vollständige Datensatz ist online verfügbar</a>
+                  </div>
+                </div>
+
+              </div>
+              <div class="flex flex-wrap">
+                <div class="infobox2" style="min-width: 1200px; margin-top: 5rem; margin-left: 24px; border-color: #002864;">
+                 
+                  <p style="margin-bottom: 0px">
+                    <b style="color: #002864;">DISCLAIMER</b><br>Die angezeigten Daten sind mit Sorgfalt zu betrachten. Einige Antworten könnten losgelöst vom Kontext
+                    Verzerrungen ausgesetzt sein. Einige Fragen wurden abhängig vom Forschungsbereich der Befragten gestellt. 
+                    <a href="https://doi.org/10.3289/HMC_publ_05" target="_blank">Für nähere Informationen beachten Sie bitte unsere
+                    Umfragepublikation.</a>
+                    </p>
+                  
+                </div>
+                
+              </div>
+              
+            </div>
+          </section>
+
+          <section>
+            <div class="container mx-auto mb-12">
+                {% block contents %}
+                <div class="flex flex-col w-full lg:space-x-4 lg:flex-row"> 
+                <br>
+                {% for doc in docs %}
+                {{ embed(doc) if doc.elementid }}
+                {% for root in doc.roots %}
+                    {{ embed(root) | indent(10) }}
+                {% endfor %}
+                {% endfor %}
+                {{ plot_script | indent(8) }}
+                <div class="container mx-auto mb-24">
+                    <div class="row">
+                      <div class="col-sm">
+                        {{ embed(roots.App) }}
+                      </div>
+                    </div>
+                  </div>
+                {% endblock %}
+            </div>
+          </div>
+          </section>
+        </div>
+      </main>
+      <footer class="relative mp-20 bg-blue-dark">
+        <div class="container pt-8">
+          <div class="flex flex-wrap justify-between">
+            <div class="mb-6 pr-12">
+              <a href="https://helmholtz.de/" target="_blank" class="block">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="200"
+                  height="28"
+                  fill="none"
+                >
+                  <path
+                    fill="#fff"
+                    d="M14.498 0h5.205v27.286h-5.205V16.28H5.202v11.005H0V0h5.202v11.043h9.296V0Zm13.598 0a.879.879 0 0 0-.613.273L25.8 1.965a.766.766 0 0 0-.271.614v22.128a.773.773 0 0 0 .27.617l1.683 1.692a.765.765 0 0 0 .613.273h14.538v-5.237h-11.9v-5.77h10.332v-5.24H30.735V5.234h11.9V0h-14.54Zm22.37 27.286h12.097v-5.234h-9.459V0h-5.202v24.707a.758.758 0 0 0 .271.617l1.682 1.692a.765.765 0 0 0 .613.273l-.003-.003Zm50.98-16.243V0h-5.203v27.286h5.203V16.28h9.295v11.005h5.206V0h-5.206v11.043h-9.295Zm34.613 8.458a.983.983 0 0 1-.271.617l-1.644 1.653a.894.894 0 0 1-.651.273h-4.651a.807.807 0 0 1-.614-.273l-1.643-1.653a.824.824 0 0 1-.272-.617V7.811a.778.778 0 0 1 .272-.616l1.643-1.691a.981.981 0 0 1 .614-.273h4.668c.241.015.47.111.651.273l1.643 1.691a.903.903 0 0 1 .272.617l-.017 11.69Zm1.224-18.205A4.437 4.437 0 0 0 134.223 0h-6.081a4.355 4.355 0 0 0-3.098 1.307l-2.68 2.696a4.374 4.374 0 0 0-1.264 3.091v13.098a4.382 4.382 0 0 0 1.261 3.08l2.68 2.729a4.273 4.273 0 0 0 3.101 1.285h6.081a4.33 4.33 0 0 0 3.06-1.269l2.712-2.729a4.375 4.375 0 0 0 1.267-3.097V7.095a4.38 4.38 0 0 0-1.261-3.078l-2.713-2.695-.005-.025Zm11.582 25.99h12.314v-5.234h-9.675V0h-5.202v24.707a.75.75 0 0 0 .271.617l1.684 1.692a.767.767 0 0 0 .613.273l-.005-.003Zm18.173-22.053v22.053h5.203V5.233h7.19V0H159.85v5.233h7.188Zm31.023-4.96a.894.894 0 0 0-.616-.273h-15.19v5.233h10.752L181.761 23.13v1.577a.913.913 0 0 0 .272.617l1.684 1.692a.767.767 0 0 0 .613.273h15.532v-5.237h-11.254L200 3.924V2.576a.911.911 0 0 0-.271-.614l-1.668-1.69ZM85.255 0l-7.237 12.609L70.778 0h-4.977v27.286h5.203V10.409l4.673 8.145a.87.87 0 0 0 .752.437h3.181a.861.861 0 0 0 .752-.437l4.633-8.068v16.8h5.202V0h-4.942Z"
+                  ></path>
+                </svg>
+              </a>
+            </div>
+            <div class="mb-6">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="191"
+                height="13"
+                fill="none"
+              >
+                <path
+                  fill="#fff"
+                  d="M6.715 3.447c0 1.472-.898 2.406-2.406 2.585l2.37 3.735v.215h-1.4L2.8 6.032H1.364v3.95H0V.574h3.734C5.566.574 6.68 1.58 6.68 3.232v.215h.036ZM5.35 3.232c0-.934-.574-1.437-1.652-1.437H1.364v3.088h2.37c1.077 0 1.652-.502 1.652-1.436v-.215H5.35ZM13.932 6.93H9.264v.36c0 1.076.646 1.723 1.76 1.723.933 0 1.615-.503 1.65-1.185h1.258c-.072 1.436-1.257 2.406-2.945 2.406-1.83 0-3.052-1.15-3.052-2.873V5.638c0-1.724 1.221-2.873 3.016-2.873 1.796 0 2.945 1.149 2.945 2.873V6.93h.036ZM9.264 5.638v.215h3.375v-.215c0-1.078-.646-1.724-1.652-1.724-1.077 0-1.723.682-1.723 1.724ZM15.368 7.9v-.144h1.293v.143c0 .719.574 1.078 1.651 1.078 1.006 0 1.58-.36 1.58-.898v-.108c0-.502-.359-.79-1.149-.933l-1.077-.18c-1.4-.251-2.154-.933-2.154-1.939v-.143c0-1.257 1.113-2.047 2.8-2.047 1.724 0 2.801.862 2.801 2.262v.144H19.82V4.99c0-.718-.538-1.077-1.58-1.077-.933 0-1.508.323-1.508.862v.107c0 .431.36.718 1.15.898l1.077.215c1.436.288 2.19.97 2.19 1.975v.144c0 1.257-1.15 2.082-2.909 2.082S15.369 9.3 15.369 7.9ZM28.582 6.93h-4.668v.36c0 1.076.646 1.723 1.76 1.723.933 0 1.615-.503 1.651-1.185h1.293c-.072 1.436-1.257 2.406-2.945 2.406-1.831 0-3.052-1.15-3.052-2.873V5.638c0-1.724 1.221-2.873 3.016-2.873 1.796 0 2.945 1.149 2.945 2.873V6.93Zm-4.704-1.292v.215h3.375v-.215c0-1.078-.646-1.724-1.651-1.724-1.042 0-1.724.682-1.724 1.724ZM35.763 5.386v4.632h-1.149l-.036-.574c-.503.466-1.22.718-2.083.718-1.58 0-2.513-.79-2.513-2.047 0-1.149.754-1.831 2.334-2.047l2.154-.287v-.43c0-.934-.538-1.437-1.544-1.437-1.005 0-1.58.503-1.58 1.328v.108h-1.292v-.108c0-1.543 1.149-2.549 2.944-2.549 1.76.036 2.765.97 2.765 2.693ZM34.47 8.043v-1.22l-1.939.287c-.861.107-1.256.466-1.256 1.005 0 .575.502.934 1.292.934.826 0 1.544-.36 1.903-1.006ZM41.616 2.873v1.185h-1.041c-.719 0-1.293.323-1.616.897v5.027h-1.293v-7.11h1.15l.071.575c.467-.395 1.077-.574 1.724-.574h1.005ZM42.262 7.289V5.601c0-1.723 1.221-2.872 3.016-2.872 1.724 0 2.945 1.149 2.945 2.729V5.6H46.93v-.143c0-.898-.682-1.508-1.652-1.508-1.077 0-1.723.646-1.723 1.687V7.29c0 1.041.646 1.688 1.723 1.688.97 0 1.652-.61 1.652-1.473v-.18h1.293v.145c0 1.615-1.15 2.693-2.945 2.693-1.83.035-3.016-1.114-3.016-2.873ZM55.655 5.494v4.524h-1.292V5.602c0-1.006-.61-1.652-1.544-1.652-.754 0-1.365.359-1.688.933v5.171h-1.293V0h1.293v3.447c.503-.467 1.149-.718 1.939-.718 1.58 0 2.585 1.041 2.585 2.765ZM63.734 2.873h2.334v1.185h-2.334v5.96h-1.292v-5.96H60.61V2.873h1.832V2.01c0-1.293.718-2.01 2.046-2.01h1.078v1.184H64.56c-.538 0-.862.287-.862.898v.79h.036ZM66.786 7.29V5.601c0-1.76 1.185-2.909 3.016-2.909 1.832 0 3.017 1.15 3.017 2.909v1.687c0 1.724-1.185 2.873-3.017 2.873-1.83.036-3.016-1.113-3.016-2.873Zm4.74-.037V5.637c0-1.077-.646-1.723-1.724-1.723-1.077 0-1.723.646-1.723 1.723v1.616c0 1.042.682 1.688 1.724 1.688 1.04.036 1.723-.646 1.723-1.688ZM78.456 2.873v1.185h-1.041c-.718 0-1.293.323-1.616.897v5.027h-1.293v-7.11h1.15l.071.575c.467-.395 1.077-.574 1.724-.574h1.005ZM87.648 2.873h1.149v7.073c0 1.652-1.149 2.657-3.016 2.657-1.831 0-2.98-.97-2.98-2.477v-.072h1.328v.072c0 .79.646 1.292 1.688 1.292 1.041 0 1.687-.538 1.687-1.436V8.905a2.918 2.918 0 0 1-1.939.718c-1.651 0-2.728-1.077-2.728-2.8V5.53c0-1.724 1.077-2.801 2.728-2.801.826 0 1.544.287 2.011.79l.072-.646Zm-.144 4.667V4.847c-.323-.574-.97-.933-1.687-.933-1.041 0-1.688.646-1.688 1.652v1.22c0 1.006.646 1.652 1.688 1.652.718 0 1.328-.323 1.687-.898ZM94.686 2.873v1.185h-1.041c-.718 0-1.293.323-1.616.897v5.027h-1.293v-7.11h1.15l.071.575c.467-.395 1.077-.574 1.724-.574h1.005ZM101.113 5.386v4.632h-1.149l-.036-.574c-.502.466-1.22.718-2.082.718-1.58 0-2.514-.79-2.514-2.047 0-1.149.754-1.831 2.334-2.047l2.154-.287v-.43c0-.934-.538-1.437-1.543-1.437-1.006 0-1.58.503-1.58 1.328v.108h-1.293v-.108c0-1.543 1.149-2.549 2.944-2.549 1.724.036 2.765.97 2.765 2.693Zm-1.328 2.657v-1.22l-1.94.287c-.861.107-1.256.466-1.256 1.005 0 .575.503.934 1.293.934.861 0 1.543-.36 1.903-1.006ZM108.797 5.494v4.524h-1.293V5.602c0-1.006-.61-1.652-1.544-1.652-.754 0-1.364.359-1.687.933v5.171h-1.293V2.873h1.149l.072.646a2.787 2.787 0 0 1 2.011-.826c1.58.036 2.585 1.077 2.585 2.8ZM115.081 0h1.293v9.982h-1.149l-.072-.574c-.503.502-1.221.754-2.011.754-1.688 0-2.765-1.113-2.765-2.837V5.53c0-1.688 1.077-2.801 2.729-2.801.79 0 1.472.251 1.939.718V0h.036Zm0 8.043v-3.16c-.323-.574-.97-.933-1.688-.933-1.041 0-1.687.646-1.687 1.652v1.723c0 1.005.646 1.652 1.687 1.652a1.96 1.96 0 0 0 1.688-.934ZM122.047 7.289V5.601c0-1.723 1.221-2.872 3.016-2.872 1.723 0 2.944 1.149 2.944 2.729V5.6h-1.292v-.143c0-.898-.683-1.508-1.652-1.508-1.077 0-1.724.646-1.724 1.687V7.29c0 1.041.647 1.688 1.724 1.688.969 0 1.652-.61 1.652-1.473v-.18h1.292v.145c0 1.615-1.149 2.693-2.944 2.693-1.831.035-3.016-1.114-3.016-2.873ZM135.44 5.494v4.524h-1.293V5.602c0-1.006-.61-1.652-1.544-1.652-.754 0-1.364.359-1.687.933v5.171h-1.293V0h1.293v3.447c.502-.467 1.149-.718 1.939-.718 1.579 0 2.585 1.041 2.585 2.765ZM142.837 5.386v4.632h-1.149l-.036-.574c-.503.466-1.221.718-2.083.718-1.58 0-2.513-.79-2.513-2.047 0-1.149.754-1.831 2.334-2.047l2.154-.287v-.43c0-.934-.539-1.437-1.544-1.437s-1.58.503-1.58 1.328v.108h-1.292v-.108c0-1.543 1.149-2.549 2.944-2.549 1.723.036 2.765.97 2.765 2.693Zm-1.329 2.657v-1.22l-1.939.287c-.862.107-1.257.466-1.257 1.005 0 .575.503.934 1.293.934.862 0 1.544-.36 1.903-1.006ZM144.74 10.018V0h1.292v9.982h-1.292v.036ZM148.079 10.018V0h1.293v9.982h-1.293v.036ZM157.092 6.93h-4.668v.36c0 1.076.646 1.723 1.759 1.723.934 0 1.616-.503 1.652-1.185h1.293c-.072 1.436-1.257 2.406-2.945 2.406-1.831 0-3.052-1.15-3.052-2.873V5.638c0-1.724 1.221-2.873 3.016-2.873 1.796 0 2.945 1.149 2.945 2.873V6.93Zm-4.668-1.292v.215h3.375v-.215c0-1.078-.646-1.724-1.652-1.724-1.077 0-1.723.682-1.723 1.724ZM164.596 5.494v4.524h-1.293V5.602c0-1.006-.61-1.652-1.544-1.652-.754 0-1.364.359-1.687.933v5.171h-1.293V2.873h1.149l.072.646a2.787 2.787 0 0 1 2.011-.826c1.58.036 2.585 1.077 2.585 2.8ZM170.988 2.873h1.149v7.073c0 1.652-1.149 2.657-3.017 2.657-1.831 0-2.98-.97-2.98-2.477v-.072h1.329v.072c0 .79.646 1.292 1.687 1.292 1.042 0 1.688-.538 1.688-1.436V8.905a2.919 2.919 0 0 1-1.939.718c-1.652 0-2.729-1.077-2.729-2.8V5.53c0-1.724 1.077-2.801 2.729-2.801.826 0 1.544.287 2.011.79l.072-.646Zm-.144 4.667V4.847c-.323-.574-.97-.933-1.688-.933-1.041 0-1.687.646-1.687 1.652v1.22c0 1.006.646 1.652 1.687 1.652.754 0 1.365-.323 1.688-.898ZM179.784 6.93h-4.667v.36c0 1.076.646 1.723 1.759 1.723.934 0 1.616-.503 1.652-1.185h1.292c-.071 1.436-1.256 2.406-2.944 2.406-1.831 0-3.052-1.15-3.052-2.873V5.638c0-1.724 1.221-2.873 3.016-2.873s2.944 1.149 2.944 2.873V6.93Zm-4.703-1.292v.215h3.375v-.215c0-1.078-.646-1.724-1.652-1.724-1.041 0-1.723.682-1.723 1.724ZM181.185 7.9v-.144h1.292v.143c0 .719.575 1.078 1.652 1.078 1.006 0 1.58-.36 1.58-.898v-.108c0-.502-.359-.79-1.149-.933l-1.077-.18c-1.401-.251-2.155-.933-2.155-1.939v-.143c0-1.257 1.114-2.047 2.801-2.047 1.724 0 2.801.862 2.801 2.262v.144h-1.293V4.99c0-.718-.538-1.077-1.58-1.077-.933 0-1.508.323-1.508.862v.107c0 .431.359.718 1.149.898l1.077.215c1.437.288 2.191.97 2.191 1.975v.144c0 1.257-1.149 2.082-2.909 2.082-1.723 0-2.872-.897-2.872-2.298ZM188.689 9.336c0-.503.359-.862.862-.862s.862.359.862.862c0 .502-.323.861-.862.861-.503 0-.862-.359-.862-.861Z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+
+          <div class="w-full mb-6">
+            <div class="flex">
+              <ul class="flex items-center my-6 space-x-4">
+                <li class="">
+                  <a href="https://twitter.com/helmholtz_hmc" target="_blank">
+                    <!--?xml version="1.0" encoding="UTF-8"?-->
+                    <svg
+                 xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                stroke-width="2"
+                color="#fff"
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                >
+                    <path
+                        stroke="#fff"
+                        d="M16.82 20.768 3.753 3.968A.6.6 0 0 1 4.227 3h2.48a.6.6 0 0 1 .473.232l13.067 16.8a.6.6 0 0 1-.474.968h-2.48a.6.6 0 0 1-.473-.232Z"
+                    />
+                    <path
+                        stroke="#fff"
+                        stroke-linecap="round"
+                        d="M20 3 4 21"
+                    />
+                </svg>
+                  </a>
+                </li>
+                <li class="">
+                    <a
+                        href="https://www.linkedin.com/company/helmholtz-metadata-collaboration-hmc"
+                        target="_blank"
+                        aria-label="Linkedin Link"
+                    >
+                        <svg aria-hidden="true" data-prefix="fab" data-icon="linkedin" class="w-6 h-6 text-white svg-inline--fa fa-linkedin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>                </a>
+                </li>
+                <li class="">
+                  <a
+                    href="https://mattermost.hzdr.de/hmc-public"
+                    target="_blank"
+                  >
+                    <svg
+                      width="2500"
+                      height="2500"
+                      viewBox="0 0 256 256"
+                      class="w-6 h-6 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      preserveAspectRatio="xMidYMid"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M243.747 73.364c-8.454-18.258-20.692-33.617-36.9-46.516.432 8.756 1.374 27.484 1.374 27.484s1.01 1.327 1.42 1.901c16.38 22.876 22.365 48.231 16.91 75.771-10.94 55.222-64.772 88.91-119.325 75.138-47.892-12.091-79.878-61.06-70.82-109.609 7.15-38.327 29.801-63.859 66.584-76.833l1.333-.504 1.046-.774c4.458-6.304 8.808-12.685 13.45-19.422C63.07 2.762 7.003 47.488.58 115.522c-6.216 65.832 38.17 124.541 101.596 137.424 66.096 13.425 129.017-25.57 148.031-87.976 9.508-31.206 7.283-61.924-6.46-91.606zm-157.31 41.172c2.787 26.487 25.745 44.538 52.302 41.603 26.092-2.884 45.166-28.409 40.227-54.232-3.85-20.134-8.105-40.19-12.188-60.279-1.689-8.313-3.398-16.623-5.19-25.391-.707.621-1.035.883-1.334 1.176-8.94 8.764-17.875 17.533-26.815 26.297-10.886 10.673-21.757 21.36-32.669 32.006-10.944 10.677-15.926 23.707-14.334 38.82z"
+                      ></path>
+                    </svg>
+                  </a>
+                </li>
+
+                <li class="">
+                    <a
+                        href="https://helmholtz.social/@helmholtz_hmc"
+                        target="_blank"
+                        aria-label="Mastodon Link"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="26" fill="none"><path fill="#fff" d="M24 8.537c0-5.64-3.657-7.294-3.657-7.294C18.499.387 15.333.027 12.043 0h-.08C8.673.027 5.51.387 3.665 1.243c.001 0-3.657 1.652-3.657 7.294 0 1.291-.025 2.835.015 4.472.133 5.517 1 10.952 6.047 12.302 2.327.622 4.325.752 5.933.664 2.918-.164 4.555-1.052 4.555-1.052l-.095-2.139s-2.085.664-4.427.583c-2.32-.08-4.77-.252-5.144-3.13a5.944 5.944 0 0 1-.053-.808s2.278.563 5.164.696c1.765.082 3.42-.105 5.102-.306 3.224-.39 6.031-2.397 6.383-4.23.556-2.89.51-7.051.51-7.051L24 8.537Zm-4.314 7.267h-2.678V9.175c0-1.396-.583-2.107-1.746-2.107-1.286 0-1.93.842-1.93 2.505v3.628h-2.663V9.573c0-1.664-.644-2.505-1.93-2.505-1.165 0-1.746.71-1.746 2.107v6.629H4.315V8.975c0-1.395.352-2.505 1.058-3.326.729-.82 1.683-1.24 2.866-1.24 1.37 0 2.408.532 3.095 1.596L12 7.135l.667-1.13c.686-1.064 1.723-1.597 3.094-1.597 1.184 0 2.138.42 2.867 1.241.707.821 1.058 1.93 1.058 3.326v6.829Z"/></svg>                </a>
+                </li>
+                <!-- INSERTED GITHUB LOGO and LINK -->
+                <li class="">
+                  <a
+                    href="https://github.com/Materials-Data-Science-and-Informatics/survey_dashboard"
+                    target="_blank"
+                  >
+                    <img src="./en_files/github-mark-white.png" width="24px" height="24px">
+                    
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div>
+
+            <div class="mb-6 pr-12">
+              <nav class="text-sm">
+                <ul class="flex">
+                  <li class="mr-4">
+                    <a
+                      href="https://dashboard.survey.helmholtz-metadaten.de/de/survey_dashboard"
+                      class="text-white"
+                    >
+                    HMC Survey Data Explorer Dashboard:</a
+                    >
+                  </li>
+                </ul>
+            </nav>
+          </div>
+          <div class="flex flex-wrap justify-between mb-6">
+            <div class="mb-6 pr-12">
+              <nav class="text-sm">
+                <ul class="flex">
+                  <li class="mr-4">
+                    <a
+                      href="https://www.fz-juelich.de/de/impressum"
+                      target="_blank"
+                      class="text-white"
+                    >
+                      Impressum</a
+                    >
+                  </li>
+                  <li class="mr-4">
+                    <a
+                      href="https://www.fz-juelich.de/de/datenschutz"
+                      target="_blank"
+                      class="text-white"
+                    >
+                      Datenschutz</a
+                    >
+                  </li>
+                  <li class="mr-4">
+                    <a
+                      href="mailto:HMC@fz-juelich.de"
+                      class="text-white"
+                    >
+                      Kontakt</a
+                    >
+                  </li>
+                </ul>
+              </nav>
+            </div>
+            <div class="mb-6">
+              <div class="text-white text-sm">
+                © 2023 Helmholtz Metadata Collaboration
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <div
+      class="hidden bg-gray-500 text-gray-500 bg-gray-100 text-gray-100 bg-purple text-purple bg-red text-red bg-orange text-orange bg-yellow text-yellow bg-turquoise text-turquoise bg-darkgreen text-darkgreen bg-blue-light text-blue-light text-green bg-green bg-blueviolet text-blueviolet bg-violet text-violet"
+      lg:pt-0=""
+      lg:pt-6=""
+      lg:pt-12=""
+      lg:pt-16=""
+      lg:pt-20=""
+      lg:pb-0=""
+      lg:pb-6=""
+      lg:pb-12=""
+      lg:pb-16=""
+      lg:pb-20=""
+      pt-3=""
+      pt-6=""
+      pt-8=""
+      pt-10=""
+      pb-0=""
+      pb-3=""
+      pb-6=""
+      pb-8=""
+      pb-10=""
+    ></div>
+
+<style>
+    html,body{overflow-y: scroll; }
+</style>
+
+    <script src="./en_files/lang.js"></script>
+    <script src="./en_files/app.js"></script>
+    <script src="./en_files/micromodal.min.js"></script>
+    <script type="text/javascript">
+      localStorage.setItem("locale", "en");
+      window.production = true;
+    </script>
+
+    <script>
+      MicroModal.init({ disableScroll: true });
+    </script>
+    <script>
+      let newstickerWrapper = document.querySelector(".newsticker-wrapper");
+      if (newstickerWrapper) {
+        let newsticker = document.querySelectorAll(".newsticker");
+        let hubLinks = document.querySelectorAll(".header-hub-link");
+        newstickerWrapper.addEventListener("mouseenter", function () {
+          newsticker.forEach(function (element) {
+            element.style.animationPlayState = "paused";
+          });
+        });
+        newstickerWrapper.addEventListener("mouseleave", function () {
+          newsticker.forEach(function (element) {
+            element.style.animationPlayState = "running";
+          });
+        });
+      }
+      const body = document.querySelector("body");
+      body.classList.add("overflow-y-hidden");
+      const cablesIframe = document.querySelector("iframe#cables_patch");
+      cablesIframe.onload = function (event) {
+        window.focus();
+        cablesIframe.classList.toggle("hidden");
+        setTimeout(() => {
+          cablesIframe.classList.toggle("opacity-0");
+          body.classList.remove("overflow-y-hidden");
+        }, 400);
+      };
+      !(function (e) {
+        var t = (function (u, D, f) {
+          "use strict";
+          var k, H;
+          if (
+            ((function () {
+              var e;
+              var t = {
+                lazyClass: "lazyload",
+                loadedClass: "lazyloaded",
+                loadingClass: "lazyloading",
+                preloadClass: "lazypreload",
+                errorClass: "lazyerror",
+                autosizesClass: "lazyautosizes",
+                srcAttr: "data-src",
+                srcsetAttr: "data-srcset",
+                sizesAttr: "data-sizes",
+                minSize: 40,
+                customMedia: {},
+                init: !0,
+                expFactor: 1.5,
+                hFac: 0.8,
+                loadMode: 2,
+                loadHidden: !0,
+                ricTimeout: 0,
+                throttleDelay: 125,
+              };
+              H = u.lazySizesConfig || u.lazysizesConfig || {};
+              for (e in t) {
+                if (!(e in H)) {
+                  H[e] = t[e];
+                }
+              }
+            })(),
+            !D || !D.getElementsByClassName)
+          ) {
+            return { init: function () {}, cfg: H, noSupport: !0 };
+          }
+          var O = D.documentElement,
+            a = u.HTMLPictureElement,
+            P = "addEventListener",
+            $ = "getAttribute",
+            q = u[P].bind(u),
+            I = u.setTimeout,
+            U = u.requestAnimationFrame || I,
+            l = u.requestIdleCallback,
+            j = /^picture$/i,
+            r = ["load", "error", "lazyincluded", "_lazyloaded"],
+            i = {},
+            G = Array.prototype.forEach,
+            J = function (e, t) {
+              if (!i[t]) {
+                i[t] = new RegExp("(\\s|^)" + t + "(\\s|$)");
+              }
+              return i[t].test(e[$]("class") || "") && i[t];
+            },
+            K = function (e, t) {
+              if (!J(e, t)) {
+                e.setAttribute("class", (e[$]("class") || "").trim() + " " + t);
+              }
+            },
+            Q = function (e, t) {
+              var i;
+              if ((i = J(e, t))) {
+                e.setAttribute("class", (e[$]("class") || "").replace(i, " "));
+              }
+            },
+            V = function (t, i, e) {
+              var a = e ? P : "removeEventListener";
+              if (e) {
+                V(t, i);
+              }
+              r.forEach(function (e) {
+                t[a](e, i);
+              });
+            },
+            X = function (e, t, i, a, r) {
+              var n = D.createEvent("Event");
+              if (!i) {
+                i = {};
+              }
+              i.instance = k;
+              n.initEvent(t, !a, !r);
+              n.detail = i;
+              e.dispatchEvent(n);
+              return n;
+            },
+            Y = function (e, t) {
+              var i;
+              if (!a && (i = u.picturefill || H.pf)) {
+                if (t && t.src && !e[$]("srcset")) {
+                  e.setAttribute("srcset", t.src);
+                }
+                i({ reevaluate: !0, elements: [e] });
+              } else if (t && t.src) {
+                e.src = t.src;
+              }
+            },
+            Z = function (e, t) {
+              return (getComputedStyle(e, null) || {})[t];
+            },
+            s = function (e, t, i) {
+              i = i || e.offsetWidth;
+              while (i < H.minSize && t && !e._lazysizesWidth) {
+                i = t.offsetWidth;
+                t = t.parentNode;
+              }
+              return i;
+            },
+            ee = (function () {
+              var i, a;
+              var t = [];
+              var r = [];
+              var n = t;
+              var s = function () {
+                var e = n;
+                n = t.length ? r : t;
+                i = !0;
+                a = !1;
+                while (e.length) {
+                  e.shift()();
+                }
+                i = !1;
+              };
+              var e = function (e, t) {
+                if (i && !t) {
+                  e.apply(this, arguments);
+                } else {
+                  n.push(e);
+                  if (!a) {
+                    a = !0;
+                    (D.hidden ? I : U)(s);
+                  }
+                }
+              };
+              e._lsFlush = s;
+              return e;
+            })(),
+            te = function (i, e) {
+              return e
+                ? function () {
+                    ee(i);
+                  }
+                : function () {
+                    var e = this;
+                    var t = arguments;
+                    ee(function () {
+                      i.apply(e, t);
+                    });
+                  };
+            },
+            ie = function (e) {
+              var i;
+              var a = 0;
+              var r = H.throttleDelay;
+              var n = H.ricTimeout;
+              var t = function () {
+                i = !1;
+                a = f.now();
+                e();
+              };
+              var s =
+                l && n > 49
+                  ? function () {
+                      l(t, { timeout: n });
+                      if (n !== H.ricTimeout) {
+                        n = H.ricTimeout;
+                      }
+                    }
+                  : te(function () {
+                      I(t);
+                    }, !0);
+              return function (e) {
+                var t;
+                if ((e = e === !0)) {
+                  n = 33;
+                }
+                if (i) {
+                  return;
+                }
+                i = !0;
+                t = r - (f.now() - a);
+                if (t < 0) {
+                  t = 0;
+                }
+                if (e || t < 9) {
+                  s();
+                } else {
+                  I(s, t);
+                }
+              };
+            },
+            ae = function (e) {
+              var t, i;
+              var a = 99;
+              var r = function () {
+                t = null;
+                e();
+              };
+              var n = function () {
+                var e = f.now() - i;
+                if (e < a) {
+                  I(n, a - e);
+                } else {
+                  (l || r)(r);
+                }
+              };
+              return function () {
+                i = f.now();
+                if (!t) {
+                  t = I(n, a);
+                }
+              };
+            },
+            e = (function () {
+              var v, m, c, h, e;
+              var y, z, g, p, C, b, A;
+              var n = /^img$/i;
+              var d = /^iframe$/i;
+              var E =
+                "onscroll" in u && !/(gle|ing)bot/.test(navigator.userAgent);
+              var _ = 0;
+              var w = 0;
+              var N = 0;
+              var M = -1;
+              var x = function (e) {
+                N--;
+                if (!e || N < 0 || !e.target) {
+                  N = 0;
+                }
+              };
+              var W = function (e) {
+                if (A == null) {
+                  A = Z(D.body, "visibility") == "hidden";
+                }
+                return (
+                  A ||
+                  !(
+                    Z(e.parentNode, "visibility") == "hidden" &&
+                    Z(e, "visibility") == "hidden"
+                  )
+                );
+              };
+              var S = function (e, t) {
+                var i;
+                var a = e;
+                var r = W(e);
+                g -= t;
+                b += t;
+                p -= t;
+                C += t;
+                while (r && (a = a.offsetParent) && a != D.body && a != O) {
+                  r = (Z(a, "opacity") || 1) > 0;
+                  if (r && Z(a, "overflow") != "visible") {
+                    i = a.getBoundingClientRect();
+                    r =
+                      C > i.left &&
+                      p < i.right &&
+                      b > i.top - 1 &&
+                      g < i.bottom + 1;
+                  }
+                }
+                return r;
+              };
+              var t = function () {
+                var e, t, i, a, r, n, s, l, o, u, f, c;
+                var d = k.elements;
+                if ((h = H.loadMode) && N < 8 && (e = d.length)) {
+                  t = 0;
+                  M++;
+                  for (; t < e; t++) {
+                    if (!d[t] || d[t]._lazyRace) {
+                      continue;
+                    }
+                    if (!E || (k.prematureUnveil && k.prematureUnveil(d[t]))) {
+                      R(d[t]);
+                      continue;
+                    }
+                    if (!(l = d[t][$]("data-expand")) || !(n = l * 1)) {
+                      n = w;
+                    }
+                    if (!u) {
+                      u =
+                        !H.expand || H.expand < 1
+                          ? O.clientHeight > 500 && O.clientWidth > 500
+                            ? 500
+                            : 370
+                          : H.expand;
+                      k._defEx = u;
+                      f = u * H.expFactor;
+                      c = H.hFac;
+                      A = null;
+                      if (w < f && N < 1 && M > 2 && h > 2 && !D.hidden) {
+                        w = f;
+                        M = 0;
+                      } else if (h > 1 && M > 1 && N < 6) {
+                        w = u;
+                      } else {
+                        w = _;
+                      }
+                    }
+                    if (o !== n) {
+                      y = innerWidth + n * c;
+                      z = innerHeight + n;
+                      s = n * -1;
+                      o = n;
+                    }
+                    i = d[t].getBoundingClientRect();
+                    if (
+                      (b = i.bottom) >= s &&
+                      (g = i.top) <= z &&
+                      (C = i.right) >= s * c &&
+                      (p = i.left) <= y &&
+                      (b || C || p || g) &&
+                      (H.loadHidden || W(d[t])) &&
+                      ((m && N < 3 && !l && (h < 3 || M < 4)) || S(d[t], n))
+                    ) {
+                      R(d[t]);
+                      r = !0;
+                      if (N > 9) {
+                        break;
+                      }
+                    } else if (
+                      !r &&
+                      m &&
+                      !a &&
+                      N < 4 &&
+                      M < 4 &&
+                      h > 2 &&
+                      (v[0] || H.preloadAfterLoad) &&
+                      (v[0] ||
+                        (!l &&
+                          (b || C || p || g || d[t][$](H.sizesAttr) != "auto")))
+                    ) {
+                      a = v[0] || d[t];
+                    }
+                  }
+                  if (a && !r) {
+                    R(a);
+                  }
+                }
+              };
+              var i = ie(t);
+              var B = function (e) {
+                var t = e.target;
+                if (t._lazyCache) {
+                  delete t._lazyCache;
+                  return;
+                }
+                x(e);
+                K(t, H.loadedClass);
+                Q(t, H.loadingClass);
+                V(t, L);
+                X(t, "lazyloaded");
+              };
+              var a = te(B);
+              var L = function (e) {
+                a({ target: e.target });
+              };
+              var T = function (t, i) {
+                try {
+                  t.contentWindow.location.replace(i);
+                } catch (e) {
+                  t.src = i;
+                }
+              };
+              var F = function (e) {
+                var t;
+                var i = e[$](H.srcsetAttr);
+                if ((t = H.customMedia[e[$]("data-media") || e[$]("media")])) {
+                  e.setAttribute("media", t);
+                }
+                if (i) {
+                  e.setAttribute("srcset", i);
+                }
+              };
+              var s = te(function (t, e, i, a, r) {
+                var n, s, l, o, u, f;
+                if (!(u = X(t, "lazybeforeunveil", e)).defaultPrevented) {
+                  if (a) {
+                    if (i) {
+                      K(t, H.autosizesClass);
+                    } else {
+                      t.setAttribute("sizes", a);
+                    }
+                  }
+                  s = t[$](H.srcsetAttr);
+                  n = t[$](H.srcAttr);
+                  if (r) {
+                    l = t.parentNode;
+                    o = l && j.test(l.nodeName || "");
+                  }
+                  f = e.firesLoad || ("src" in t && (s || n || o));
+                  u = { target: t };
+                  K(t, H.loadingClass);
+                  if (f) {
+                    clearTimeout(c);
+                    c = I(x, 2500);
+                    V(t, L, !0);
+                  }
+                  if (o) {
+                    G.call(l.getElementsByTagName("source"), F);
+                  }
+                  if (s) {
+                    t.setAttribute("srcset", s);
+                  } else if (n && !o) {
+                    if (d.test(t.nodeName)) {
+                      T(t, n);
+                    } else {
+                      t.src = n;
+                    }
+                  }
+                  if (r && (s || o)) {
+                    Y(t, { src: n });
+                  }
+                }
+                if (t._lazyRace) {
+                  delete t._lazyRace;
+                }
+                Q(t, H.lazyClass);
+                ee(function () {
+                  var e = t.complete && t.naturalWidth > 1;
+                  if (!f || e) {
+                    if (e) {
+                      K(t, "ls-is-cached");
+                    }
+                    B(u);
+                    t._lazyCache = !0;
+                    I(function () {
+                      if ("_lazyCache" in t) {
+                        delete t._lazyCache;
+                      }
+                    }, 9);
+                  }
+                  if (t.loading == "lazy") {
+                    N--;
+                  }
+                }, !0);
+              });
+              var R = function (e) {
+                if (e._lazyRace) {
+                  return;
+                }
+                var t;
+                var i = n.test(e.nodeName);
+                var a = i && (e[$](H.sizesAttr) || e[$]("sizes"));
+                var r = a == "auto";
+                if (
+                  (r || !m) &&
+                  i &&
+                  (e[$]("src") || e.srcset) &&
+                  !e.complete &&
+                  !J(e, H.errorClass) &&
+                  J(e, H.lazyClass)
+                ) {
+                  return;
+                }
+                t = X(e, "lazyunveilread").detail;
+                if (r) {
+                  re.updateElem(e, !0, e.offsetWidth);
+                }
+                e._lazyRace = !0;
+                N++;
+                s(e, t, r, a, i);
+              };
+              var r = ae(function () {
+                H.loadMode = 3;
+                i();
+              });
+              var l = function () {
+                if (H.loadMode == 3) {
+                  H.loadMode = 2;
+                }
+                r();
+              };
+              var o = function () {
+                if (m) {
+                  return;
+                }
+                if (f.now() - e < 999) {
+                  I(o, 999);
+                  return;
+                }
+                m = !0;
+                H.loadMode = 3;
+                i();
+                q("scroll", l, !0);
+              };
+              return {
+                _: function () {
+                  e = f.now();
+                  k.elements = D.getElementsByClassName(H.lazyClass);
+                  v = D.getElementsByClassName(
+                    H.lazyClass + " " + H.preloadClass
+                  );
+                  q("scroll", i, !0);
+                  q("resize", i, !0);
+                  q("pageshow", function (e) {
+                    if (e.persisted) {
+                      var t = D.querySelectorAll("." + H.loadingClass);
+                      if (t.length && t.forEach) {
+                        U(function () {
+                          t.forEach(function (e) {
+                            if (e.complete) {
+                              R(e);
+                            }
+                          });
+                        });
+                      }
+                    }
+                  });
+                  if (u.MutationObserver) {
+                    new MutationObserver(i).observe(O, {
+                      childList: !0,
+                      subtree: !0,
+                      attributes: !0,
+                    });
+                  } else {
+                    O[P]("DOMNodeInserted", i, !0);
+                    O[P]("DOMAttrModified", i, !0);
+                    setInterval(i, 999);
+                  }
+                  q("hashchange", i, !0);
+                  [
+                    "focus",
+                    "mouseover",
+                    "click",
+                    "load",
+                    "transitionend",
+                    "animationend",
+                  ].forEach(function (e) {
+                    D[P](e, i, !0);
+                  });
+                  if (/d$|^c/.test(D.readyState)) {
+                    o();
+                  } else {
+                    q("load", o);
+                    D[P]("DOMContentLoaded", i);
+                    I(o, 2e4);
+                  }
+                  if (k.elements.length) {
+                    t();
+                    ee._lsFlush();
+                  } else {
+                    i();
+                  }
+                },
+                checkElems: i,
+                unveil: R,
+                _aLSL: l,
+              };
+            })(),
+            re = (function () {
+              var i;
+              var n = te(function (e, t, i, a) {
+                var r, n, s;
+                e._lazysizesWidth = a;
+                a += "px";
+                e.setAttribute("sizes", a);
+                if (j.test(t.nodeName || "")) {
+                  r = t.getElementsByTagName("source");
+                  for (n = 0, s = r.length; n < s; n++) {
+                    r[n].setAttribute("sizes", a);
+                  }
+                }
+                if (!i.detail.dataAttr) {
+                  Y(e, i.detail);
+                }
+              });
+              var a = function (e, t, i) {
+                var a;
+                var r = e.parentNode;
+                if (r) {
+                  i = s(e, r, i);
+                  a = X(e, "lazybeforesizes", { width: i, dataAttr: !!t });
+                  if (!a.defaultPrevented) {
+                    i = a.detail.width;
+                    if (i && i !== e._lazysizesWidth) {
+                      n(e, r, a, i);
+                    }
+                  }
+                }
+              };
+              var e = function () {
+                var e;
+                var t = i.length;
+                if (t) {
+                  e = 0;
+                  for (; e < t; e++) {
+                    a(i[e]);
+                  }
+                }
+              };
+              var t = ae(e);
+              return {
+                _: function () {
+                  i = D.getElementsByClassName(H.autosizesClass);
+                  q("resize", t);
+                },
+                checkElems: t,
+                updateElem: a,
+              };
+            })(),
+            t = function () {
+              if (!t.i && D.getElementsByClassName) {
+                t.i = !0;
+                re._();
+                e._();
+              }
+            };
+          return (
+            I(function () {
+              H.init && t();
+            }),
+            (k = {
+              cfg: H,
+              autoSizer: re,
+              loader: e,
+              init: t,
+              uP: Y,
+              aC: K,
+              rC: Q,
+              hC: J,
+              fire: X,
+              gW: s,
+              rAF: ee,
+            })
+          );
+        })(e, e.document, Date);
+        (e.lazySizes = t),
+          "object" == typeof module && module.exports && (module.exports = t);
+      })("undefined" != typeof window ? window : {});
+      const BurgerButton = document.querySelectorAll("button.hmc-burger");
+      const NavMobile = document.querySelector("nav.hmc-nav-mobile");
+      for (const button of BurgerButton) {
+        button.addEventListener("click", function (event) {
+          NavMobile.classList.toggle("visible");
+        });
+      }
+      const expandButtons = document.querySelectorAll(
+        "button.nav_item_cildren_expand"
+      );
+      for (const button of expandButtons) {
+        button.addEventListener("click", function (event) {
+          this.classList.toggle("close");
+          this.nextElementSibling.classList.toggle("open");
+        });
+      }
+      const expandLinks = document.querySelectorAll(
+        "a.nav_item_cildren_expand"
+      );
+      for (const expandLink of expandLinks) {
+        expandLink.addEventListener("click", function (event) {
+          this.nextElementSibling.classList.toggle("close");
+          this.nextElementSibling.nextElementSibling.classList.toggle("open");
+        });
+      }
+      const closeButton = document.querySelector("button.hmc-close-mobile-nav");
+      closeButton.addEventListener("click", function (event) {
+        NavMobile.classList.remove("visible");
+      });
+      window.onscroll = function () {
+        scrollFunction();
+      };
+      function scrollFunction() {
+        if (
+          document.body.scrollTop > 20 ||
+          document.documentElement.scrollTop > 20
+        ) {
+          document.getElementById("app").classList.add("scrolled");
+        } else {
+          document.getElementById("app").classList.remove("scrolled");
+        }
+      }
+    </script>
+
+    <!-- Matomo -->
+    <script>
+      var _paq = (window._paq = window._paq || []);
+      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+      _paq.push(["disableCookies"]);
+      _paq.push(["trackPageView"]);
+      _paq.push(["enableLinkTracking"]);
+      (function () {
+        var u = "//matomo.helmholtz-metadaten.de/";
+        _paq.push(["setTrackerUrl", u + "matomo.php"]);
+        _paq.push(["setSiteId", "1"]);
+        var d = document,
+          g = d.createElement("script"),
+          s = d.getElementsByTagName("script")[0];
+        g.async = true;
+        g.src = u + "matomo.js";
+        s.parentNode.insertBefore(g, s);
+      })();
+    </script>
+    <!-- End Matomo Code -->
+  
+  {% endblock %}

@@ -30,7 +30,11 @@ md_text_description = {'EN': ("Explorer interactively the HMC 2021 Survey result
     "Any Feedback is welcome and can be given [here](https://github.com/Materials-Data-Science-and-Informatics/survey_dashboard)"),
     'DE':('Exploriere interakiv die Resultate der HMC 2021 Umfrage.')}
 
-
+md_text_descriptions_icons = {
+    'people': {'EN': ("**631** Researchers took part in the survey"), 'DE':("**631** Forschende nahmen an der Umfrage teil")},
+    'institution': {'EN': ("**18** Helmholtz research centers and institutes"), 'DE':("**18** Helmholtz-Zentren und Institute")},
+    'questions': {'EN': ("**49** Survey questions"), 'DE':("**49** Fragen gestellt")},
+}
 
 ## Global data filters\n 
 md_text_global_filter = {'EN': ("Apply filters to displayed data according to research areas and data generation method"),

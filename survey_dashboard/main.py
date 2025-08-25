@@ -17,6 +17,8 @@ import pandas as pd
 import panel as pn
 from bokeh.palettes import Category20
 from bokeh.models import ColumnDataSource, Div
+from jinja2 import Environment, FileSystemLoader
+from pathlib import Path
 from .plots import bokeh_barchart, bokeh_piechart, add_legend_at, bokeh_corr_plot
 from .plots import create_legend_corr, generate_wordcloud, interactive_wordcloud
 from .plots import DEFAULT_FIGURE_WIDTH, DEFAULT_FIGURE_HEIGHT
@@ -28,12 +30,18 @@ from .data.display_specifications.hcs_clean_dictionaries import HCS_dtypesWOmc, 
 from .text_display import *
 from .data.display_specifications.hcs_clean_dictionaries import FILTER_OPTIONS, BARCHART_ALLOWED
 from .data.display_specifications.hmc_custom_layout import hmc_custom_css_accordion
-
+from .text_display import md_text_descriptions_icons
 
 # GLOBAL
 LANGUAGE = os.environ.get('LANGUAGE_DASHBOARD', 'EN') #'DE'
 ACCORDION_WIDTH = int(DEFAULT_FIGURE_WIDTH*2) # maybe this can be made dynamic. 
 # This is the only width parameter to which everything streches to 
+SIZING_MODE = "stretch_width"  # fixed'
+
+this_folder = Path(__file__).parent
+env = Environment(loader=FileSystemLoader(this_folder))
+jinja_template = env.get_template(f"hmc_layout/{LANGUAGE.lower()}_template.html")
+template = pn.Template(jinja_template)
 
 pn.config.loading_spinner = 'dots'
 pn.config.loading_color = '#005AA0'
@@ -50,6 +58,22 @@ for key, val in HCS_MCsubquestions.items():
 
 # if LANGUAGE = 'DE', we translate the data entries because these will often be used as tick labels
 
+
+# Overview icons with images:
+assests_path = this_folder / "hmc_layout" / "assests"
+people_ic = pn.Row(
+    pn.pane.SVG(assests_path / "people.svg"),
+    md_text_descriptions_icons["people"][LANGUAGE],
+)
+inst_ic = pn.Row(
+    pn.pane.SVG(assests_path / "institute.svg"),
+    md_text_descriptions_icons["institution"][LANGUAGE],
+)
+questions_ic = pn.Row(
+    pn.pane.SVG(assests_path / "quiz_black_48dp.svg"),
+    md_text_descriptions_icons["questions"][LANGUAGE],
+)
+overview_icons = pn.Row(people_ic, inst_ic, questions_ic)
 
 # Small Helpers functions 
 
@@ -96,7 +120,7 @@ def construct_tabs(tab_list):
     return pn.Tabs(*tab_list)#, dynamic=True)
 
 pwd = os.getcwd() # TODO better use the absolute location of the main.py file...
-datafilepath= join(pwd, 'survey_dashboard/data/hmc_survey_2021_data.csv')
+datafilepath= join(pwd, 'survey_dashboard/data/hmc_survey_2021_data_cleaned.csv')
 # if not os.path.exists(datafilepath):
 #     from .data.download_data import download_data
 #     print('Downloading Data')

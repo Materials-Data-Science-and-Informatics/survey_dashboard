@@ -48,4 +48,4 @@ fi
 # Run the panel server
 echo "Starting Survey Dashboard on http://localhost:5006/"
 echo "Press Ctrl+C to stop the server"
-panel serve --port 5006 survey_dashboard/ 
+panel serve --port 5006 survey_dashboard/ --static-dirs en_files=./survey_dashboard/hmc_layout/static/en_files
