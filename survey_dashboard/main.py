@@ -96,11 +96,11 @@ def construct_tabs(tab_list):
     return pn.Tabs(*tab_list)#, dynamic=True)
 
 pwd = os.getcwd() # TODO better use the absolute location of the main.py file...
-datafilepath= join(pwd, 'survey_dashboard/data/hmc_survey_2021_data_cleaned.csv')
-if not os.path.exists(datafilepath):
-    from .data.download_data import download_data
-    print('Downloading Data')
-    download_data()
+datafilepath= join(pwd, 'survey_dashboard/data/hmc_survey_2021_data.csv')
+# if not os.path.exists(datafilepath):
+#     from .data.download_data import download_data
+#     print('Downloading Data')
+#     download_data()
 
 # For the dashboard presentation, we load some metadata to certain stuff out of the HMC graph.
 # However this gets prepared in before in as a new dataframe
@@ -437,9 +437,9 @@ multi_filter2 = pn.widgets.MultiChoice(name="Filter by data by question specific
 #lang_select = Select(title="Language", value="en",
 #               options=['en', 'de'], description="Change the language of the Dashboard.")
 
-chart_select1 =  pn.widgets.Select(title="Visualization type", value="Vertical Bar chart",
+chart_select1 =  pn.widgets.Select(name="Visualization type", value="Vertical Bar chart",
                options=['Vertical Bar chart', 'Horizontal Bar chart', 'Pie chart'])
-chart_select2 =  pn.widgets.Select(title="Visualization type", value="Vertical Bar chart",
+chart_select2 =  pn.widgets.Select(name="Visualization type", value="Vertical Bar chart",
                options=['Vertical Bar chart', 'Horizontal Bar chart', 'Pie chart'])
 
 # Correlation plot

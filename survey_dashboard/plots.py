@@ -204,6 +204,11 @@ def bokeh_barchart(df, x='x_value', y=['y_value'], factors=None, figure=None, da
     tools = 'wheel_zoom,box_zoom,undo,reset,save'
     #if x_range is None:
     #    x_range = source.data[x]
+    # Handle None ranges to prevent Bokeh validation error
+    if y_range is None:
+        y_range = (0, 10)  # Default range
+    if x_range is None:
+        x_range = ['Category 1', 'Category 2', 'Category 3']  # Default categories
     fig = bokeh_figure(x_range=x_range, y_range=y_range, title=title, #y_range=(0, 280), 
            height=DEFAULT_FIGURE_HEIGHT, width=DEFAULT_FIGURE_WIDTH, toolbar_location='above', tools=tools)
 
@@ -601,7 +606,7 @@ xlabel='Answers', ylabel='Number of answers', alpha=None, **kwargs):
         alpha = 1.0
     colors = ["#75968f", "#a5bab7", "#c9d9d3", "#e2e2e2", "#dfccce", "#ddb7b1", "#cc7878", "#933b41", "#550b1d"]
     mapper = LinearColorMapper(palette=colors, low=df.data[y].min(), high=df.data[y].max())   
-    fig.circle(source=df, x=x, y=y, radius = 0.9, **kwargs)#size=markersize, fill_color={'field': 'region', 'transform': color_mapper}, fill_alpha=alpha)
+    fig.scatter(source=df, x=x, y=y, size=0.9, **kwargs)#size=markersize, fill_color={'field': 'region', 'transform': color_mapper}, fill_alpha=alpha)
     #line_color='#7c7e71',
     #line_width=0.5,
     #line_alpha=0.5,
@@ -648,7 +653,7 @@ def bokeh_corr_plot(source, x='x_values', y='y_values',  figure=None, title='', 
                tools='hover,wheel_zoom,box_zoom,undo,reset,save',
                   y_range=y_range, x_range=x_range, tooltips=tooltips)
 
-    circle = fig.circle(source=source, x=x, y=y, size=markersize, alpha=alpha, hover_alpha=1.0, 
+    circle = fig.scatter(source=source, x=x, y=y, size=markersize, alpha=alpha, hover_alpha=1.0, 
            hover_line_color='black', hover_line_width=5, fill_color='color',  line_color='color', **kwargs)  #radius=0.1,
     
     fig.xaxis.major_label_orientation = 1
@@ -693,7 +698,7 @@ def create_legend_items(number, size_min, color, fig):
     size = size_min
     alpha_min = 0.2
     for i in range(number):
-        circ = fig.circle(radius=size, x=0.0, y=0.0, muted=True, visible=False, fill_color=color[i], name='foo')
+        circ = fig.scatter(size=size, x=0.0, y=0.0, muted=True, visible=False, fill_color=color[i], name='foo')
         leg_items.append((f'{size}', [circ]))
         size = size + step
     
@@ -724,7 +729,7 @@ def create_legend_items(number, size_min, color, fig, steps=None, data=None, sca
     sizes = percentage_to_area(steps, scale_m=scale_m)
     for i in range(number):
         size = sizes[i]
-        circ = fig.circle(size=size, x=3.0, y=y, fill_color=color[i], name='foo', alpha=alpha)
+        circ = fig.scatter(size=size, x=3.0, y=y, fill_color=color[i], name='foo', alpha=alpha)
         txt = fig.text(text=[f'{steps[i]}'], x=3.0+x_offset, y=y, text_font_size="18px", 
                        text_align="left", text_baseline="middle")
         y = y - y_step
