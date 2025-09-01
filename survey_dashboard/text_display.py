@@ -12,6 +12,7 @@
 This is the central place for all text from the dashboard which needs to be translated
 """
 
+md_text_title = {'EN': 'HMC Survey Data Explorer', 'DE': 'HMC Survey Data Explorer'}
 
 # Description
 md_text_description = {'EN': ("Explorer interactively the HMC 2021 Survey results. "
@@ -30,11 +31,13 @@ md_text_description = {'EN': ("Explorer interactively the HMC 2021 Survey result
     "Any Feedback is welcome and can be given [here](https://github.com/Materials-Data-Science-and-Informatics/survey_dashboard)"),
     'DE':('Exploriere interakiv die Resultate der HMC 2021 Umfrage.')}
 
+
 md_text_descriptions_icons = {
     'people': {'EN': ("**631** Researchers took part in the survey"), 'DE':("**631** Forschende nahmen an der Umfrage teil")},
     'institution': {'EN': ("**18** Helmholtz research centers and institutes"), 'DE':("**18** Helmholtz-Zentren und Institute")},
     'questions': {'EN': ("**49** Survey questions"), 'DE':("**49** Fragen gestellt")},
 }
+
 
 ## Global data filters\n 
 md_text_global_filter = {'EN': ("Apply filters to displayed data according to research areas and data generation method"),
@@ -44,13 +47,17 @@ md_text_global_filter = {'EN': ("Apply filters to displayed data according to re
 md_text_global_filters_widgets = [{'EN': "Research area", 'DE': "Forschungsfeld"}, {'EN': "Data generation method", 'DE': "Datenerzeugungs Methode"}]
 
 # Overview\n
+
 md_text_overview = {'EN': "Birds eye view of survey results related to research data management.",
                     'DE': "Übersicht mit hervorgehobene Fragen zum Forschungsdatenmanagement"}
 
 
-
-
 # Tools and Methods\n 
+
+md_text_tools_tabs = {'methods': {'EN': 'Data generation methods', 'DE': 'Datengenerierungsmethoden'}, 
+                      'software': {'EN': 'Main software in use', 'DE': 'Haupt Software in Benutzung'}, 
+                      'repositories': {'EN': 'Repositories data published in', 'DE': 'Repositorien mit Datenpublikationen'}}
+
 md_text_tools_used = {'EN': ("Discover the scientific methods, used software and repositories of our communities."),
                     'DE': ("Entdecke die wissenschaftliche Methoden, Werkzeuge, Software und Repositorien welche in unseren Forschungsgemeinschaft "
                     "genutzt werden.")}
@@ -68,6 +75,6 @@ md_text_corrchart = {'EN': "Correspondence of selected questions",
 md_text_button = {'EN': ("# Further charts\n")}
 
 accordion_titles = {
-    'EN': ['Global Data Filters', 'Overview', 'Methods, Tools and Software', 'Survey Data Explorer'],
-    'DE': ['Globale Datenfilter', 'Überblick', 'Methoden, Werkzeuge und Software', 'Umfrage-explorer']
+    'EN': ['Global Data Filters', 'Community Profiles', 'Methods, Tools and Software', 'Survey Data Explorer'],
+    'DE': ['Globale Datenfilter', 'Communityprofile', 'Methoden, Werkzeuge und Software', 'Survey Data Explorer']
 }
