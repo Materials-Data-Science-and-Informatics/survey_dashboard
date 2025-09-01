@@ -53,39 +53,56 @@ def calculate_crosstab(
 
 def filter_dataframe(
     df: pd.DataFrame,
-    include: list = None,
-    exclude: List[Tuple[str, list]] = None,
-    exclude_nan=True,
-    exclude_anonymized=True,
-    as_type="category",
+    include: List[str] = None,
+    exclude: List[Tuple[str, List]] = None,
+    exclude_nan: bool = True,
+    exclude_anonymized: bool = True,
+    as_type: str = "object",
 ) -> pd.DataFrame:
     """
-    Filter a dataframe by including and excluding certain columns and values.
+    Filter dataframe based on include/exclude criteria
 
-    example:
-    df = filter_dataframe(surveydata, include=["careerLevel", "docStructured", "researchArea"], exclude=[("careerLevel", to_exclude)])
+    Args:
+        df: Input dataframe
+        include: List of columns to include
+        exclude: List of tuples (column, values_to_exclude)
+        exclude_nan: Whether to exclude rows with NaN values
+        exclude_anonymized: Whether to replace "Anonymized" with empty string
+        as_type: Data type to convert columns to
 
-    returns a dataFrame with columns ["careerLevel", "docStructured", "researchArea"],
-    where rows which contain to_exclude values in the "careerLevel" column are removed
-    ```
+    Returns:
+        Filtered dataframe
     """
-
-    # Create a mapping of renamed columns to original columns
-    original_to_renamed = {v: k for k, v in HCS_colnamesDict.items()}
-
+    # Check if the DataFrame has already been renamed (has human-readable column names)
+    # If it has renamed columns, don't try to convert back to original names
+    has_renamed_columns = any(col in df.columns for col in ['careerLevel', 'researchArea', 'centerAffiliation'])
+    
     if include is not None:
-        # Convert renamed column names to original names if needed
-        include_original = [original_to_renamed.get(col, col) for col in include]
+        if has_renamed_columns:
+            # DataFrame already has renamed columns, use them directly
+            include_columns = include
+        else:
+            # DataFrame has original column names, convert if needed
+            original_to_renamed = {v: k for k, v in HCS_colnamesDict.items()}
+            include_columns = [original_to_renamed.get(col, col) for col in include]
+        
         df = (
-            df[include_original]
-            .dropna(how="all", subset=include_original)
+            df[include_columns]
+            .dropna(how="all", subset=include_columns)
             .astype(as_type)
         )
 
-    for key, val in exclude:
-        # Convert renamed column names to original names if needed
-        key_original = original_to_renamed.get(key, key)
-        df = df.loc[~df[key_original].isin(val)]
+    if exclude:
+        for key, val in exclude:
+            if has_renamed_columns:
+                # DataFrame already has renamed columns, use them directly
+                key_column = key
+            else:
+                # DataFrame has original column names, convert if needed
+                original_to_renamed = {v: k for k, v in HCS_colnamesDict.items()}
+                key_column = original_to_renamed.get(key, key)
+            
+            df = df.loc[~df[key_column].isin(val)]
 
     if exclude_nan:
         for key in df.keys():

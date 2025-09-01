@@ -159,12 +159,12 @@ def construct_tabs(tab_list):
 
 
 pwd = os.getcwd()  # TODO better use the absolute location of the main.py file...
-datafilepath = join(pwd, "survey_dashboard/data/hmc_survey_2021_data_cleaned.csv")
-if not os.path.exists(datafilepath):
-    from .data.download_data import download_data
+datafilepath = join(pwd, "survey_dashboard/data/responses_cleaned_mapped_to_publish.csv")
+# if not os.path.exists(datafilepath):
+#     from .data.download_data import download_data
 
-    print("Downloading Data")
-    download_data()
+#     print("Downloading Data")
+#     download_data()
 
 # For the dashboard presentation, we load some metadata to certain stuff out of the HMC graph.
 # However this gets prepared in before in as a new dataframe
