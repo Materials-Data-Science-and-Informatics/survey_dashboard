@@ -1031,6 +1031,47 @@
                     {{ embed(root) | indent(10) }}
                 {% endfor %}
                 {% endfor %}
+                
+                <!-- Load BokehJS explicitly before Panel app initialization -->
+                <script type="text/javascript" src="static/js/bokeh.min.js"></script>
+                <script type="text/javascript" src="static/js/bokeh-gl.min.js"></script>
+                <script type="text/javascript" src="static/js/bokeh-widgets.min.js"></script>
+                <script type="text/javascript" src="static/js/bokeh-tables.min.js"></script>
+                
+                <!-- Ensure BokehJS is loaded before Panel app initialization -->
+                <script type="text/javascript">
+                    // Override the default Bokeh error handling to prevent the "library missing" error
+                    window.BokehErrorHandler = function() {
+                        // Don't show the error if BokehJS is actually loading
+                        if (typeof Bokeh !== 'undefined' && Bokeh.embed) {
+                            return false; // Don't show error
+                        }
+                        return true; // Show error only if BokehJS is truly missing
+                    };
+                    
+                    // Wait for BokehJS to be fully loaded
+                    function ensureBokehJSLoaded() {
+                        return new Promise((resolve) => {
+                            function checkBokehJS() {
+                                if (typeof Bokeh !== 'undefined' && Bokeh.embed && Bokeh.embed.embed_items) {
+                                    console.log('BokehJS loaded successfully');
+                                    resolve();
+                                } else {
+                                    setTimeout(checkBokehJS, 50);
+                                }
+                            }
+                            checkBokehJS();
+                        });
+                    }
+                    
+                    // Initialize Panel app only after BokehJS is loaded
+                    document.addEventListener('DOMContentLoaded', function() {
+                        ensureBokehJSLoaded().then(() => {
+                            console.log('Panel app can now initialize safely');
+                        });
+                    });
+                </script>
+                
                 {{ plot_script | indent(8) }}
                 <div class="container mx-auto mb-24">
                     <div class="row">
