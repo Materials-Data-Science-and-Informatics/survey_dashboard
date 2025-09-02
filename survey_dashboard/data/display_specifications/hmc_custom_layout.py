@@ -19,18 +19,16 @@ hmc_custom_css_accordion ='''
   background-color: rgba(0, 0, 0, 0.03);
   border-radius: 0;
   display: flex;
-  justify-content: start !important;
+  justify-content: flex-start;
   width: 100%;
 }
 .bk.card-button {
   background-color: transparent;
   margin-left: 0.5em;
-  width: 100% !important;
-  text-align: left;
+  flex-basis: content;
   padding: 16px 24px !important;
   box-sizing: border-box;
   display: flex !important;
-  justify-content: space-between !important;
   align-items: center !important;
 }
 .bk.card-header-row {
@@ -99,9 +97,10 @@ body {
 /* Target the actual Panel accordion structure */
 .bk-panel-models-accordion .bk-panel-models-card-header {
   display: flex !important;
-  justify-content: space-between !important;
+  justify-content: flex-start !important;
   align-items: center !important;
   width: 100% !important;
+  gap: 0 !important;
 }
 
 /* Fix the text and icon positioning in Panel accordion headers */
@@ -126,7 +125,7 @@ body {
 
 .bk-panel-models-accordion .bk-panel-models-card-header .bk-panel-models-icon {
   order: 2 !important;
-  margin-left: auto !important;
+  margin-left: 0 !important;
   flex-shrink: 0 !important;
 }
 
@@ -146,10 +145,11 @@ body {
 /* Target Panel's actual accordion button structure */
 .bk-panel-models-accordion .bk-panel-models-card-header button {
   display: flex !important;
-  justify-content: space-between !important;
+  justify-content: flex-start !important;
   align-items: center !important;
   width: 100% !important;
   text-align: left !important;
+  gap: 0 !important;
 }
 
 /* Ensure the text content is on the left */
@@ -162,7 +162,7 @@ body {
 /* Ensure the icon is on the right */
 .bk-panel-models-accordion .bk-panel-models-card-header button > *:last-child {
   order: 2 !important;
-  margin-left: auto !important;
+  margin-left: 0 !important;
   flex-shrink: 0 !important;
 }
 
@@ -177,15 +177,19 @@ body {
 .bk-panel-models-accordion .bk-panel-models-card-header .bk-panel-models-icon,
 .bk-panel-models-accordion .bk-panel-models-card-header .bk-panel-models-markup-icon {
   order: 2 !important;
-  margin-left: auto !important;
+  margin-left: 0 !important;
   flex-shrink: 0 !important;
 }
 
 /* Ensure all Panel layout containers span full width */
-.bk-panel-models-layout-column,
+.bk-panel-models-layout-Column,
 .bk-panel-models-layout-row {
   width: 100% !important;
   max-width: 100% !important;
+}
+
+.bk-Row {
+padding: 20px;
 }
 
 /* Fix carousel overflow issues */
@@ -223,6 +227,24 @@ body {
 /* Smooth transitions for accordion interactions */
 .bk-panel-models-accordion .bk-panel-models-card-content {
   transition: all 0.3s ease;
+}
+
+/* Remove spacing between text and icon in accordion headers */
+.bk-panel-models-accordion .bk-panel-models-card-header * {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.bk-panel-models-accordion .bk-panel-models-card-header button {
+  padding: 16px 24px !important;
+}
+
+.bk-panel-models-accordion .bk-panel-models-card-header button > *:first-child {
+  margin-right: 8px !important;
+}
+
+.bk-panel-models-accordion .bk-panel-models-card-header button > *:last-child {
+  margin-left: 8px !important;
 }
 '''
 #rgba(0, 0, 0, 0.03);
