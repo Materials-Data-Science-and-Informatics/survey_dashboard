@@ -1043,7 +1043,7 @@ print("Creating layout")
 # Global data filters
 
 row1 = pn.Column(
-    md_text_global_filter[LANGUAGE], g_filters[0], g_filters[1], sizing_mode=SIZING_MODE
+    md_text_global_filter[LANGUAGE], g_filters[0], g_filters[1], sizing_mode="stretch_width"
 )
 
 global_filters_sec = row1
@@ -1051,9 +1051,9 @@ global_filters_sec = row1
 # Overview part
 overview_sec = pn.Column(
     md_text_overview[LANGUAGE],
-    pn.Row(fig_ov3, fig_ov2),
-    pn.Row(fig_ov1, fig_ov4),
-    sizing_mode=SIZING_MODE,
+    pn.Row(fig_ov3, fig_ov2, sizing_mode="stretch_width"),
+    pn.Row(fig_ov1, fig_ov4, sizing_mode="stretch_width"),
+    sizing_mode="stretch_width",
 )
 
 
@@ -1074,16 +1074,17 @@ methods_tools_sec = methods_tabs
 
 inputs = pn.Column(*controls_bar, width=half_width)
 inputs2 = pn.Column(*controls_bar2, width=half_width)
-row2 = pn.Column(pn.Row(inputs, inputs2), pn.Row(fig_exp1, fig_exp2))
+row2 = pn.Column(pn.Row(inputs, inputs2, sizing_mode="stretch_width"), pn.Row(fig_exp1, fig_exp2, sizing_mode="stretch_width"), sizing_mode="stretch_width")
 # Correlation
 # inputs_corr = pn.Column(*controls_corr, width=800)
 row3 = pn.Column(
     md_text_corrchart[LANGUAGE],
-    pn.Row(pn.layout.VSpacer(), fig_corr, leg_corr, pn.layout.VSpacer()),
+    pn.Row(pn.layout.VSpacer(), fig_corr, leg_corr, pn.layout.VSpacer(), sizing_mode="stretch_width"),
+    sizing_mode="stretch_width"
 )
 coree_ex_sec = row3
 question_ex_sec = pn.Column(
-    md_text_barchart[LANGUAGE], row2, row3, sizing_mode=SIZING_MODE
+    md_text_barchart[LANGUAGE], row2, row3, sizing_mode="stretch_width"
 )
 
 
@@ -1099,19 +1100,19 @@ overall_accordion = pn.Accordion(
     (accordion_titles[LANGUAGE][1], overview_sec),
     (accordion_titles[LANGUAGE][2], methods_tools_sec),
     (accordion_titles[LANGUAGE][3], question_ex_sec),
-    sizing_mode="scale_both",
+    sizing_mode="stretch_both",
 )  # , css_classes=['accordion', 'accordion-header'])#,
 # ('Correlation explorer', coree_ex_sec))
 overall_accordion.active = [0, 3]  # [0,1]
 overall_accordion.scroll = True
-overall_accordion.margin = 0
-overall_accordion.width = ACCORDION_WIDTH
-overall_accordion.min_width = ACCORDION_WIDTH
+overall_accordion.margin = (20, 20, 20, 20)  # Add consistent margin on all sides
+overall_accordion.width = None  # Remove fixed width constraint
+overall_accordion.min_width = None  # Remove min-width constraint
 
 # layout = pn.Column(desc, md_text_description[LANGUAGE], overall_accordion)
 # layout = pn.Column(overview_icons, md_text_description[LANGUAGE], overall_accordion, sizing_mode=SIZING_MODE)
 # The text and icons are now in the new template
-layout = pn.Column(overall_accordion, sizing_mode=SIZING_MODE)
+layout = pn.Column(overall_accordion, sizing_mode="stretch_both")
 
 template.add_panel("App", layout)
 template.add_variable("app_title", md_text_title[LANGUAGE])
