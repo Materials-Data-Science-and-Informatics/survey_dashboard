@@ -715,7 +715,7 @@
 {% endblock %}
 
     {% block inner_body %}
-    <div id="app" class="overflow-x-hidden">
+    <div id="app" class="overflow-visible">
       <header class="fixed top-0 w-screen bg-white hmc-app-header">
         <div id="app-header" class="relative z-10 h-full bg-white">
           <div class="container relative flex h-full bg-white xl:items-center">
@@ -1307,14 +1307,15 @@
         });
       }
       const body = document.querySelector("body");
-      body.classList.add("overflow-y-hidden");
+      // Remove the overflow-y-hidden that prevents scrolling
+      // body.classList.add("overflow-y-hidden");
       const cablesIframe = document.querySelector("iframe#cables_patch");
       cablesIframe.onload = function (event) {
         window.focus();
         cablesIframe.classList.toggle("hidden");
         setTimeout(() => {
           cablesIframe.classList.toggle("opacity-0");
-          body.classList.remove("overflow-y-hidden");
+          // body.classList.remove("overflow-y-hidden");
         }, 400);
       };
       !(function (e) {

@@ -39,6 +39,24 @@ hmc_custom_css_accordion ='''
   overflow-wrap: break-word;
   text-align: left;
 }
+
+/* Fix scrolling issues */
+body {
+  overflow-y: auto !important;
+  overflow-x: auto !important;
+}
+
+#app {
+  overflow: visible !important;
+}
+
+.bk-panel-models-markup-html {
+  overflow: visible !important;
+}
+
+.bk-panel-models-layout-column {
+  overflow: visible !important;
+}
 '''
 #rgba(0, 0, 0, 0.03);
 #"#005AA0" :  rgba(0, 90, 160, 0.53);
