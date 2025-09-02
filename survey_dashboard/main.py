@@ -280,10 +280,9 @@ def select_data(question, data_filters, data_filters_method, filter_by=FILTER_BY
         df, q_index_clean, display_dict=HCS_MCsubquestions_flattened
     )
 
-    print('data_all', data_all)
-    # Handle "All" filter differently - when "All" is selected, show aggregated data
-    if "All" in data_filters:
-        # Restructure data_all to match expected plotting format
+    # Handle data filtering based on what's selected
+    if "All" in data_filters and len(data_filters) == 1:
+        # Only "All" is selected - use the aggregated data from all research areas
         if len(q_index_clean) == 1:
             key = q_index_clean[0]
             data = {
@@ -291,6 +290,10 @@ def select_data(question, data_filters, data_filters_method, filter_by=FILTER_BY
                 key: data_all.get(key, []),
                 "x_value": data_all.get(key, [])  # Add missing x_value column
             }
+        else:
+            # Multiple columns case
+            data = data_all
+        y_keys = ["All"] + [data_all.get(q_index_clean[0], [])]
     else:
         # Specific research areas are selected - filter the data
         exclude = []
@@ -300,9 +303,25 @@ def select_data(question, data_filters, data_filters_method, filter_by=FILTER_BY
         for filter_key in exclude:
             df = df[df[filter_by] != filter_key]
         data, y_keys = prepare_data_research_field(df, q_index)  # this add also Cum. Sum.
-        # Add "All" data if it's also selected
+        print('data before adding All:', data)
+        print('data_all keys:', list(data_all.keys()))
+        print('data_all["All"] length:', len(data_all.get("All", [])))
+        
+        # Add "All" data if it's selected in the filters
         if "All" in data_filters:
-            data["All"] = data_all["All"]
+            all_data = data_all.get("All", [])
+            print('Adding All data, length:', len(all_data), 'x_value length:', len(data["x_value"]))
+            
+            # Simple approach: truncate "All" data to match x_value length
+            if len(all_data) > len(data["x_value"]):
+                data["All"] = all_data[:len(data["x_value"])]
+                print('All data truncated to match x_value length')
+            else:
+                # If "All" data is shorter, just use what we have
+                data["All"] = all_data
+                print('All data added (shorter than x_value)')
+        
+        print('data after adding All:', data)
         
     # print(data)
     # We create two ColumnDataSources, because they have to be n*n and
