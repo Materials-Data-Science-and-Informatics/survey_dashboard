@@ -17,6 +17,7 @@ from os.path import dirname, join
 from pathlib import Path
 import pandas as pd
 import panel as pn
+import numpy as np
 from bokeh.palettes import Category20
 from bokeh.models import ColumnDataSource, Div
 from jinja2 import Environment, FileSystemLoader
@@ -312,16 +313,50 @@ def select_data(question, data_filters, data_filters_method, filter_by=FILTER_BY
             all_data = data_all.get("All", [])
             print('Adding All data, length:', len(all_data), 'x_value length:', len(data["x_value"]))
             
-            # Simple approach: truncate "All" data to match x_value length
-            if len(all_data) > len(data["x_value"]):
-                data["All"] = all_data[:len(data["x_value"])]
-                print('All data truncated to match x_value length')
-            else:
-                # If "All" data is shorter, just use what we have
+            # OPTION 2: When "All" + specific filters are selected, expand to show all research areas
+            if "researchArea" in data:
+                # Use full "All" data and expand x_value to all research areas
                 data["All"] = all_data
-                print('All data added (shorter than x_value)')
+                data["x_value"] = data_all["researchArea"]
+                
+                # Expand specific research area data to match full x_value length
+                for key in data_filters:
+                    if key != "All" and key in data:
+                        # Find position of this research area in full x_value
+                        try:
+                            position = data["x_value"].index(key)
+                            # Create array with value at correct position, zeros elsewhere
+                            new_array = np.zeros(len(data["x_value"]), dtype=data[key].dtype)
+                            new_array[position] = data[key][0]  # Use first (and only) value
+                            data[key] = new_array
+                        except ValueError:
+                            # If not found, just pad with zeros
+                            padding = [0] * (len(data["x_value"]) - len(data[key]))
+                            data[key] = list(data[key]) + padding
+                
+                print('Research area: Expanded to show all research areas with aligned data')
+            else:
+                # For other questions: truncate to match x_value length
+                if len(all_data) > len(data["x_value"]):
+                    data["All"] = all_data[:len(data["x_value"])]
+                    
+                else:
+                    data["All"] = all_data
+                   
+            
+            print('data after adding All:', data)
         
-        print('data after adding All:', data)
+        # Also expand Cum. Sum to match the new x_value length
+        if "Cum. Sum" in data:
+            cum_sum_data = data["Cum. Sum"]
+            if len(cum_sum_data) < len(data["x_value"]):
+                # Pad with zeros to match new length
+                if isinstance(cum_sum_data, np.ndarray):
+                    padding = np.zeros(len(data["x_value"]) - len(cum_sum_data), dtype=cum_sum_data.dtype)
+                    data["Cum. Sum"] = np.concatenate([cum_sum_data, padding])
+                else:
+                    padding = [0] * (len(data["x_value"]) - len(cum_sum_data))
+                    data["Cum. Sum"] = list(cum_sum_data) + padding
         
     # print(data)
     # We create two ColumnDataSources, because they have to be n*n and
