@@ -280,15 +280,30 @@ def select_data(question, data_filters, data_filters_method, filter_by=FILTER_BY
         df, q_index_clean, display_dict=HCS_MCsubquestions_flattened
     )
 
-    exclude = []
-    for field in re_fields:
-        if field not in data_filters:
-            exclude.append(field)
-    for filter_key in exclude:
-        df = df[df[filter_by] != filter_key]
-    data, y_keys = prepare_data_research_field(df, q_index)  # this add also Cum. Sum.
+    print('data_all', data_all)
+    # Handle "All" filter differently - when "All" is selected, show aggregated data
     if "All" in data_filters:
-        data["All"] = data_all["All"]
+        # Restructure data_all to match expected plotting format
+        if len(q_index_clean) == 1:
+            key = q_index_clean[0]
+            data = {
+                "All": data_all["All"],
+                key: data_all.get(key, []),
+                "x_value": data_all.get(key, [])  # Add missing x_value column
+            }
+    else:
+        # Specific research areas are selected - filter the data
+        exclude = []
+        for field in re_fields:
+            if field not in data_filters:
+                exclude.append(field)
+        for filter_key in exclude:
+            df = df[df[filter_by] != filter_key]
+        data, y_keys = prepare_data_research_field(df, q_index)  # this add also Cum. Sum.
+        # Add "All" data if it's also selected
+        if "All" in data_filters:
+            data["All"] = data_all["All"]
+        
     # print(data)
     # We create two ColumnDataSources, because they have to be n*n and
     # it is therefore not posible to put all specifics into one

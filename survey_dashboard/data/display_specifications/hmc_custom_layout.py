@@ -188,7 +188,7 @@ body {
   max-width: 100% !important;
 }
 
-.bk-Row {
+.bk-Row { /* Row is the main container for the layout -- dont remove this */
 padding: 20px;
 }
 
