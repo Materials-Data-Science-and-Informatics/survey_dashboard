@@ -206,7 +206,17 @@ def bokeh_barchart(df, x='x_value', y=['y_value'], factors=None, figure=None, da
     #    x_range = source.data[x]
     # Handle None ranges to prevent Bokeh validation error
     if y_range is None:
-        y_range = (0, 10)  # Default range
+        # Automatically calculate y_range based on data
+        max_values = []
+        for y_key in y_keys:
+            if y_key in source.data:
+                max_values.extend(source.data[y_key])
+        if max_values:
+            y_max = max(max_values)
+            # Add 10% padding to the top
+            y_range = (0, y_max * 1.1)
+        else:
+            y_range = (0, 10)  # Fallback default range
     if x_range is None:
         x_range = ['Category 1', 'Category 2', 'Category 3']  # Default categories
     fig = bokeh_figure(x_range=x_range, y_range=y_range, title=title, #y_range=(0, 280), 
