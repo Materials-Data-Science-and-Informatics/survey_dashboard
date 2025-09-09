@@ -102,6 +102,26 @@ corr_theme = {
     "width": int(DEFAULT_FIGURE_WIDTH*1.5),
     "height": int(DEFAULT_FIGURE_HEIGHT*1.5)}
 }
+pie_theme = {
+    "figure_kwargs" : {
+    "background_fill_color" : '#00000000', #transparent
+    "border_fill_color" : '#00000000',
+    # Note: No x_range.range_padding for pie charts as they use numeric ranges
+    "xgrid.grid_line_color": None,
+    "xaxis.major_label_orientation": 1,
+    "title.text_font_size": '18px',
+    "yaxis.axis_label_text_font_size": '18px',
+    "xaxis.axis_label_text_font_size": '18px',
+    "xaxis.major_label_text_font_size": '16px',
+    "yaxis.major_label_text_font_size": '16px',
+    "toolbar.logo": None,
+    "toolbar_location": "right",
+    "legend.location": "top_right",
+    "legend.orientation": "vertical",
+    "legend.click_policy": "hide",
+    "width": DEFAULT_FIGURE_WIDTH,
+    "height": DEFAULT_FIGURE_HEIGHT}
+}
 
 
 
@@ -273,7 +293,7 @@ def bokeh_barchart(df, x='x_value', y=['y_value'], factors=None, figure=None, da
     return fig
 
 # bokeh piechart
-@apply_theme()
+@apply_theme(theme=pie_theme)
 def bokeh_piechart(df, x='x_value', y=['counts'], figure=None, outer_radius=0.7, inner_radius=0.4, 
                    title='', fill_color=None, legend_labels=None, line_color='black', **kwargs):
     """Draw an interactive piechart with bokeh
@@ -369,13 +389,17 @@ def bokeh_piechart(df, x='x_value', y=['counts'], figure=None, outer_radius=0.7,
 
     tools = 'hover,wheel_zoom,box_zoom,undo,reset,save'
     if figure is None:
+        x_range = (-1.2, 1.2)  # Give some padding around the pie chart
+        y_range = (0.2, 1.8)   # Give some padding around the pie chart
         fig = bokeh_figure(height=DEFAULT_FIGURE_HEIGHT, width=DEFAULT_FIGURE_WIDTH,
                title=title,
                toolbar_location='above',
                tools=tools,
                tooltips=[('Data', f'@{x}'),
                          ('Percentage', '@percent{0.00%}'), 
-                         ('Count', f'@count')])
+                         ('Count', f'@count')],
+               x_range=x_range,
+               y_range=y_range)
     else:
         fig = figure
         
