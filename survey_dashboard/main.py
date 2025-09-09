@@ -307,18 +307,18 @@ def select_data(question, data_filters, data_filters_method, filter_by=FILTER_BY
         print('data before adding All:', data)
         print('data_all keys:', list(data_all.keys()))
         print('data_all["All"] length:', len(data_all.get("All", [])))
-        
+
         # Add "All" data if it's selected in the filters
         if "All" in data_filters:
             all_data = data_all.get("All", [])
             print('Adding All data, length:', len(all_data), 'x_value length:', len(data["x_value"]))
-            
+
             # OPTION 2: When "All" + specific filters are selected, expand to show all research areas
             if "researchArea" in data:
                 # Use full "All" data and expand x_value to all research areas
                 data["All"] = all_data
                 data["x_value"] = data_all["researchArea"]
-                
+
                 # Expand specific research area data to match full x_value length
                 for key in data_filters:
                     if key != "All" and key in data:
@@ -333,19 +333,19 @@ def select_data(question, data_filters, data_filters_method, filter_by=FILTER_BY
                             # If not found, just pad with zeros
                             padding = [0] * (len(data["x_value"]) - len(data[key]))
                             data[key] = list(data[key]) + padding
-                
+
                 print('Research area: Expanded to show all research areas with aligned data')
             else:
                 # For other questions: truncate to match x_value length
                 if len(all_data) > len(data["x_value"]):
                     data["All"] = all_data[:len(data["x_value"])]
-                    
+
                 else:
                     data["All"] = all_data
-                   
-            
+
+
             print('data after adding All:', data)
-        
+
         # Also expand Cum. Sum to match the new x_value length
         if "Cum. Sum" in data:
             cum_sum_data = data["Cum. Sum"]
@@ -357,7 +357,7 @@ def select_data(question, data_filters, data_filters_method, filter_by=FILTER_BY
                 else:
                     padding = [0] * (len(data["x_value"]) - len(cum_sum_data))
                     data["Cum. Sum"] = list(cum_sum_data) + padding
-        
+
     # print(data)
     # We create two ColumnDataSources, because they have to be n*n and
     # it is therefore not posible to put all specifics into one
@@ -888,9 +888,14 @@ def update(target, event, question_sel, f_choice, m_choice, q_filter, charttype)
             **display_options,
         )  # df.data['factors'], legend_labels='legend_labels')#, figure=figure)
     elif charttype == "Horizontal Bar chart":
+        # Swap the ranges for horizontal orientation
         y_range = display_options["y_range"]
         display_options["y_range"] = display_options["x_range"]
         display_options["x_range"] = y_range
+
+        # Swap the labels for horizontal orientation
+        display_options["xlabel"] = ""  # X axis lays vertically but shows categorical data
+        display_options["ylabel"] = "Number of Answers"  # Y axis now lays horizontally but still shows numerical data
         # TODO change tooltips...
         fig = bokeh_barchart(
             source,
@@ -899,8 +904,6 @@ def update(target, event, question_sel, f_choice, m_choice, q_filter, charttype)
             legend_labels=y_keys,
             fill_color=fill_colors,
             orientation="horizontal",
-            xlabel="Number of Answers",
-            ylabel="",
             **display_options,
         )  #'horizontal')#df.data['factors'], legend_labels='legend_labels')#, figure=figure)
     elif charttype == "Pie chart":
