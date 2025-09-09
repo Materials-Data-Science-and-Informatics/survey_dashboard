@@ -15,6 +15,12 @@ import numpy as np
 from functools import wraps
 from collections import Counter
 from bokeh.models import ColumnDataSource
+
+from bokeh.models import HelpTool
+from bokeh.models import HoverTool
+from bokeh.models import Range1d
+from bokeh.transform import dodge
+
 from bokeh.plotting import figure as bokeh_figure
 from bokeh.palettes import Category20c
 #from bokeh.transform import factor_cmap
@@ -123,6 +129,27 @@ pie_theme = {
     "height": DEFAULT_FIGURE_HEIGHT}
 }
 
+horizontal_theme = {
+    "figure_kwargs" : {
+    "background_fill_color" : '#00000000', #transparent
+    "border_fill_color" : '#00000000',
+    # Note: No x_range.range_padding for horizontal bars as x_range is numeric
+    "xgrid.grid_line_color": None,
+    "xaxis.major_label_orientation": 1,
+    "title.text_font_size": '18px',
+    "yaxis.axis_label_text_font_size": '18px',
+    "xaxis.axis_label_text_font_size": '18px',
+    "xaxis.major_label_text_font_size": '16px',
+    "yaxis.major_label_text_font_size": '16px',
+    "toolbar.logo": None,
+    "toolbar_location": "right",
+    "legend.location": "top_right",
+    "legend.orientation": "vertical",
+    "legend.click_policy": "hide",
+    "width": DEFAULT_FIGURE_WIDTH,
+    "height": DEFAULT_FIGURE_HEIGHT}
+}
+
 
 
 
@@ -173,122 +200,147 @@ def rek_set_attr(obj: object, key: str, val:object) -> None:
         key_new = ".".join(ke for ke in keys[1:])
         return rek_set_attr(obj2, key_new, val)
 
-
-
-
-@apply_theme()
+# DONE: Refactored this function heavily to get the plots to work
 def bokeh_barchart(df, x='x_value', y=['y_value'], factors=None, figure=None, data_visible=[True], title='', 
                     width=0.1,  xlabel='', ylabel='Number of answers', palette=Category20c, 
                     fill_color=None, legend_labels=None, description='For more information about the HMC survey click here.', 
                     redirect='https://helmholtz-metadaten.de/en/',  orientation='vertical', x_range=None, y_range=None,**kwargs):
-    """Create an interactive bar chart with bokeh
+    """Create an interactive bar chart with bokeh"""
+    
+    # Choose theme based on orientation
+    if orientation == 'horizontal':
+        return _bokeh_barchart_horizontal(df, x, y, factors, figure, data_visible, title, 
+                                         width, xlabel, ylabel, palette, fill_color, legend_labels, 
+                                         description, redirect, orientation, x_range, y_range, **kwargs)
+    else:
+        return _bokeh_barchart_vertical(df, x, y, factors, figure, data_visible, title, 
+                                       width, xlabel, ylabel, palette, fill_color, legend_labels, 
+                                       description, redirect, orientation, x_range, y_range, **kwargs)
 
-    :param df: [description]
-    :type df: bokeh.models.ColumnDataSource
-    :param x: [description], defaults to 'x_value'
-    :type x: str, optional
-    :param y: [description], defaults to ['y_value']
-    :type y: list, optional
-    :param factors: [description], defaults to None
-    :type factors: [type], optional
-    :param figure: [description], defaults to None
-    :type figure: [type], optional
-    :param data_visible: [description], defaults to [True]
-    :type data_visible: list, optional
-    :param title: [description], defaults to ''
-    :type title: str, optional
-    :param width: [description], defaults to 0.1
-    :type width: float, optional
-    :param xlabel: [description], defaults to ''
-    :type xlabel: str, optional
-    :param ylabel: [description], defaults to 'Number of answers'
-    :type ylabel: str, optional
-    :param palette: [description], defaults to Category20c
-    :type palette: [type], optional
-    :param fill_color: [description], defaults to None
-    :type fill_color: [type], optional
-    :param legend_labels: [description], defaults to None
-    :type legend_labels: [type], optional
-    :param description: [description], defaults to 'For more information about the HMC survey click here.'
-    :type description: str, optional
-    :param redirect: [description], defaults to 'https://helmholtz-metadaten.de/en/pages/structure-governance'
-    :type redirect: str, optional
-    :return: [description]
-    :rtype: [type]
-    """
+@apply_theme(theme=horizontal_theme)
+def _bokeh_barchart_horizontal(df, x='x_value', y=['y_value'], factors=None, figure=None, data_visible=[True], title='', 
+                    width=0.1,  xlabel='', ylabel='Number of answers', palette=Category20c, 
+                    fill_color=None, legend_labels=None, description='For more information about the HMC survey click here.', 
+                    redirect='https://helmholtz-metadaten.de/en/',  orientation='vertical', x_range=None, y_range=None,**kwargs):
+    """Internal function for horizontal bar charts with horizontal theme"""
+    return _bokeh_barchart_impl(df, x, y, factors, figure, data_visible, title, 
+                               width, xlabel, ylabel, palette, fill_color, legend_labels, 
+                               description, redirect, orientation, x_range, y_range, **kwargs)
+
+@apply_theme(theme=default_theme)
+def _bokeh_barchart_vertical(df, x='x_value', y=['y_value'], factors=None, figure=None, data_visible=[True], title='', 
+                    width=0.1,  xlabel='', ylabel='Number of answers', palette=Category20c, 
+                    fill_color=None, legend_labels=None, description='For more information about the HMC survey click here.', 
+                    redirect='https://helmholtz-metadaten.de/en/',  orientation='vertical', x_range=None, y_range=None,**kwargs):
+    """Internal function for vertical bar charts with default theme"""
+    return _bokeh_barchart_impl(df, x, y, factors, figure, data_visible, title, 
+                               width, xlabel, ylabel, palette, fill_color, legend_labels, 
+                               description, redirect, orientation, x_range, y_range, **kwargs)
+
+def _bokeh_barchart_impl(df, x='x_value', y=['y_value'], factors=None, figure=None, data_visible=[True], title='', 
+                    width=0.1,  xlabel='', ylabel='Number of answers', palette=Category20c, 
+                    fill_color=None, legend_labels=None, description='For more information about the HMC survey click here.', 
+                    redirect='https://helmholtz-metadaten.de/en/',  orientation='vertical', x_range=None, y_range=None,**kwargs):
+    """Internal implementation of bar chart creation"""
+    
     y_keys = y
     source = df
-    #print(y, x)
-    #print(df.column_names)
     help_t = HelpTool(description=description, redirect=redirect)
     tools = 'wheel_zoom,box_zoom,undo,reset,save'
-    #if x_range is None:
-    #    x_range = source.data[x]
-    # Handle None ranges to prevent Bokeh validation error
-    if y_range is None:
-        # Automatically calculate y_range based on data
-        max_values = []
-        for y_key in y_keys:
-            if y_key in source.data:
-                max_values.extend(source.data[y_key])
-        if max_values:
-            y_max = max(max_values)
-            # Add 10% padding to the top
-            y_range = (0, y_max * 1.1)
-        else:
-            y_range = (0, 10)  # Fallback default range
+    
+     # Use the provided ranges or calculate defaults
     if x_range is None:
-        x_range = ['Category 1', 'Category 2', 'Category 3']  # Default categories
-    fig = bokeh_figure(x_range=x_range, y_range=y_range, title=title, #y_range=(0, 280), 
-           height=DEFAULT_FIGURE_HEIGHT, width=DEFAULT_FIGURE_WIDTH, toolbar_location='above', tools=tools)
+        if x in source.data:
+            x_range = source.data[x]
+        else:
+            x_range = ['Category 1', 'Category 2', 'Category 3']
 
+    # Convert numerical lists to strings for categorical data
+    if isinstance(x_range, list) and len(x_range) > 0 and isinstance(x_range[0], (int, float)):
+        x_range = [str(val) for val in x_range]
+    
+    #if y_range is None:
+     # Calculate numerical range from actual data values
+    max_values = []
+    for y_key in y_keys:
+        if y_key in source.data:
+            max_values.extend(source.data[y_key])
+    
+    if max_values:
+        numerical_max = max(max_values)
+        numerical_range = (0, numerical_max * 1.1)
+    else:
+        numerical_range = (0, 10)  # Fallback default range
+
+    
+    # Set up ranges based on orientation
+    if orientation == 'vertical':
+        # Vertical: categorical on x-axis, numerical on y-axis
+        fig_x_range = x_range
+        fig_y_range = numerical_range
+        fig_xlabel = xlabel
+        fig_ylabel = ylabel
+    else:
+        # Horizontal: categorical on y-axis, numerical on x-axis
+        fig_x_range = numerical_range
+        fig_y_range = x_range   
+        fig_xlabel = ylabel
+        fig_ylabel = xlabel
+    
+    # Create figure
+    fig = bokeh_figure(x_range=fig_x_range, y_range=fig_y_range, title=title,
+           height=DEFAULT_FIGURE_HEIGHT, width=DEFAULT_FIGURE_WIDTH, 
+           toolbar_location='above', tools=tools)
+    
     fig.add_tools(help_t)
     
+    # Calculate bar positions for multiple series
     nvisible = len(y_keys)
     step = width + 0.05
-    if nvisible%2 == 0:
-        start = -step*nvisible/2 + step/2.0
-    elif nvisible==1:
+    if nvisible % 2 == 0:
+        start = -step * nvisible / 2 + step / 2.0
+    elif nvisible == 1:
         start = 0.0
     else:
-        start = nvisible//2 * -step
+        start = nvisible // 2 * -step
     
-    position = [start + i*step for i in range(len(y))]        
-    tooltips=[(f'{x}', f'@{x}')]
+    position = [start + i * step for i in range(len(y_keys))]
+    tooltips = [(f'{x}', f'@{x}')]
     bars = []
-
-    #for i, y in enumerate(y_keys):
-    #    bar = fig.vbar(x=dodge(x, position[i], range=fig.x_range), top=y, source=source,
-    #       width=width, color=fill_color[i], legend_label=y, **kwargs)
-    for i, y in enumerate(y_keys):
-        if orientation=='vertical':
-            bar = fig.vbar(x=dodge(x, position[i], range=fig.x_range), top=y, source=source,
-                width=width, color=fill_color[i], legend_label=y, selection_fill_color='black', 
-                selection_fill_alpha=0.8,
-                nonselection_fill_alpha=0.2,
-                nonselection_fill_color="blue",
-                selection_line_color="black", fill_alpha=0.8,
-                nonselection_line_alpha=0.5, hover_fill_alpha=1.0,
-                hover_line_color="black", hover_line_width=5.0, **kwargs)
-            fig.y_range.start =  0
-        else: # orientation=='horizontal':
-            bar = fig.hbar(y=dodge(x, position[i], range=fig.y_range), right=y, source=source,
-                height=width, color=fill_color[i], legend_label=y, selection_fill_color='black', selection_fill_alpha=0.8,
-                nonselection_fill_alpha=0.2,
-                nonselection_fill_color="blue",
-                selection_line_color="black", fill_alpha=0.8,
-                nonselection_line_alpha=0.5, hover_fill_alpha=1.0,
-                hover_line_color="black", hover_line_width=5.0, **kwargs)   
-            fig.x_range.start =  0
-
-        tooltips.append((f'{y}', '@{' + str(y) + '}'))
+    
+    # Create bars based on orientation
+    for i, y_key in enumerate(y_keys):
+        if orientation == 'vertical':
+            # Vertical bars: dodge along x-axis (categorical)
+            bar = fig.vbar(x=dodge(x, position[i], range=fig.x_range), 
+                          top=y_key, source=source,
+                          width=width, color=fill_color[i], legend_label=y_key,
+                          selection_fill_color='black', selection_fill_alpha=0.8,
+                          nonselection_fill_alpha=0.2, nonselection_fill_color="blue",
+                          selection_line_color="black", fill_alpha=0.8,
+                          nonselection_line_alpha=0.5, hover_fill_alpha=1.0,
+                          hover_line_color="black", hover_line_width=5.0, **kwargs)
+        else:
+            # Horizontal bars: dodge along y-axis (categorical)
+            bar = fig.hbar(y=dodge(x, position[i], range=fig.y_range), 
+                          right=y_key, source=source,
+                          height=width, color=fill_color[i], legend_label=y_key,
+                          selection_fill_color='black', selection_fill_alpha=0.8,
+                          nonselection_fill_alpha=0.2, nonselection_fill_color="blue",
+                          selection_line_color="black", fill_alpha=0.8,
+                          nonselection_line_alpha=0.5, hover_fill_alpha=1.0,
+                          hover_line_color="black", hover_line_width=5.0, **kwargs)
+        
+        tooltips.append((f'{y_key}', f'@{y_key}'))
         bars.append(bar)
-
-    # How the data was given, there is not a way for the hover tool to display a single value
-    hover = HoverTool(tooltips=tooltips,renderers=bars)
+    
+    # Add hover tool
+    hover = HoverTool(tooltips=tooltips, renderers=bars)
     fig.add_tools(hover)
-    fig.yaxis.axis_label = ylabel
-    fig.xaxis.axis_label = xlabel
+    
+    # Set axis labels
+    fig.yaxis.axis_label = fig_ylabel
+    fig.xaxis.axis_label = fig_xlabel
     
     return fig
 
