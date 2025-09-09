@@ -157,7 +157,7 @@
       href="https://helmholtz-metadaten.de/favicon/favicon.ico"
     />
     <meta name="msapplication-config" content="/favicon/browserconfig.xml" />
-    
+
     <!-- Style added for title banner-->
     <style>
       .banner {
@@ -167,7 +167,7 @@
         background-repeat: no-repeat;
         align-items: flex-end !important;
       }
-      
+
       .d-flex {
         display: flex !important;
       }
@@ -201,7 +201,7 @@
       }
 
       .infobox2 {
-        
+
         border-style:solid;
         border-width: 2px;
         color: #000000;
@@ -213,7 +213,7 @@
       .highlight {
         color:#14c8ff;
       }
-    
+
     </style>
     <!---->
 
@@ -887,7 +887,7 @@
                     <span></span>
                     <span></span>
                   </button>
-                 
+
                   To be included later
                   <div>
                     <ul class="flex">
@@ -909,10 +909,10 @@
                       </li>
                     </ul>
                   </div>
-                  
+
                 </div>
-                
-               
+
+
             </div>
 
             <div
@@ -939,33 +939,33 @@
                 </ul>
               </div>
             </div>
-          </div>  
+          </div>
 
 
         </div>
       </header>
-      
-      <main class="pb-20 bg-gray-100">   
+
+      <main class="pb-20 bg-gray-100">
 
         <div class="banner flex-row d-flex" style="background-image: url(./en_files/Banner2.png);">
           <div class="container mx-auto mb-12" style="display: flex;padding-left: 72px;">
             <span class="text-2xl sm:text-3xl font-display font-bold uppercase text-white" style="display: inline-block; align-self: flex-end;">
             {{ app_title }}
             </span>
-           
+
             <img src="./en_files/SurveyExplorerLogoInverted.png" style="margin-left:auto; height: 13rem">
-           
+
           </div>
         </div>
         <div class="pt-10 pb-20 lg:pt-20">
           <section>
             <div class="container mx-auto mb-24">
-              
+
               <p style="margin-left:36px; margin-bottom:2.5rem;">
                 Who are the data stakeholders in Helmholtz? What tools do they use? What are the roadblocks to better metadata?
                 These were some of the questions that we investigated with our HMC community survey in 2021. Here you can browse the results interactively and dive deeper into the data!
               </p>
-              
+
               <p style="margin-left: 36px; margin-bottom:12px; margin-top: 2.5rem;">
                 Refine the displayed data with <b>Global Data Filters</b> and explore
                 <ul style="margin-left: 72px;font-size: 17px; list-style-type: disc;">
@@ -1006,24 +1006,24 @@
               </div>
               <div class="flex flex-wrap">
                 <div class="infobox2" style="min-width: 1200px; margin-top: 5rem; margin-left: 24px; border-color: #002864;">
-                 
+
                   <p style="margin-bottom: 0px">
-                    <b style="color: #002864;">DISCLAIMER</b><br>Displayed data should be interpreted with care. Responses might be subject to sample bias and some 
-                    questions were specific to the research field of participants. 
+                    <b style="color: #002864;">DISCLAIMER</b><br>Displayed data should be interpreted with care. Responses might be subject to sample bias and some
+                    questions were specific to the research field of participants.
                     <a href="https://doi.org/10.3289/HMC_publ_05" target="_blank">Check our written publication for further details.</a>
                   </p>
-                  
+
                 </div>
-                
+
               </div>
-              
+
             </div>
           </section>
 
           <section>
             <div class="container mx-auto mb-12">
                 {% block contents %}
-                <div class="flex flex-col w-full lg:space-x-4 lg:flex-row"> 
+                <div class="flex flex-col w-full lg:space-x-4 lg:flex-row">
                 <br>
                 {% for doc in docs %}
                 {{ embed(doc) if doc.elementid }}
@@ -1031,13 +1031,13 @@
                     {{ embed(root) | indent(10) }}
                 {% endfor %}
                 {% endfor %}
-                
+
                 <!-- Load BokehJS explicitly before Panel app initialization -->
                 <script type="text/javascript" src="static/js/bokeh.min.js"></script>
                 <script type="text/javascript" src="static/js/bokeh-gl.min.js"></script>
                 <script type="text/javascript" src="static/js/bokeh-widgets.min.js"></script>
                 <script type="text/javascript" src="static/js/bokeh-tables.min.js"></script>
-                
+
                 <!-- Ensure BokehJS is loaded before Panel app initialization -->
                 <script type="text/javascript">
                     // Override the default Bokeh error handling to prevent the "library missing" error
@@ -1048,7 +1048,7 @@
                         }
                         return true; // Show error only if BokehJS is truly missing
                     };
-                    
+
                     // Wait for BokehJS to be fully loaded
                     function ensureBokehJSLoaded() {
                         return new Promise((resolve) => {
@@ -1063,7 +1063,7 @@
                             checkBokehJS();
                         });
                     }
-                    
+
                     // Initialize Panel app only after BokehJS is loaded
                     document.addEventListener('DOMContentLoaded', function() {
                         ensureBokehJSLoaded().then(() => {
@@ -1071,7 +1071,7 @@
                         });
                     });
                 </script>
-                
+
                 {{ plot_script | indent(8) }}
                 <div class="container mx-auto mb-24">
                     <div class="row">
@@ -1188,7 +1188,7 @@
                     target="_blank"
                   >
                     <img src="./en_files/github-mark-white.png" width="24px" height="24px">
-                    
+
                   </a>
                 </li>
               </ul>
@@ -1203,8 +1203,8 @@
                       href="https://dashboard.survey.helmholtz-metadaten.de"
                       class="text-white"
                     >
-                    HMC Survey Data Explorer Dashboard:</a
-                    >
+                    HMC Survey Data Explorer Dashboard
+                    </a>
                   </li>
                 </ul>
             </nav>
@@ -1244,7 +1244,7 @@
             </div>
             <div class="mb-6">
               <div class="text-white text-sm">
-                © 2023 Helmholtz Metadata Collaboration
+                © 2025 Helmholtz Metadata Collaboration
               </div>
             </div>
           </div>
@@ -2014,5 +2014,5 @@
       })();
     </script>
     <!-- End Matomo Code -->
-  
+
   {% endblock %}
