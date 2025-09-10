@@ -9,8 +9,8 @@
 # For further information on the license, see the LICENSE file                #
 ###############################################################################
 """
-Visualization manager module for the survey dashboard.
-Handles creation and updates of all charts and visualizations.
+Chart creation module for the survey dashboard.
+Handles creation of all chart types and visualizations.
 """
 
 import panel as pn
@@ -25,7 +25,7 @@ from survey_dashboard.plots import (
     DEFAULT_FIGURE_WIDTH,
     DEFAULT_FIGURE_HEIGHT
 )
-from survey_dashboard.config import (
+from survey_dashboard.core.config import (
     DEFAULT_QUESTIONS,
     ACCORDION_WIDTH,
     OFFSET_HEIGHT_FOR_TABS,
@@ -39,11 +39,11 @@ from survey_dashboard.text_display import (
 )
 
 
-class VisualizationManager:
-    """Manages creation and updating of all visualizations."""
+class ChartManager:
+    """Manages creation of all chart types."""
     
     def __init__(self, data_processor):
-        """Initialize visualization manager with data processor."""
+        """Initialize chart manager with data processor."""
         self.data_processor = data_processor
         self.half_width = int(ACCORDION_WIDTH / 2)
     
@@ -169,26 +169,19 @@ class VisualizationManager:
         )
         
         return methods_tabs, wordcloud_panes
-    
-    def update_chart(self, target, event, question_sel, f_choice, m_choice, q_filter, charttype):
-        """Update charts based on user selections."""
-        print(event)
-        question = question_sel  # .value
-        data_filters = f_choice.value
-        data_filters_method = m_choice.value
-        charttype = charttype  # .value
 
+    def create_chart(self, question, data_filters, data_filters_method, chart_type):
+        """Create a chart of the specified type."""
         df, ydata_spec, display_options = self.data_processor.select_data(
             question, data_filters, data_filters_method
         )
-        source = df
-
+        
         y_keys = ydata_spec.data["y_keys"]
         fill_colors = ydata_spec.data["colors"]
         
-        if charttype == "Vertical Bar chart":
+        if chart_type == "Vertical Bar chart":
             fig = bokeh_barchart(
-                source,
+                df,
                 y=y_keys,
                 factors=y_keys,
                 legend_labels=y_keys,
@@ -196,7 +189,7 @@ class VisualizationManager:
                 orientation="vertical",
                 **display_options,
             )
-        elif charttype == "Horizontal Bar chart":
+        elif chart_type == "Horizontal Bar chart":
             # Swap the ranges for horizontal orientation
             y_range = display_options["y_range"]
             display_options["y_range"] = display_options["x_range"]
@@ -207,7 +200,7 @@ class VisualizationManager:
             display_options["ylabel"] = "Number of Answers"  # Y axis now lays horizontally but still shows numerical data
             
             fig = bokeh_barchart(
-                source,
+                df,
                 y=y_keys,
                 factors=y_keys,
                 legend_labels=y_keys,
@@ -215,139 +208,33 @@ class VisualizationManager:
                 orientation="horizontal",
                 **display_options,
             )
-        elif charttype == "Pie chart":
+        elif chart_type == "Pie chart":
             display_options.pop("x_range")
             display_options.pop("y_range")
             display_options.pop("width")
             fig = bokeh_piechart(
-                source,
+                df,
                 y=y_keys,
                 legend_labels=y_keys,
                 fill_color=fill_colors,
                 **display_options,
             )
         
-        target.object = fig
+        return fig
 
-    def update_correlation_chart(self, target, event, question_sel, question_sel2, f_choice, m_choice):
-        """Update the correlation plot."""
-        print(event)
-        print("correlation_plot")
-        question = question_sel.value
-        question2 = question_sel2.value
-        data_filters = f_choice.value
-        data_filters_method = m_choice.value
-        
+    def create_correlation_plot(self, question1, question2, data_filters, data_filters_method):
+        """Create correlation plot."""
         df, display_options, marker_scale = self.data_processor.select_data_corr(
-            question, question2, data_filters, data_filters_method
+            question1, question2, data_filters, data_filters_method
         )
-        print(df.data)
-        print(display_options)
-        fig_corr = bokeh_corr_plot(df, **display_options)
-        
-        target.object = fig_corr
+        return bokeh_corr_plot(df, **display_options)
 
-    def update_wordcloud(self, target, event, f_choice, m_choice, content):
-        """Update word cloud visualizations."""
-        print(event)
-        data_filters = f_choice.value
-        data_filters_method = m_choice.value
-
+    def create_wordcloud(self, data_filters, data_filters_method, content):
+        """Create word cloud visualization."""
         text_list = self.data_processor.select_data_wordcloud(
             data_filters, data_filters_method, content=content
         )
         wordcloud = generate_wordcloud(
             text_list, height=DEFAULT_FIGURE_HEIGHT, width=DEFAULT_FIGURE_WIDTH
         )
-        target.object = interactive_wordcloud(wordcloud)
-    
-    def create_update_callbacks(self, widgets):
-        """Create all update callback functions."""
-        # Extract widgets for easier access
-        multi_choice = widgets["global_filters"]["research_area"]
-        multi_choice_method = widgets["global_filters"]["method"]
-        question_select = widgets["exploration"]["question1"]
-        question_select2 = widgets["exploration"]["question2"]
-        chart_select1 = widgets["exploration"]["chart_type1"]
-        chart_select2 = widgets["exploration"]["chart_type2"]
-        multi_filter = widgets["exploration"]["filter1"]
-        multi_filter2 = widgets["exploration"]["filter2"]
-        
-        # Create callback functions
-        def gen_update_overview1(target, event):
-            f_choice, m_choice = multi_choice, multi_choice_method
-            question_sel = self.data_processor.map_qkey_to_question(DEFAULT_QUESTIONS["overview"]["ov1"])
-            self.update_chart(
-                target, event, question_sel, f_choice, m_choice,
-                q_filter=None, charttype="Vertical Bar chart"
-            )
-
-        def gen_update_overview2(target, event):
-            f_choice, m_choice = multi_choice, multi_choice_method
-            question_sel = self.data_processor.map_qkey_to_question(DEFAULT_QUESTIONS["overview"]["ov2"])
-            self.update_chart(
-                target, event, question_sel, f_choice, m_choice,
-                q_filter=None, charttype="Vertical Bar chart"
-            )
-
-        def gen_update_overview3(target, event):
-            f_choice, m_choice = multi_choice, multi_choice_method
-            question_sel = self.data_processor.map_qkey_to_question(DEFAULT_QUESTIONS["overview"]["ov3"])
-            self.update_chart(
-                target, event, question_sel, f_choice, m_choice,
-                q_filter=None, charttype="Vertical Bar chart"
-            )
-
-        def gen_update_overview4(target, event):
-            f_choice, m_choice = multi_choice, multi_choice_method
-            question_sel = self.data_processor.map_qkey_to_question(DEFAULT_QUESTIONS["overview"]["ov4"])
-            self.update_chart(
-                target, event, question_sel, f_choice, m_choice,
-                q_filter=None, charttype="Vertical Bar chart"
-            )
-
-        def gen_update_exp1(target, event):
-            f_choice, m_choice = multi_choice, multi_choice_method
-            question_sel, q_filter, charttype = (
-                question_select.value,
-                multi_filter,
-                chart_select1.value,
-            )
-            self.update_chart(target, event, question_sel, f_choice, m_choice, q_filter, charttype)
-
-        def gen_update_exp2(target, event):
-            f_choice, m_choice = multi_choice, multi_choice_method
-            question_sel, q_filter, charttype = (
-                question_select2.value,
-                multi_filter2,
-                chart_select2.value,
-            )
-            self.update_chart(target, event, question_sel, f_choice, m_choice, q_filter, charttype)
-
-        def gen_update_corr(target, event):
-            f_choice, m_choice = multi_choice, multi_choice_method
-            question_sel = question_select
-            question_sel2 = question_select2
-            self.update_correlation_chart(target, event, question_sel, question_sel2, f_choice, m_choice)
-
-        def gen_update_wc_methods(target, event):
-            f_choice, m_choice = multi_choice, multi_choice_method
-            content = WORDCLOUD_CONTENT["methods"]
-            self.update_wordcloud(target, event, f_choice, m_choice, content)
-
-        def gen_update_wc_software(target, event):
-            f_choice, m_choice = multi_choice, multi_choice_method
-            content = WORDCLOUD_CONTENT["software"]
-            self.update_wordcloud(target, event, f_choice, m_choice, content)
-
-        def gen_update_wc_repo(target, event):
-            f_choice, m_choice = multi_choice, multi_choice_method
-            content = WORDCLOUD_CONTENT["repositories"]
-            self.update_wordcloud(target, event, f_choice, m_choice, content)
-        
-        return {
-            "overview": [gen_update_overview1, gen_update_overview2, gen_update_overview3, gen_update_overview4],
-            "exploration": [gen_update_exp1, gen_update_exp2],
-            "correlation": gen_update_corr,
-            "wordclouds": [gen_update_wc_methods, gen_update_wc_software, gen_update_wc_repo]
-        }
+        return interactive_wordcloud(wordcloud)

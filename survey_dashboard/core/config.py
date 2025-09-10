@@ -32,7 +32,7 @@ SIZING_MODE = "stretch_width"
 # Data Configuration
 def get_data_path():
     """Get the path to the data file relative to this module"""
-    this_folder = Path(__file__).parent
+    this_folder = Path(__file__).parent.parent
     return this_folder / "data" / "responses_cleaned_mapped_to_publish.csv"
 
 DATAFILE_PATH = str(get_data_path())
@@ -116,10 +116,10 @@ PANEL_CONFIG = {
 # Template Configuration
 def get_template_path():
     """Get the path to the template file based on language"""
-    this_folder = Path(__file__).parent
+    this_folder = Path(__file__).parent.parent
     return this_folder / f"hmc_layout/{LANGUAGE.lower()}_template.html"
 
 def get_assets_path():
     """Get the path to the assets folder"""
-    this_folder = Path(__file__).parent
+    this_folder = Path(__file__).parent.parent
     return this_folder / "hmc_layout" / "assets"

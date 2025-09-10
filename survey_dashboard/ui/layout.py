@@ -16,7 +16,7 @@ Handles the creation and organization of the dashboard layout and template integ
 import panel as pn
 from jinja2 import Environment, FileSystemLoader
 
-from survey_dashboard.config import (
+from survey_dashboard.core.config import (
     LANGUAGE,
     PANEL_CONFIG,
     get_template_path,

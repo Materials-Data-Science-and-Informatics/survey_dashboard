@@ -15,7 +15,7 @@ Creates and manages all interactive widgets used in the dashboard.
 
 import panel as pn
 
-from survey_dashboard.config import (
+from survey_dashboard.core.config import (
     LANGUAGE,
     CHART_TYPES,
     DEFAULT_QUESTIONS,

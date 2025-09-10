@@ -9,19 +9,20 @@
 # For further information on the license, see the LICENSE file                #
 ###############################################################################
 """
-Main entry point for the HMC Survey Dashboard.
-This simplified main file orchestrates the creation of the dashboard using
-modular components for data processing, widgets, visualizations, and layout.
+Simplified entry point for the HMC Survey Dashboard.
+This app.py orchestrates the creation of the dashboard using the new modular structure.
 """
 
 print("Initializing HMC Survey Dashboard...")
 
-# Import modular components
+# Import core components
 from survey_dashboard.core.data import DataProcessor
 from survey_dashboard.core.charts import ChartManager
+
+# Import UI components  
 from survey_dashboard.ui.widgets import WidgetFactory
-from survey_dashboard.ui.callbacks import CallbackManager
 from survey_dashboard.ui.layout import LayoutManager
+from survey_dashboard.ui.callbacks import CallbackManager
 
 print("Loading configuration and data...")
 
@@ -31,8 +32,8 @@ chart_manager = ChartManager(data_processor)
 
 # Initialize UI components
 widget_factory = WidgetFactory(data_processor)
-callback_manager = CallbackManager(data_processor, chart_manager)
 layout_manager = LayoutManager()
+callback_manager = CallbackManager(data_processor, chart_manager)
 
 print("Creating widgets...")
 
@@ -46,7 +47,7 @@ data_filters_method = widgets["global_filters"]["method"].value
 
 print("Creating visualizations...")
 
-# Create all visualizations
+# Create all visualizations using chart manager
 overview_charts = chart_manager.create_overview_charts(data_filters, data_filters_method)
 exploration_charts = chart_manager.create_exploration_charts(
     widgets["exploration"]["question1"], 
@@ -55,49 +56,54 @@ exploration_charts = chart_manager.create_exploration_charts(
     data_filters_method
 )
 correlation_chart = chart_manager.create_correlation_chart(
-    widgets["exploration"]["question1"], 
-    widgets["exploration"]["question2"], 
-    data_filters, 
+    widgets["exploration"]["question1"],
+    widgets["exploration"]["question2"],
+    data_filters,
     data_filters_method
 )
 methods_tools_tabs, wordcloud_panes = chart_manager.create_wordcloud_tabs(data_filters, data_filters_method)
 
 print("Setting up callbacks...")
 
-# Create callback functions
+# Create update callbacks
 callbacks = callback_manager.create_update_callbacks(widgets)
 
-# Link global filters to all charts
-global_filters = control_groups["global_filters"]
-for control in global_filters:
-    # Link to exploration charts
-    control.link(exploration_charts[0], callbacks={"value": callbacks["exploration"][0]})
-    control.link(exploration_charts[1], callbacks={"value": callbacks["exploration"][1]})
-    
-    # Link to word clouds
-    control.link(wordcloud_panes["methods"], callbacks={"value": callbacks["wordclouds"][0]})
-    control.link(wordcloud_panes["software"], callbacks={"value": callbacks["wordclouds"][1]})
-    control.link(wordcloud_panes["repositories"], callbacks={"value": callbacks["wordclouds"][2]})
-    
-    # Link to correlation chart
-    control.link(correlation_chart[0], callbacks={"value": callbacks["correlation"]})
-    
-    # Link to overview charts
-    control.link(overview_charts['ov1'], callbacks={"value": callbacks["overview"][0]})
-    control.link(overview_charts['ov2'], callbacks={"value": callbacks["overview"][1]})
-    control.link(overview_charts['ov3'], callbacks={"value": callbacks["overview"][2]})
-    control.link(overview_charts['ov4'], callbacks={"value": callbacks["overview"][3]})
+# Bind callbacks to widgets and charts
+def bind_callbacks():
+    """Bind all interactive callbacks to their respective widgets and charts."""
+    # Global filter callbacks for overview charts
+    for i, chart_key in enumerate(['ov1', 'ov2', 'ov3', 'ov4']):
+        widgets["global_filters"]["research_area"].param.watch(
+            callbacks["overview"][i], "value"
+        )
+        widgets["global_filters"]["method"].param.watch(
+            callbacks["overview"][i], "value"  
+        )
+        overview_charts[chart_key].param.watch(callbacks["overview"][i], "object")
 
-# Link exploration controls to charts
-controls_bar1 = control_groups["controls_bar1"]
-for control in controls_bar1:
-    control.link(exploration_charts[0], callbacks={"value": callbacks["exploration"][0]})
-    control.link(correlation_chart[0], callbacks={"value": callbacks["correlation"]})
+    # Exploration chart callbacks
+    for widget_key in ["question1", "question2", "chart_type1", "chart_type2"]:
+        if "question" in widget_key:
+            callback_idx = 0 if "1" in widget_key else 1
+            widgets["exploration"][widget_key].param.watch(
+                callbacks["exploration"][callback_idx], "value"
+            )
+    
+    # Global filter callbacks for exploration charts
+    for callback in callbacks["exploration"]:
+        widgets["global_filters"]["research_area"].param.watch(callback, "value")
+        widgets["global_filters"]["method"].param.watch(callback, "value")
 
-controls_bar2 = control_groups["controls_bar2"]
-for control in controls_bar2:
-    control.link(exploration_charts[1], callbacks={"value": callbacks["exploration"][1]})
-    control.link(correlation_chart[0], callbacks={"value": callbacks["correlation"]})
+    # Correlation chart callbacks
+    widgets["exploration"]["question1"].param.watch(callbacks["correlation"], "value")
+    widgets["exploration"]["question2"].param.watch(callbacks["correlation"], "value")
+    widgets["global_filters"]["research_area"].param.watch(callbacks["correlation"], "value")
+    widgets["global_filters"]["method"].param.watch(callbacks["correlation"], "value")
+
+    # Word cloud callbacks
+    for callback in callbacks["wordclouds"]:
+        widgets["global_filters"]["research_area"].param.watch(callback, "value")
+        widgets["global_filters"]["method"].param.watch(callback, "value")
 
 print("Creating layout...")
 
@@ -110,9 +116,13 @@ layout = layout_manager.create_complete_layout(
     methods_tools_tabs=methods_tools_tabs
 )
 
+print("Setting up template...")
+
 # Setup template and make servable
 template = layout_manager.setup_template_variables(layout)
-layout_manager.make_servable()
+bind_callbacks()
 
-print("Dashboard ready! 🎉")
-print("Serve with: panel serve --port 5006 survey_dashboard/ --static-dirs en_files=./survey_dashboard/hmc_layout/static/en_files")
+print("Dashboard ready! Making servable...")
+template = layout_manager.make_servable()
+
+print("HMC Survey Dashboard initialized successfully!")

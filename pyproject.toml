@@ -31,6 +31,9 @@ classifiers = [
 keywords = ["dashboard", "data visualization", "survey data", "categorical data", 
 "interactive visualization", "bokeh", "panel"]
 
+[project.scripts]
+survey-dashboard = "survey_dashboard.scripts:run_app"
+
 
 [tool.poetry]
 name = "survey-dashboard"

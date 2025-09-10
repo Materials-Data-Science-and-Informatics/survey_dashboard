@@ -32,7 +32,7 @@ from survey_dashboard.data.display_specifications.hcs_clean_dictionaries import 
     HCS_MCList,
     HCS_dtypesWOmc
 )
-from survey_dashboard.config import (
+from survey_dashboard.core.config import (
     LANGUAGE,
     DATAFILE_PATH,
     FILTER_BY,
