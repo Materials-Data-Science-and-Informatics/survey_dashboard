@@ -1,10 +1,10 @@
-# Survey dashboard
+# Survey Dashboard
 
 A dashboard to display survey data in an interactive way.
 
 ## Overview
 
-This repository contains a dashboard using Panel and Bokeh, developed to display data from 
+This repository contains a dashboard using Panel and Bokeh, developed to display data from
 HMC surveys in an interactive exploratory way. It is designed such that the code for the interactive
 visualizations might be reused for other projects.
 Example of a deployed version can be found [here](https://dashboard.survey.helmholtz-metadaten.de/survey_dashboard)
@@ -16,32 +16,53 @@ Some impressions:
 
 ## Installation
 
-After downloading the git repository you can install the software either with pip or poetry.
-We recommend setting it up in a separate python virtual environment.
+### Prerequisites
+- Python 3.12 or higher
+- Poetry (recommended) or pip
+
+### Using Poetry (Recommended)
+
+After downloading the git repository, install the dependencies using Poetry:
 
 ```shell
-pip install survey_dashboard
+poetry install
 ```
-or
+
+### Using pip
+
+Alternatively, you can install directly from the repository:
 
 ```shell
-poetry install .
+pip install .
 ```
 
 ## Usage
 
+### Development Mode
 
-After installation you can start the app, i.e the panel server/bokeh server.
+For development, you can run the app directly using Panel serve:
+
 ```shell
-panel serve --port 50006 survey_dashboard/ 
+# Using Poetry
+poetry run survey-dashboard
+
+# Using Python directly
+panel serve app.py --port 5006 --show --autoreload
 ```
-If you have given the dashboard a specific layout like the layout specific to HMC, which is on the hmc_specific branch, you might have to link to to a specific template.
+
+The `--autoreload` flag enables automatic reloading when you make changes to the code, which is useful during development.
+
+### Manual Panel Serve
+
+If you need more control over the server configuration:
+
 ```shell
-panel serve --port 5006 survey_dashboard/ --static-dirs en_files=./survey_dashboard/hmc_layout/static/en_files
-
+panel serve app.py --port 5006 --static-dirs en_files=./survey_dashboard/hmc_layout/static/en_files --show
 ```
 
-* Navigate to `http://localhost:5006/` in your browser.
+### Access the Dashboard
+
+* Navigate to `http://localhost:5006/` in your browser after starting the server.
 
 ## Deployment
 
