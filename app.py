@@ -74,36 +74,66 @@ def bind_callbacks():
     # Global filter callbacks for overview charts
     for i, chart_key in enumerate(['ov1', 'ov2', 'ov3', 'ov4']):
         widgets["global_filters"]["research_area"].param.watch(
-            callbacks["overview"][i], "value"
+            lambda event, target=overview_charts[chart_key], callback=callbacks["overview"][i]: callback(target, event), 
+            "value"
         )
         widgets["global_filters"]["method"].param.watch(
-            callbacks["overview"][i], "value"  
+            lambda event, target=overview_charts[chart_key], callback=callbacks["overview"][i]: callback(target, event), 
+            "value"  
         )
-        overview_charts[chart_key].param.watch(callbacks["overview"][i], "object")
 
     # Exploration chart callbacks
     for widget_key in ["question1", "question2", "chart_type1", "chart_type2"]:
         if "question" in widget_key:
             callback_idx = 0 if "1" in widget_key else 1
+            target_chart = exploration_charts[callback_idx]
             widgets["exploration"][widget_key].param.watch(
-                callbacks["exploration"][callback_idx], "value"
+                lambda event, target=target_chart, callback=callbacks["exploration"][callback_idx]: callback(target, event),
+                "value"
             )
     
     # Global filter callbacks for exploration charts
-    for callback in callbacks["exploration"]:
-        widgets["global_filters"]["research_area"].param.watch(callback, "value")
-        widgets["global_filters"]["method"].param.watch(callback, "value")
+    for i, callback in enumerate(callbacks["exploration"]):
+        target_chart = exploration_charts[i]
+        widgets["global_filters"]["research_area"].param.watch(
+            lambda event, target=target_chart, callback=callback: callback(target, event), 
+            "value"
+        )
+        widgets["global_filters"]["method"].param.watch(
+            lambda event, target=target_chart, callback=callback: callback(target, event), 
+            "value"
+        )
 
     # Correlation chart callbacks
-    widgets["exploration"]["question1"].param.watch(callbacks["correlation"], "value")
-    widgets["exploration"]["question2"].param.watch(callbacks["correlation"], "value")
-    widgets["global_filters"]["research_area"].param.watch(callbacks["correlation"], "value")
-    widgets["global_filters"]["method"].param.watch(callbacks["correlation"], "value")
+    widgets["exploration"]["question1"].param.watch(
+        lambda event, target=correlation_chart[0], callback=callbacks["correlation"]: callback(target, event), 
+        "value"
+    )
+    widgets["exploration"]["question2"].param.watch(
+        lambda event, target=correlation_chart[0], callback=callbacks["correlation"]: callback(target, event), 
+        "value"
+    )
+    widgets["global_filters"]["research_area"].param.watch(
+        lambda event, target=correlation_chart[0], callback=callbacks["correlation"]: callback(target, event), 
+        "value"
+    )
+    widgets["global_filters"]["method"].param.watch(
+        lambda event, target=correlation_chart[0], callback=callbacks["correlation"]: callback(target, event), 
+        "value"
+    )
 
     # Word cloud callbacks
-    for callback in callbacks["wordclouds"]:
-        widgets["global_filters"]["research_area"].param.watch(callback, "value")
-        widgets["global_filters"]["method"].param.watch(callback, "value")
+    wordcloud_targets = [wordcloud_panes["methods"], wordcloud_panes["software"], wordcloud_panes["repositories"]]
+    for i, callback in enumerate(callbacks["wordclouds"]):
+        target = wordcloud_targets[i]
+        widgets["global_filters"]["research_area"].param.watch(
+            lambda event, target=target, callback=callback: callback(target, event), 
+            "value"
+        )
+        widgets["global_filters"]["method"].param.watch(
+            lambda event, target=target, callback=callback: callback(target, event), 
+            "value"
+        )
 
 print("Creating layout...")
 
