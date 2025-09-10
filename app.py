@@ -84,13 +84,12 @@ def bind_callbacks():
 
     # Exploration chart callbacks
     for widget_key in ["question1", "question2", "chart_type1", "chart_type2"]:
-        if "question" in widget_key:
-            callback_idx = 0 if "1" in widget_key else 1
-            target_chart = exploration_charts[callback_idx]
-            widgets["exploration"][widget_key].param.watch(
-                lambda event, target=target_chart, callback=callbacks["exploration"][callback_idx]: callback(target, event),
-                "value"
-            )
+        callback_idx = 0 if "1" in widget_key else 1
+        target_chart = exploration_charts[callback_idx]
+        widgets["exploration"][widget_key].param.watch(
+            lambda event, target=target_chart, callback=callbacks["exploration"][callback_idx]: callback(target, event),
+            "value"
+        )
     
     # Global filter callbacks for exploration charts
     for i, callback in enumerate(callbacks["exploration"]):
