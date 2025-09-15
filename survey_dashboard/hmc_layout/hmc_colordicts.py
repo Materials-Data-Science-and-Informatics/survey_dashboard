@@ -9,17 +9,13 @@
 # For further information on the license, see the LICENSE file                #
 ###############################################################################
 """
-This file contains color palets which are HMC specific
+This file contains color palettes which are HMC specific
 @author: s.gerlich
 """
 
-import matplotlib.pyplot as plt
-import cmasher as cmr
-colors = cmr.take_cmap_colors(HMCRamp, None, cmap_range=(0.2, 0.8), return_fmt='hex')
+from typing import Optional, List, Any
 
-
-
-# Dictionary of HMC hub colors                         
+# Dictionary of HMC hub colors
 hubPalette = {
         "Information":"#A0235A",
         "Health":"#D23264",
@@ -43,7 +39,7 @@ HMCPalette = [
         "#3F5704"
         ]
 
-# List of Hub Info color Palette        
+# List of Hub Info color Palette
 hubInfoPalette = [
         "#005AA0",
         "#0A2D6E",
@@ -56,28 +52,28 @@ hubInfoPalette = [
         "#470723"
         ]
 
-# create color ramps for continuous data out of color palettes
-# function to create ramp: make_ramp()
-def make_Ramp( ramp_colors ): 
-    from colour import Color
-    from matplotlib.colors import LinearSegmentedColormap
+# Create color ramps for continuous data out of color palettes
+def make_Ramp(ramp_colors: List[str]) -> Optional[Any]:
+    """Create a matplotlib colormap from a list of colors."""
+    try:
+        from colour import Color  # type: ignore[import-untyped]
+        from matplotlib.colors import LinearSegmentedColormap  # type: ignore[import-untyped]
+        color_ramp = LinearSegmentedColormap.from_list('hmc_colormap', [Color(c1).rgb for c1 in ramp_colors])
+        return color_ramp
+    except ImportError:
+        # Fallback if optional dependencies aren't available
+        return None
 
-    color_ramp = LinearSegmentedColormap.from_list( 'my_list', [ Color( c1 ).rgb for c1 in ramp_colors ] )
-    plt.figure( figsize = (15,3))
-    plt.imshow( [list(np.arange(0, len( ramp_colors ) , 0.1)) ] , interpolation='nearest', origin='lower', cmap= color_ramp )
-    plt.xticks([])
-    plt.yticks([])
-    return color_ramp
 
-
-# to be used in matplotlib: cmap
-# equivalent of plotnine: scale_color_cmap()
-# continuous color scale based on HMC color palette
+# Create color ramps (only if dependencies are available)
 HMCRamp = make_Ramp(HMCPalette)
-#cmr.view_cmap(HMCRamp)
-
-# continuous color scale based on Hub Info color palette
 hubInfoRamp = make_Ramp(hubInfoPalette)
-#cmr.view_cmap(hubInfoRamp)
 
-
+# Generate HMC color samples for Bokeh (fallback to basic colors if dependencies fail)
+def get_hmc_colors(n_colors: int = 10) -> List[str]:
+    """Get n_colors from the HMC palette, cycling if needed."""
+    if len(HMCPalette) >= n_colors:
+        return HMCPalette[:n_colors]
+    else:
+        # Cycle through colors if we need more than available
+        return [HMCPalette[i % len(HMCPalette)] for i in range(n_colors)]

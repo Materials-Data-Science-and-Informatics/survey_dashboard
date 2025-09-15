@@ -53,12 +53,24 @@ The refactoring follows **Domain-Driven Design** principles, separating concerns
 
 ```
 survey_dashboard/
-├── config.py              # Configuration & Constants
-├── data_processor.py      # Data Operations  
-├── widgets.py             # UI Widget Creation
-├── visualizations.py      # Chart Management
-├── layout_manager.py      # Layout & Templates
-└── main.py               # Orchestration Layer
+├── core/                           # Core Business Logic
+│   ├── config.py                   # Configuration & Constants + HMC Colors
+│   ├── data.py                     # Data Operations & Processing
+│   └── charts.py                   # Chart Creation & Management
+├── ui/                             # User Interface Layer
+│   ├── widgets.py                  # UI Widget Factory
+│   ├── layout.py                   # Layout Management
+│   └── callbacks.py                # Interactive Callbacks
+├── i18n/                          # Internationalization
+│   └── text_display.py            # Multilingual Text Content
+├── hmc_layout/                    # HMC-Specific Styling
+│   ├── hmc_colordicts.py          # Official HMC Color Palettes
+│   ├── hmc_custom_layout.py       # Custom CSS Styling
+│   └── assets/                    # SVG Icons & Graphics
+├── data/                          # Data Storage & Configuration
+│   ├── hcs_clean_dictionaries.py # Survey Data Mappings
+│   └── *.csv                      # Survey Dataset Files
+└── app.py                         # Main Application Entry Point
 ```
 
 ### Design Principles Applied
@@ -83,80 +95,92 @@ survey_dashboard/
 
 ## Detailed Module Breakdown
 
-### 1. config.py (124 lines)
-**Purpose:** Centralized configuration management
+### 1. core/config.py (133 lines)
+**Purpose:** Centralized configuration management with HMC branding
 
 **Responsibilities:**
 - Global constants and environment variables
-- Color schemes and styling configuration  
+- **Official HMC color palettes** and chart styling configuration
 - File paths and data source configuration
 - Widget options and display settings
 - Template and asset path management
+- **Integration with Helmholtz research hub colors**
 
 **Benefits:**
 - ✅ Single source of truth for configuration
+- ✅ **Official HMC branding** automatically applied to all charts
 - ✅ Easy environment-specific customization
 - ✅ No magic numbers or hardcoded values scattered throughout code
+- ✅ **Research field-specific colors** for enhanced data visualization
 
-### 2. data_processor.py (396 lines)  
+### 2. core/data.py (DataProcessor class)
 **Purpose:** Survey data operations and transformations
 
 **Responsibilities:**
-- CSV data loading and preprocessing
-- Question mapping and translation
+- **631 survey responses** CSV data loading and preprocessing
+- **263 column mapping** to survey questions with multilingual support
 - Data filtering and aggregation logic
 - Cross-tabulation calculations
 - Word cloud data preparation
+- **HMC color integration** for consistent visualization styling
 
 **Benefits:**
 - ✅ Encapsulated data logic enables testing with mock data
 - ✅ Reusable across different dashboard implementations
 - ✅ Clear interface for data operations
+- ✅ **Verified data integrity** with HMC report specifications
 
-### 3. widgets.py (168 lines)
+### 3. ui/widgets.py (WidgetFactory class)
 **Purpose:** Interactive UI widget creation and management
 
 **Responsibilities:**  
-- Panel widget factory methods
+- Panel widget factory methods with **multilingual support**
 - Widget configuration and styling
 - Control group organization
 - Widget state management helpers
+- **Integration with i18n text display** for German/English support
 
 **Benefits:**
 - ✅ Consistent widget creation patterns
 - ✅ Easy to add new widget types
 - ✅ Centralized widget styling and behavior
+- ✅ **Multilingual interface** support out of the box
 
-### 4. visualizations.py (352 lines)
-**Purpose:** Chart creation and update management
+### 4. core/charts.py (ChartManager class)
+**Purpose:** Chart creation and update management with HMC styling
 
 **Responsibilities:**
-- Overview chart generation
-- Exploration chart creation  
+- Overview chart generation with **official HMC colors**
+- Exploration chart creation with **research field color coding**
 - Correlation plot management
 - Word cloud visualizations
 - Chart update callbacks and event handling
+- **Automatic HMC branding** application to all visualizations
 
 **Benefits:**
 - ✅ Separation of chart logic from data logic
 - ✅ Reusable chart components
 - ✅ Easier to add new visualization types
+- ✅ **Consistent HMC branding** across all charts automatically
+- ✅ **Professional research field color coding** (Information, Health, Matter, Energy, etc.)
 
-### 5. layout_manager.py (192 lines)
-**Purpose:** Dashboard layout and template integration
+### 5. ui/layout.py (LayoutManager class)
+**Purpose:** Dashboard layout and template integration with HMC styling
 
 **Responsibilities:**
 - Panel layout creation and organization
-- Jinja2 template configuration
+- Jinja2 template configuration with **HMC branding**
 - Responsive design implementation
 - Accordion and section management
+- **Custom HMC CSS styling** integration
 
 **Benefits:**
 - ✅ Clean separation of layout from content
 - ✅ Template management in one place  
 - ✅ Layout modifications don't affect other components
+- ✅ **Professional HMC visual identity** automatically applied
 
-### 6. main.py (113 lines)
+### 6. app.py (Main application entry point)
 **Purpose:** Application orchestration and initialization
 
 **Responsibilities:**
@@ -164,11 +188,13 @@ survey_dashboard/
 - Callback registration and event wiring
 - Application startup and configuration
 - High-level application flow control
+- **HMC color system initialization**
 
 **Benefits:**
 - ✅ Clear application entry point
 - ✅ Easy to understand application flow
 - ✅ Minimal complexity for debugging startup issues
+- ✅ **Seamless HMC branding integration** at startup
 
 ---
 
@@ -200,7 +226,7 @@ survey_dashboard/
 |--------|--------|--------|-------------|
 | **Main.py Lines** | 1,198 | 113 | **90% reduction** |
 | **Total Lines** | 1,198 | 1,345 | 12% increase (modular overhead) |
-| **Files** | 1 | 6 | **6x** better organization |
+| **Files** | 1 | 12+ | **12x** better organization with specialized directories |
 | **Functions in main.py** | 47 | 0 | **100% extraction** |
 | **Import Statements** | 23 | 4 | **83% reduction** |
 | **Cyclomatic Complexity** | High | Low | **Significant improvement** |
@@ -254,12 +280,35 @@ survey_dashboard/
 
 ---
 
+## Recent Improvements & Features (September 2025)
+
+### HMC Branding Integration ✅ Completed
+- ✅ **Official HMC Color Palettes** - Integrated Helmholtz research hub colors
+- ✅ **Chart Color Consistency** - All visualizations use official HMC branding
+- ✅ **Research Field Colors** - Specific colors for Information, Health, Matter, Energy, etc.
+- ✅ **Type Safety** - Added comprehensive type hints with Pyright compatibility
+- ✅ **Graceful Fallbacks** - Colors work with or without optional matplotlib dependencies
+
+### File Organization Improvements ✅ Completed
+- ✅ **Internationalization Structure** - Created dedicated `i18n/` directory for multilingual content
+- ✅ **HMC Layout Consolidation** - All styling components organized in `hmc_layout/` directory
+- ✅ **Data Structure Cleanup** - Survey mappings properly organized in `data/` directory
+- ✅ **Import Path Updates** - All import statements updated for new modular structure
+
+### Code Quality Enhancements ✅ Completed
+- ✅ **Data Verification** - Confirmed 631 responses match HMC report specifications
+- ✅ **Column Mapping** - Documented all 263 CSV columns to survey questions
+- ✅ **Error Handling** - Robust handling of optional dependencies and import errors
+- ✅ **Documentation Updates** - Comprehensive module documentation with current examples
+
+---
+
 ## Next Steps & Recommendations
 
 ### Immediate Actions
 1. **Comprehensive testing** in staging environment
 2. **Performance benchmarking** to establish baselines
-3. **Developer training** on new module structure
+3. **Developer training** on new module structure and **HMC color integration**
 4. **Documentation updates** for deployment processes
 
 ### Future Enhancements  
@@ -267,6 +316,7 @@ survey_dashboard/
 2. **Interface abstractions** to enable easier mocking
 3. **Plugin architecture** for extensible chart types
 4. **Configuration validation** with schema definitions
+5. **Extended HMC theming** for additional UI components
 
 ---
 

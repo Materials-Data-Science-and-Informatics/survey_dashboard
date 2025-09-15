@@ -33,7 +33,7 @@ from survey_dashboard.core.config import (
     SIZING_MODE,
     LANGUAGE
 )
-from survey_dashboard.text_display import (
+from survey_dashboard.i18n.text_display import (
     md_text_tools_used,
     md_text_tools_tabs
 )

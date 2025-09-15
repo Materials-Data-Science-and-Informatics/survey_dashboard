@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 ###############################################################################
 # Copyright (c), Forschungszentrum Jülich GmbH, IAS-9, Germany.               #
@@ -19,12 +20,12 @@ from pathlib import Path
 
 def run_app():
     """Run the survey dashboard application using Panel serve."""
-    # Get the directory containing app.py (project root)
-    project_root = Path(__file__).parent.parent
-    app_path = project_root / "app.py"
+    # Get the directory containing app.py (same directory as scripts.py)
+    script_dir = Path(__file__).parent
+    app_path = script_dir / "app.py"
     
     # Static files directory for assets
-    static_dir = project_root / "survey_dashboard" / "hmc_layout" / "static" / "en_files"
+    static_dir = script_dir / "hmc_layout" / "static" / "en_files"
     
     # Build the panel serve command
     cmd = [

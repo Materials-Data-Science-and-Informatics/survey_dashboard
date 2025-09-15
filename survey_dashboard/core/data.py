@@ -24,7 +24,7 @@ from survey_dashboard.analysis import (
     percentage_to_area,
     get_all_values
 )
-from survey_dashboard.data.display_specifications.hcs_clean_dictionaries import (
+from survey_dashboard.data.hcs_clean_dictionaries import (
     HCSquestions,
     HCS_orderedCats,
     HCS_MCsubquestions,

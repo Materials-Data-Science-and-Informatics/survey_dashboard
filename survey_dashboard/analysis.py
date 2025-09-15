@@ -16,7 +16,7 @@ prepare the data for visualization
 import math
 import pandas as pd
 from typing import List, Tuple
-from .data.display_specifications.hcs_clean_dictionaries import HCS_colnamesDict
+from .data.hcs_clean_dictionaries import HCS_colnamesDict
 
 
 def calculate_crosstab(

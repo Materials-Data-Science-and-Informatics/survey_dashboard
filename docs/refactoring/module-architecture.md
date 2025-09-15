@@ -6,33 +6,45 @@ This document provides detailed technical specifications for each module created
 
 ---
 
-## Architecture Diagram
+## Current Architecture Diagram
 
 ```
 ┌─────────────────┐
-│    main.py      │ ← Application Entry Point
-│  (Orchestrator) │
+│     app.py      │ ← Main Application Entry Point
+│ (Orchestrator)  │
 └─────────────────┘
          │
          ▼
 ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│  LayoutManager  │◄────│VisualizationMgr │◄────│ DataProcessor   │
+│  ui/layout.py   │◄────│  core/charts.py │◄────│  core/data.py   │
 │                 │     │                 │     │                 │
-│ • Template      │     │ • Charts        │     │ • Data Loading  │
-│ • Accordion     │     │ • Callbacks     │     │ • Filtering     │
-│ • Responsive    │     │ • Updates       │     │ • Aggregation   │
+│ • Template Mgmt │     │ • Chart Factory │     │ • Data Loading  │
+│ • Layout Assembly│     │ • Visualization │     │ • Filtering     │
+│ • Accordion UI  │     │ • Word Clouds   │     │ • Aggregation   │
 └─────────────────┘     └─────────────────┘     └─────────────────┘
          ▲                       ▲                       ▲
          │                       │                       │
-         │               ┌───────┴───────┐               │
-         │               │               │               │
-         │               ▼               ▼               │
+         │               ┌───────┼───────┐               │
+         │               │       │       │               │
+         │               ▼       ▼       ▼               │
 ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐
-│ WidgetFactory   │ │    config.py    │ │   text_display  │
-│                 │ │                 │ │   (existing)    │
-│ • UI Controls   │ │ • Constants     │ │                 │  
-│ • Filters       │ │ • Colors        │ │ • Translations  │
-│ • Selectors     │ │ • Paths         │ │ • UI Text       │
+│ ui/widgets.py   │ │ core/config.py  │ │ ui/callbacks.py │
+│                 │ │                 │ │                 │
+│ • Widget Factory│ │ • Constants     │ │ • Interactivity │  
+│ • UI Controls   │ │ • HMC Colors    │ │ • Event Handling│
+│ • Form Elements │ │ • Paths & Config│ │ • Updates       │
+└─────────────────┘ └─────────────────┘ └─────────────────┘
+         ▲                       ▲                       
+         │                       │                       
+         │               ┌───────┴───────┐               
+         │               │               │               
+         ▼               ▼               ▼               
+┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐
+│ i18n/text       │ │ hmc_layout/     │ │ data/           │
+│ _display.py     │ │                 │ │                 │
+│                 │ │ • HMC Colors    │ │ • Survey Config │  
+│ • Translations  │ │ • CSS Styling   │ │ • Data Files    │
+│ • UI Text       │ │ • Brand Assets  │ │ • Mappings      │
 └─────────────────┘ └─────────────────┘ └─────────────────┘
 ```
 

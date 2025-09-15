@@ -22,7 +22,7 @@ from survey_dashboard.core.config import (
     get_template_path,
     get_assets_path
 )
-from survey_dashboard.text_display import (
+from survey_dashboard.i18n.text_display import (
     md_text_global_filter,
     md_text_overview,
     md_text_barchart,
@@ -31,7 +31,7 @@ from survey_dashboard.text_display import (
     accordion_titles,
     md_text_descriptions_icons
 )
-from survey_dashboard.data.display_specifications.hmc_custom_layout import (
+from survey_dashboard.hmc_layout.hmc_custom_layout import (
     hmc_custom_css_accordion,
 )
 

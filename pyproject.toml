@@ -34,7 +34,6 @@ keywords = ["dashboard", "data visualization", "survey data", "categorical data"
 [project.scripts]
 survey-dashboard = "survey_dashboard.scripts:run_app"
 
-
 [tool.poetry]
 name = "survey-dashboard"
 version = "0.1.0"
@@ -76,6 +75,7 @@ watchfiles = "^1.1.0"
 pandas = "^2.3.2"
 wordcloud = "^1.9.4"
 bokeh = "^3.7.3"
+matplotlib = "^3.10.6"
 
 
 [tool.poetry.group.dev.dependencies]

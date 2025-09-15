@@ -32,22 +32,27 @@ def update_chart(target, event, ...):
 
 ### New Structure (After Refactoring)
 ```python
-# main.py (113 lines) - Orchestration only
-from survey_dashboard.data_processor import DataProcessor
-from survey_dashboard.widgets import WidgetFactory
-from survey_dashboard.visualizations import VisualizationManager
-from survey_dashboard.layout_manager import LayoutManager
+# app.py (main entry point) - Orchestration only
+from survey_dashboard.core.data import DataProcessor
+from survey_dashboard.ui.widgets import WidgetFactory
+from survey_dashboard.core.charts import ChartManager
+from survey_dashboard.ui.layout import LayoutManager
+from survey_dashboard.ui.callbacks import CallbackManager
 
 # Clear initialization flow
 data_processor = DataProcessor()
 widget_factory = WidgetFactory(data_processor)
+chart_manager = ChartManager(data_processor)
 # ... etc
 
-# config.py - All constants
-# data_processor.py - All data logic
-# widgets.py - All widget creation
-# visualizations.py - All chart logic
-# layout_manager.py - All layout logic
+# core/config.py - All constants + HMC colors
+# core/data.py - All data logic
+# ui/widgets.py - All widget creation
+# core/charts.py - All chart logic
+# ui/layout.py - All layout logic
+# ui/callbacks.py - Interactive callbacks
+# i18n/text_display.py - Multilingual content
+# hmc_layout/ - HMC branding and styling
 ```
 
 ---
@@ -65,14 +70,16 @@ SIZING_MODE = "stretch_width"
 # ... scattered throughout the file
 ```
 
-#### ✅ After (config.py):
+#### ✅ After (core/config.py):
 ```python
-from survey_dashboard.config import (
+from survey_dashboard.core.config import (
     LANGUAGE,
     ACCORDION_WIDTH,
     SIZING_MODE,
     RESEARCH_AREA_COLORS,
-    DEFAULT_QUESTIONS
+    DEFAULT_QUESTIONS,
+    HMC_CHART_COLORS,  # New HMC colors
+    HMC_HUB_COLORS     # Research hub colors
 )
 ```
 
@@ -88,9 +95,9 @@ def select_data(question, data_filters, data_filters_method, filter_by=FILTER_BY
     # Risk of breaking other functionality
 ```
 
-#### ✅ After (isolated in data_processor.py):
+#### ✅ After (isolated in core/data.py):
 ```python
-from survey_dashboard.data_processor import DataProcessor
+from survey_dashboard.core.data import DataProcessor
 
 # Easy to test with mock data
 data_processor = DataProcessor()
@@ -111,9 +118,9 @@ result = data_processor.select_data(question, filters, method_filters)
 # Risk of breaking existing widgets
 ```
 
-#### ✅ After (focused in widgets.py):
+#### ✅ After (focused in ui/widgets.py):
 ```python
-from survey_dashboard.widgets import WidgetFactory
+from survey_dashboard.ui.widgets import WidgetFactory
 
 class WidgetFactory:
     def create_new_widget_type(self):
@@ -143,21 +150,23 @@ def update(target, event, question_sel, f_choice, m_choice, q_filter, charttype)
         # New chart logic mixed with existing logic
 ```
 
-#### ✅ After (clean extension in visualizations.py):
+#### ✅ After (clean extension in core/charts.py):
 ```python
-from survey_dashboard.visualizations import VisualizationManager
+from survey_dashboard.core.charts import ChartManager
 
-class VisualizationManager:
-    def update_chart(self, target, event, question_sel, f_choice, m_choice, q_filter, charttype):
+class ChartManager:
+    def create_chart(self, question, data_filters, data_filters_method, chart_type):
         # ... existing code ...
-        elif charttype == "New Chart Type":
-            fig = self.create_new_chart_type(source, **display_options)
+        elif chart_type == "New Chart Type":
+            fig = self.create_new_chart_type(df, ydata_spec, display_options)
         
-        target.object = fig
+        return fig
     
-    def create_new_chart_type(self, source, **options):
+    def create_new_chart_type(self, df, ydata_spec, display_options):
         """New chart creation logic isolated here"""
-        return new_chart_function(source, **options)
+        # Uses HMC colors automatically
+        fill_colors = ydata_spec.data["colors"]  # HMC colors applied
+        return new_chart_function(df, fill_color=fill_colors, **display_options)
 ```
 
 ### 5. Modifying Layout
@@ -170,9 +179,9 @@ class VisualizationManager:
 # Changes affected multiple concerns
 ```
 
-#### ✅ After (clean separation in layout_manager.py):
+#### ✅ After (clean separation in ui/layout.py):
 ```python
-from survey_dashboard.layout_manager import LayoutManager
+from survey_dashboard.ui.layout import LayoutManager
 
 layout_manager = LayoutManager()
 
@@ -184,8 +193,9 @@ def create_new_section(self, components):
         sizing_mode="stretch_width"
     )
 
-# Add to accordion
+# Add to accordion with HMC styling
 sections["new_section"] = self.create_new_section(components)
+accordion = self.create_accordion_layout(sections)  # HMC CSS applied
 ```
 
 ---
@@ -231,14 +241,18 @@ sections["new_section"] = self.create_new_section(components)
 
 | What you need | Old location | New location |
 |---------------|-------------|--------------|
-| **Configuration values** | Throughout main.py | `config.py` |
-| **Color schemes** | Lines 210-224 in main.py | `config.py` → `RESEARCH_AREA_COLORS` |
-| **Data file paths** | Lines 162-163 in main.py | `config.py` → `DATAFILE_PATH` |
-| **Data processing** | Lines 238-571 in main.py | `data_processor.py` → `DataProcessor` class |
-| **Widget creation** | Lines 584-651 in main.py | `widgets.py` → `WidgetFactory` class |
-| **Chart updates** | Lines 861-963 in main.py | `visualizations.py` → `VisualizationManager` class |
-| **Layout assembly** | Lines 1117-1197 in main.py | `layout_manager.py` → `LayoutManager` class |
-| **Application startup** | Mixed throughout main.py | `main.py` (now clean orchestration) |
+| **Configuration values** | Throughout main.py | `core/config.py` |
+| **Color schemes** | Lines 210-224 in main.py | `core/config.py` → `RESEARCH_AREA_COLORS, HMC_CHART_COLORS` |
+| **HMC colors** | Not available | `hmc_layout/hmc_colordicts.py` → `hubPalette, HMCPalette` |
+| **Data file paths** | Lines 162-163 in main.py | `core/config.py` → `DATAFILE_PATH` |
+| **Data processing** | Lines 238-571 in main.py | `core/data.py` → `DataProcessor` class |
+| **Widget creation** | Lines 584-651 in main.py | `ui/widgets.py` → `WidgetFactory` class |
+| **Chart creation** | Lines 861-963 in main.py | `core/charts.py` → `ChartManager` class |
+| **Interactive callbacks** | Mixed with charts | `ui/callbacks.py` → `CallbackManager` class |
+| **Layout assembly** | Lines 1117-1197 in main.py | `ui/layout.py` → `LayoutManager` class |
+| **Multilingual text** | Throughout main.py | `i18n/text_display.py` → Various text dictionaries |
+| **CSS styling** | Inline styles | `hmc_layout/hmc_custom_layout.py` → `hmc_custom_css_accordion` |
+| **Application startup** | Mixed throughout main.py | `app.py` (now clean orchestration) |
 
 ---
 
@@ -263,15 +277,20 @@ from survey_dashboard.plots import *
 ### New Import Pattern:
 ```python
 # Each module imports only what it needs
-# main.py (minimal imports):
-from survey_dashboard.data_processor import DataProcessor
-from survey_dashboard.widgets import WidgetFactory  
-from survey_dashboard.visualizations import VisualizationManager
-from survey_dashboard.layout_manager import LayoutManager
+# app.py (minimal imports):
+from survey_dashboard.core.data import DataProcessor
+from survey_dashboard.ui.widgets import WidgetFactory  
+from survey_dashboard.core.charts import ChartManager
+from survey_dashboard.ui.layout import LayoutManager
+from survey_dashboard.ui.callbacks import CallbackManager
+
+# HMC styling and colors
+from survey_dashboard.hmc_layout.hmc_colordicts import get_hmc_colors, hubPalette
 
 # Module-specific imports in their respective files
-# config.py imports configuration-related modules
-# data_processor.py imports data-related modules
+# core/config.py imports configuration-related modules
+# core/data.py imports data-related modules
+# ui/ modules import UI-related modules
 # etc.
 ```
 
@@ -329,6 +348,50 @@ def test_visualization_manager():
 
 ---
 
+## Working with HMC Colors (New Feature)
+
+### Using Official HMC Colors in Charts
+```python
+# Get HMC colors for charts
+from survey_dashboard.hmc_layout.hmc_colordicts import get_hmc_colors, hubPalette
+
+# Automatic color application (happens automatically)
+colors = get_hmc_colors(5)  # ['#A3C6E1', '#005AA0', '#0A2D6E', '#1B3142', '#5A696E']
+
+# Research hub specific colors
+info_color = hubPalette["Information"]    # '#A0235A'
+health_color = hubPalette["Health"]       # '#D23264'
+energy_color = hubPalette["Energy"]       # '#FFD228'
+```
+
+### Color Integration Points
+```python
+# Colors are automatically applied through the data processor
+from survey_dashboard.core.data import DataProcessor
+from survey_dashboard.core.config import RESEARCH_AREA_COLORS, HMC_CHART_COLORS
+
+data_processor = DataProcessor()
+# HMC colors are automatically used in ydata_spec.data["colors"]
+
+# For custom visualizations
+custom_colors = HMC_CHART_COLORS[:n_categories]
+```
+
+### Adding Custom Color Schemes
+```python
+# Extend hmc_colordicts.py for new color schemes
+def get_custom_hmc_colors(category="default"):
+    """Get colors for specific use cases"""
+    if category == "research_fields":
+        return [hubPalette[field] for field in hubPalette.keys()]
+    elif category == "charts":
+        return HMCPalette
+    else:
+        return get_hmc_colors(10)
+```
+
+---
+
 ## Common Gotchas and Solutions
 
 ### 1. Import Path Changes
@@ -338,7 +401,7 @@ def test_visualization_manager():
 from main import select_data
 
 # ✅ Use this instead:
-from survey_dashboard.data_processor import DataProcessor
+from survey_dashboard.core.data import DataProcessor
 data_processor = DataProcessor()
 data_processor.select_data(...)
 ```
@@ -350,7 +413,7 @@ data_processor.select_data(...)
 LANGUAGE = "EN"  # was global in main.py
 
 # ✅ Use this instead:
-from survey_dashboard.config import LANGUAGE
+from survey_dashboard.core.config import LANGUAGE
 ```
 
 ### 3. Function Signatures Changed  
@@ -371,8 +434,10 @@ result = data_processor.select_data(question, filters, methods)
 control.link(fig, callbacks={"value": gen_update_exp1})
 
 # ✅ New callback pattern:
-callbacks = visualization_manager.create_update_callbacks(widgets)
-control.link(fig, callbacks={"value": callbacks["exploration"][0]})
+from survey_dashboard.ui.callbacks import CallbackManager
+callback_manager = CallbackManager(chart_manager)
+callbacks = callback_manager.create_exploration_callbacks(widgets)
+control.link(fig, callbacks={"value": callbacks["chart1"]})
 ```
 
 ---
@@ -407,8 +472,11 @@ control.link(fig, callbacks={"value": callbacks["exploration"][0]})
 
 ### Common Questions:
 - **"Where is function X now?"** → Check the code location reference table above
-- **"How do I add a new chart?"** → Extend `VisualizationManager` in `visualizations.py`
-- **"How do I change configuration?"** → Modify values in `config.py`
+- **"How do I add a new chart?"** → Extend `ChartManager` in `core/charts.py`
+- **"How do I change configuration?"** → Modify values in `core/config.py`
+- **"How do I use HMC colors?"** → Import from `hmc_layout/hmc_colordicts.py`
+- **"How do I modify styling?"** → Update CSS in `hmc_layout/hmc_custom_layout.py`
+- **"How do I add translations?"** → Update text dictionaries in `i18n/text_display.py`
 - **"Tests are failing after my change"** → Check if you broke module interfaces
 
 ---

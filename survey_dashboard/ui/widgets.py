@@ -20,11 +20,11 @@ from survey_dashboard.core.config import (
     CHART_TYPES,
     DEFAULT_QUESTIONS,
 )
-from survey_dashboard.text_display import (
+from survey_dashboard.i18n.text_display import (
     md_text_global_filters_widgets,
     md_text_select_widgets
 )
-from survey_dashboard.data.display_specifications.hcs_clean_dictionaries import (
+from survey_dashboard.data.hcs_clean_dictionaries import (
     FILTER_OPTIONS,
     BARCHART_ALLOWED
 )

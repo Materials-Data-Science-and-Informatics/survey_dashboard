@@ -88,7 +88,7 @@ This documentation repository contains comprehensive information about the major
 
 ---
 
-## 🏗️ New Architecture Summary
+## 🏗️ Current Architecture Summary
 
 ### Before Refactoring
 ```
@@ -99,15 +99,31 @@ main.py (1,198 lines)
 └── Monolithic structure
 ```
 
-### After Refactoring  
+### Current Refactored Structure  
 ```
 survey_dashboard/
-├── config.py (124 lines)           # Configuration & Constants
-├── data_processor.py (396 lines)   # Data Operations
-├── widgets.py (168 lines)          # UI Widget Creation
-├── visualizations.py (352 lines)   # Chart Management  
-├── layout_manager.py (192 lines)   # Layout & Templates
-└── main.py (113 lines)             # Clean Orchestration
+├── core/                           # Core Business Logic
+│   ├── config.py                   # Configuration & Constants + HMC Colors
+│   ├── data.py                     # Data Operations & Processing
+│   └── charts.py                   # Chart Creation & Management
+├── ui/                             # User Interface Layer
+│   ├── widgets.py                  # UI Widget Factory
+│   ├── layout.py                   # Layout Management
+│   └── callbacks.py                # Interactive Callbacks
+├── i18n/                          # Internationalization
+│   └── text_display.py            # Multilingual Text Content
+├── hmc_layout/                    # HMC-Specific Styling
+│   ├── hmc_colordicts.py          # Official HMC Color Palettes
+│   ├── hmc_custom_layout.py       # Custom CSS Styling
+│   ├── assets/                    # SVG Icons & Graphics
+│   └── static/                    # Static Web Assets
+├── data/                          # Data Storage & Configuration
+│   ├── hcs_clean_dictionaries.py # Survey Data Mappings
+│   ├── *.csv                      # Survey Dataset Files
+│   └── *.json                     # Additional Data Files
+├── app.py                         # Main Application Entry Point
+├── analysis.py                    # Statistical Analysis Functions
+└── plots.py                       # Core Plotting Functions
 ```
 
 ---
@@ -145,41 +161,85 @@ survey_dashboard/
 
 ## 🛠️ Module Responsibilities
 
-### `config.py` - Configuration Hub
+### Core Business Logic (`core/`)
+
+#### `core/config.py` - Configuration Hub
 - Global constants and environment variables
-- Color schemes and styling configuration
+- **HMC color schemes** and styling configuration
 - File paths and data source management
 - Widget options and template configuration
 
-### `data_processor.py` - Data Operations
+#### `core/data.py` - Data Operations Engine
 - CSV loading and preprocessing
 - Question mapping and translation
 - Data filtering and aggregation
 - Statistical calculations and transformations
 
-### `widgets.py` - UI Factory
-- Interactive widget creation
+#### `core/charts.py` - Chart Creation Manager
+- Overview, exploration, and correlation chart creation
+- Word cloud generation and management
+- Chart type selection and configuration
+- Visualization data preparation
+
+### User Interface Layer (`ui/`)
+
+#### `ui/widgets.py` - UI Widget Factory
+- Interactive widget creation (selectors, filters, controls)
 - Widget configuration and organization  
 - Control group management
 - Panel component generation
 
-### `visualizations.py` - Chart Engine
-- Chart creation and management
-- Visualization updates and callbacks
-- Word cloud generation
-- Interactive plot handling
-
-### `layout_manager.py` - Layout Controller
-- Dashboard layout assembly
-- Template integration and configuration
-- Responsive design implementation
+#### `ui/layout.py` - Layout Manager
+- Dashboard layout assembly and template integration
+- Accordion structure and responsive design
 - Section organization and styling
+- Template variable management
 
-### `main.py` - Application Orchestrator
+#### `ui/callbacks.py` - Interactive Callbacks
+- Widget event handling and chart updates
+- User interaction management
+- Dynamic content updates
+
+### Internationalization (`i18n/`)
+
+#### `i18n/text_display.py` - Multilingual Content
+- Translatable text content (English/German)
+- UI labels and descriptions
+- Question text and tooltip content
+
+### HMC-Specific Styling (`hmc_layout/`)
+
+#### `hmc_layout/hmc_colordicts.py` - Official Color Palettes
+- **Helmholtz research hub colors** (Information, Health, Matter, etc.)
+- **HMC brand color palettes** for charts and visualizations
+- Color utility functions and matplotlib integration
+
+#### `hmc_layout/hmc_custom_layout.py` - Custom CSS Styling
+- Accordion and card styling
+- Responsive design CSS
+- Panel component customization
+
+### Data Layer (`data/`)
+
+#### `data/hcs_clean_dictionaries.py` - Survey Data Configuration
+- Survey question mappings and translations
+- Data type specifications and validation
+- Multiple choice question handling
+
+### Application Entry Points
+
+#### `app.py` - Main Application Entry Point
 - Component initialization and dependency injection
 - Callback registration and event wiring  
-- Application startup flow
-- High-level coordination
+- Application startup flow and coordination
+
+#### `analysis.py` - Statistical Analysis Functions
+- Cross-tabulation and statistical calculations
+- Data aggregation and transformation utilities
+
+#### `plots.py` - Core Plotting Functions  
+- Bokeh-based chart creation utilities
+- Plot styling and configuration helpers
 
 ---
 
@@ -250,22 +310,51 @@ docs/refactoring/
 
 ---
 
+## 🎨 Recent Improvements & Features
+
+### HMC Branding Integration (September 2024)
+- ✅ **Official HMC Color Palettes** - Integrated Helmholtz research hub colors
+- ✅ **Chart Color Consistency** - All visualizations use official HMC branding
+- ✅ **Research Field Colors** - Specific colors for Information, Health, Matter, Energy, etc.
+- ✅ **Graceful Fallbacks** - Colors work with or without optional matplotlib dependencies
+
+### File Organization Improvements
+- ✅ **Internationalization Structure** - Moved `text_display.py` to dedicated `i18n/` directory
+- ✅ **HMC Layout Consolidation** - All styling components in `hmc_layout/` directory
+- ✅ **Data Structure Cleanup** - Survey mappings properly organized in `data/` directory
+- ✅ **Import Path Fixes** - Updated all import statements for new structure
+
+### Code Quality Enhancements
+- ✅ **Type Hints Added** - Improved static type checking with Pyright compatibility
+- ✅ **Error Handling** - Robust handling of optional dependencies
+- ✅ **Documentation Updates** - Comprehensive module documentation and examples
+
+### Developer Experience
+- ✅ **Column Mapping Guide** - Detailed documentation of 263 CSV columns to survey questions
+- ✅ **Data Verification** - Confirmed 631 responses match HMC report specifications
+- ✅ **Color Utility Functions** - Easy-to-use functions for getting HMC colors in charts
+
+---
+
 ## ❓ Frequently Asked Questions
 
 ### Q: Does the refactored version work exactly the same?
-**A:** Yes! All functionality is preserved. Users see no difference, but developers get a much better codebase.
+**A:** Yes! All functionality is preserved. Users see no difference, but developers get a much better codebase with official HMC branding.
 
 ### Q: Do I need to change deployment scripts?
 **A:** No changes needed. The same Panel serve command works exactly as before.
 
 ### Q: Can I still modify the dashboard?
-**A:** Yes, but it's now much easier! Check the [Developer Migration Guide](developer-migration-guide.md) for details.
+**A:** Yes, but it's now much easier! Check the [Developer Migration Guide](developer-migration-guide.md) for details. Plus you now have official HMC colors available.
 
 ### Q: What about performance?
 **A:** No performance impact. The modular structure may even be slightly faster due to better organization.
 
 ### Q: How do I add new features?
 **A:** Much easier now! Each type of change goes to its specific module. See the [Module Architecture](module-architecture.md) guide.
+
+### Q: How do I use the new HMC colors?
+**A:** Import from `hmc_layout.hmc_colordicts` - colors are automatically applied to charts, or use `get_hmc_colors(n)` for custom visualizations.
 
 ---
 

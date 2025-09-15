@@ -15,13 +15,16 @@ Contains all global constants, paths, and configuration settings.
 
 import os
 from pathlib import Path
-from bokeh.palettes import Category20
 
 from survey_dashboard.plots import DEFAULT_FIGURE_WIDTH
-from survey_dashboard.data.display_specifications.hcs_clean_dictionaries import (
+from survey_dashboard.data.hcs_clean_dictionaries import (
     HCSquestions,
     HCS_colnamesDict,
     HCS_MCsubquestions,
+)
+from survey_dashboard.hmc_layout.hmc_colordicts import (
+  hubPalette,
+  get_hmc_colors
 )
 
 # Global Configuration
@@ -55,11 +58,15 @@ RESEARCH_FIELDS = [
     "Psychology"
 ]
 
-# Generate colors for research fields
+# Generate colors for research fields using HMC palette
 RESEARCH_AREA_COLORS = {
-    field: Category20[len(RESEARCH_FIELDS)][i]
+    field: get_hmc_colors(len(RESEARCH_FIELDS))[i]
     for i, field in enumerate(RESEARCH_FIELDS)
 }
+
+# HMC Color Configuration
+HMC_CHART_COLORS = get_hmc_colors(10)  # Default 10 colors for charts
+HMC_HUB_COLORS = hubPalette  # Research field specific colors
 
 # Default Questions for Startup
 DEFAULT_QUESTIONS = {
