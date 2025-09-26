@@ -159,14 +159,44 @@ class DataProcessor:
                     exclude.append(field)
             for filter_key in exclude:
                 df = df[df[filter_by] != filter_key]
-            data, y_keys = prepare_data_research_field(df, q_index)
+
+            # Special case: if we're querying the research area question itself,
+            # we need different logic to avoid double-grouping by research areas
+            if q_index_0 == filter_by:  # This is the research area question
+                # For research area distribution, create data structure directly
+                data = {}
+                # Use the full research area list as x_value for proper positioning
+                data["x_value"] = data_all.get(q_index_0, [])
+
+                # Create arrays for each selected research area
+                for area in data_filters:
+                    if area != "All":
+                        # Create array with value at correct position, zeros elsewhere
+                        area_array = np.zeros(len(data["x_value"]))
+                        if area in data["x_value"]:
+                            position = data["x_value"].index(area)
+                            area_count = len(df[df[filter_by] == area])
+                            area_array[position] = area_count
+                        data[area] = area_array
+
+                y_keys = [area for area in data_filters if area != "All"]
+            else:
+                # Normal case: use prepare_data_research_field for other questions
+                data, y_keys = prepare_data_research_field(df, q_index)
 
             # Add "All" data if it's selected in the filters
             if "All" in data_filters:
                 all_data = data_all.get("All", [])
 
-                # When "All" + specific filters are selected, expand to show all research areas
-                if "researchArea" in data:
+                # Special handling for research area question
+                if q_index_0 == filter_by:  # This is the research area question
+                    # Add "All" data to our research area structure
+                    data["All"] = all_data
+                    # Make sure "All" is in y_keys
+                    if "All" not in y_keys:
+                        y_keys = ["All"] + y_keys
+                elif "researchArea" in data:
+                    # When "All" + specific filters are selected, expand to show all research areas
                     # Use full "All" data and expand x_value to all research areas
                     data["All"] = all_data
                     data["x_value"] = data_all["researchArea"]
