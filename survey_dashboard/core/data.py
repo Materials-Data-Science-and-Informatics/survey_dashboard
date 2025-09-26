@@ -96,6 +96,22 @@ class DataProcessor:
 
     def select_data(self, question, data_filters, data_filters_method, filter_by=FILTER_BY):
         """Select and transform data for visualization"""
+
+        def get_real_research_areas(data_filters):
+            """
+            Separate pseudo-categories (All, Cum. Sum) from real research area values.
+
+            Args:
+                data_filters: List of selected filter values
+
+            Returns:
+                tuple: (real_research_areas, pseudo_categories)
+            """
+            pseudo_categories = {"All", "Cum. Sum"}
+            real_areas = [area for area in data_filters if area not in pseudo_categories]
+            pseudo_cats = [area for area in data_filters if area in pseudo_categories]
+            return real_areas, pseudo_cats
+
         print(question)
         q_index = self.map_question_to_qkey(question)
         print(q_index)
@@ -137,6 +153,9 @@ class DataProcessor:
             df, q_index_clean, display_dict=HCS_MCSUBQUESTIONS_FLATTENED
         )
 
+        # Separate real research areas from pseudo-categories
+        real_research_areas, pseudo_categories = get_real_research_areas(data_filters)
+
         # Handle data filtering based on what's selected
         if "All" in data_filters and len(data_filters) == 1:
             # Only "All" is selected - use the aggregated data from all research areas
@@ -152,13 +171,18 @@ class DataProcessor:
                 data = data_all
             y_keys = ["All"] + [data_all.get(q_index_clean[0], [])]
         else:
-            # Specific research areas are selected - filter the data
-            exclude = []
-            for field in RESEARCH_FIELDS:
-                if field not in data_filters:
-                    exclude.append(field)
-            for filter_key in exclude:
-                df = df[df[filter_by] != filter_key]
+            # Handle filtering based on real research areas (not pseudo-categories)
+            if real_research_areas:
+                # Real research areas are selected - filter the data to include only those
+                exclude = []
+                for field in RESEARCH_FIELDS:
+                    # Only exclude fields that are real research areas (not pseudo-categories)
+                    if field not in {"All", "Cum. Sum"} and field not in real_research_areas:
+                        exclude.append(field)
+
+                for filter_key in exclude:
+                    df = df[df[filter_by] != filter_key]
+            # else: Only pseudo-categories selected - df remains unfiltered
 
             # Special case: if we're querying the research area question itself,
             # we need different logic to avoid double-grouping by research areas
@@ -168,24 +192,29 @@ class DataProcessor:
                 # Use the full research area list as x_value for proper positioning
                 data["x_value"] = data_all.get(q_index_0, [])
 
-                # Create arrays for each selected research area
-                for area in data_filters:
-                    if area != "All":
-                        # Create array with value at correct position, zeros elsewhere
-                        area_array = np.zeros(len(data["x_value"]))
-                        if area in data["x_value"]:
-                            position = data["x_value"].index(area)
-                            area_count = len(df[df[filter_by] == area])
-                            area_array[position] = area_count
-                        data[area] = area_array
+                # Create arrays for each real research area selected
+                for area in real_research_areas:
+                    # Create array with value at correct position, zeros elsewhere
+                    area_array = np.zeros(len(data["x_value"]))
+                    if area in data["x_value"]:
+                        position = data["x_value"].index(area)
+                        area_count = len(df[df[filter_by] == area])
+                        area_array[position] = area_count
+                    data[area] = area_array
 
-                y_keys = [area for area in data_filters if area != "All"]
+                # Handle "Cum. Sum" pseudo-category if selected
+                if "Cum. Sum" in pseudo_categories:
+                    # Add cumulative sum data (this will be the total across all areas)
+                    data["Cum. Sum"] = data_all.get("All", [])
+
+                # Set y_keys to include both real areas and pseudo-categories
+                y_keys = real_research_areas + [cat for cat in pseudo_categories if cat != "All"]
             else:
                 # Normal case: use prepare_data_research_field for other questions
                 data, y_keys = prepare_data_research_field(df, q_index)
 
-            # Add "All" data if it's selected in the filters
-            if "All" in data_filters:
+            # Add "All" data if it's selected in the pseudo-categories
+            if "All" in pseudo_categories:
                 all_data = data_all.get("All", [])
 
                 # Special handling for research area question
