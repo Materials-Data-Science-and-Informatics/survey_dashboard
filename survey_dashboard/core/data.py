@@ -76,11 +76,14 @@ class DataProcessor:
     def map_question_to_qkey(self, question: str, lang: str = LANGUAGE) -> list:
         """
         Map a given question String to the corresponding columns keys in the dataframe
-        
+
         usually this is one column, but for multiple choice this can be several columns.
+        Handles question strings with or without the ★ correlation indicator prefix.
         """
         column_keys = []
-        key = HCS_QUESTIONS_REVERT[lang][question]
+        # Strip the ★ indicator if present (used to mark correlation-compatible questions)
+        clean_question = question.replace("★ ", "")
+        key = HCS_QUESTIONS_REVERT[lang][clean_question]
         if key in HCS_MCList:
             print(f"Multiple Choice,{key}")
             # for multiple choice this is a list of subquestions
@@ -112,11 +115,10 @@ class DataProcessor:
             pseudo_cats = [area for area in data_filters if area in pseudo_categories]
             return real_areas, pseudo_cats
 
-        print(question)
         q_index = self.map_question_to_qkey(question)
-        print(q_index)
         q_index_0 = q_index[0]
-        question_full = question
+        # Strip ★ indicator for cleaner chart titles
+        question_full = question.replace("★ ", "")
 
         # Clean up missing columns
         q_index_clean = []
@@ -166,10 +168,17 @@ class DataProcessor:
                     key: data_all.get(key, []),
                     "x_value": data_all.get(key, [])
                 }
+                y_keys = ["All"]
             else:
-                # Multiple columns case
-                data = data_all
-            y_keys = ["All"] + [data_all.get(q_index_clean[0], [])]
+                # Multiple columns case (multiple-choice questions)
+                data = data_all.copy()
+                # For multiple-choice, get_all_values returns {All: values, last_key: labels}
+                # We need to add x_value for the plotting code
+                # The last key in q_index_clean contains the x-axis labels
+                last_key = q_index_clean[-1]
+                if last_key in data_all and "x_value" not in data:
+                    data["x_value"] = data_all[last_key]
+                y_keys = data_filters
         else:
             # Handle filtering based on real research areas (not pseudo-categories)
             if real_research_areas:
@@ -266,7 +275,7 @@ class DataProcessor:
         # Prepare display specifications
         ydata_spec = {}
         colors = []
-        for key in data_filters:
+        for key in y_keys:
             colors.append(RESEARCH_AREA_COLORS[key])
 
         # Determine axis configuration
@@ -275,7 +284,8 @@ class DataProcessor:
             xtype = HCS_dtypesWOmc[q_index_0]
 
         if len(q_index) > 1:  # multiple choice case
-            x_range = data["x_value"]
+            # Defensive: ensure x_value exists, fallback to using q_index_0 data
+            x_range = data.get("x_value", data.get(q_index_0, []))
             width = 0.1
         elif xtype == "category":
             x_range = HCS_orderedCats[q_index_0]
@@ -285,9 +295,9 @@ class DataProcessor:
             width = 0.6
         y_range = None
 
-        ydata_spec["y_keys"] = data_filters
+        ydata_spec["y_keys"] = y_keys
         ydata_spec["colors"] = colors
-        ydata_spec["legend_labels"] = data_filters
+        ydata_spec["legend_labels"] = y_keys
         selected = ColumnDataSource(data=data)
         ydata_spec = ColumnDataSource(data=ydata_spec)
 
@@ -382,8 +392,9 @@ class DataProcessor:
         ]
 
         title = f""
-        xlabel = f"{question}"
-        ylabel = f"{question2}"
+        # Strip ★ indicator for cleaner axis labels
+        xlabel = f"{question.replace('★ ', '')}"
+        ylabel = f"{question2.replace('★ ', '')}"
 
         selected = ColumnDataSource(cross_tab)
 

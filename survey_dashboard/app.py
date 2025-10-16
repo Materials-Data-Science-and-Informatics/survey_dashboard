@@ -33,7 +33,7 @@ chart_manager = ChartManager(data_processor)
 # Initialize UI components
 widget_factory = WidgetFactory(data_processor)
 layout_manager = LayoutManager()
-callback_manager = CallbackManager(data_processor, chart_manager)
+callback_manager = CallbackManager(data_processor, chart_manager, widget_factory)
 
 print("Creating widgets...")
 
@@ -144,6 +144,10 @@ layout = layout_manager.create_complete_layout(
     correlation_chart=correlation_chart,
     methods_tools_tabs=methods_tools_tabs
 )
+
+# Wire correlation_row to callbacks for visibility toggling
+correlation_row = layout_manager.get_correlation_row()
+callback_manager.set_correlation_row(correlation_row)
 
 print("Setting up template...")
 

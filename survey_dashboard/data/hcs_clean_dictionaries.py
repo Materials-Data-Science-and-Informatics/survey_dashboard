@@ -15,9 +15,9 @@ A collection of dictionaries/maps to influence the display of certain categorica
 ##########################################
 ############### DICTIONARY ###############
 ########## RENAME COLUMN NAMES ###########
-########################################## 
+##########################################
 
-# Dictionary to rename columns in df for better readability 
+# Dictionary to rename columns in df for better readability
 
 HCS_colnamesDict = {
         "PERBG1/_":"centerAffiliation",
@@ -287,7 +287,7 @@ HCS_colnamesDict = {
 ##########################################
 ############### DICTIONARY ###############
 ###### DEFINE DATA TYPES OF COLUMNS ######
-########################################## 
+##########################################
 
 ### for categorical, numerical and string answers
 
@@ -334,26 +334,26 @@ HCS_dtypesWOmc = {
 ###############################################
 #################### LIST #####################
 ###### SPECIFY MULTIPLE CHOICE QUESTIONS ######
-############################################### 
+###############################################
 
 # List  to specify all multiple choice questions
 # For MC question cleaning
 # List includes common strings of MC question column names
 
 HCS_MCList = [
-        "dataGenMethod_", 
-        "lsfIdent_", 
+        "dataGenMethod_",
+        "lsfIdent_",
         "dataFormats_",
-        "pubMethod_", 
-        "pubMotivation_", 
+        "pubMethod_",
+        "pubMotivation_",
         "pubObstaclesA_",
         "pubObstaclesB_",
-        "pubMetadata_", 
-        "docMethod_", 
-        "docMetadata_", 
-        "docMotivation_", 
-        "docStandards_", 
-        "docObstacles_", 
+        "pubMetadata_",
+        "docMethod_",
+        "docMetadata_",
+        "docMotivation_",
+        "docStandards_",
+        "docObstacles_",
         "servNeeds_sub_",
         "RSDP2",
         "RSDP1c",
@@ -377,7 +377,7 @@ HCS_MCList = [
 ##########################################
 
 # Dictionary to convert MC answers to dtype = 'boolean'
-# In this case, MC questions were exported with 'Yes'/'No' answers 
+# In this case, MC questions were exported with 'Yes'/'No' answers
 
 convertToBoolDict = {
         'Y':True,
@@ -439,7 +439,7 @@ abbrevHubsDict = {
 #######################################################
 
 # Dictionary specifying the subquestions of multiple choice questions
- 
+
 HCS_MCsubquestions = {
         "dataFormats_":{"dataFormats_1":"archives",
                         "dataFormats_2":"audiovisual \n formats",
@@ -457,7 +457,7 @@ HCS_MCsubquestions = {
                         "dataFormats_14":"structured text",
                         "dataFormats_15":"binary scientific \n formats"
                         },
-            
+
             "dataGenMethod_":{'dataGenMethod_1':"imaging",
                               'dataGenMethod_2':"analytical methods",
                               'dataGenMethod_3':"simulations",
@@ -466,13 +466,13 @@ HCS_MCsubquestions = {
                               'dataGenMethod_6':"recordings",
                               'dataGenMethod_other':"other"
                               },
-                              
-            "dataStorage_":{'dataStorage_0':"I don't know.", 
-                            'dataStorage_1':"locally", 
+
+            "dataStorage_":{'dataStorage_0':"I don't know.",
+                            'dataStorage_1':"locally",
                             'dataStorage_2':"centrally \n (internal server)",
                             'dataStorage_3':"externally \n (servers / repositories)"
                             },
-                                                       
+
             "docMetadata_":{'docMetadata_2':"contextual information",
                             'docMetadata_3':"provenance of data",
                             'docMetadata_4':"information on data collection",
@@ -482,13 +482,13 @@ HCS_MCsubquestions = {
                             'docMetadata_8':"information on storage \n and long-term preservation",
                             'docMetadata_9':"access information"
                             },
-                         
-            "docMethod_":{'docMethod_0':"no documentation", 
-                          'docMethod_1':"pen and paper", 
-                          'docMethod_2':"digital system", 
+
+            "docMethod_":{'docMethod_0':"no documentation",
+                          'docMethod_1':"pen and paper",
+                          'docMethod_2':"digital system",
                           'docMethod_3':"digital text"
                           },
-                         
+
             "docMotivation_":{'docMotivation_0':"no specific reason",
                               'docMotivation_1':"improved findability",
                               'docMotivation_2':"provide research \n data context",
@@ -497,7 +497,7 @@ HCS_MCsubquestions = {
                               'docMotivation_5':"scientific community \n recognition",
                               'docMotivation_6':"administrative guidelines"
                               },
-                              
+
             "docObstacles_":{'docObstacles_0':"no difficulties",
                              'docObstacles_1':"lack of resources",
                              'docObstacles_4':"lack of incentives",
@@ -507,7 +507,7 @@ HCS_MCsubquestions = {
                              'docObstacles_8':"no apparent benefits.",
                              'docObstacles_9':"lack of experience"
                             },
-                             
+
             "docStandards_":{'docStandards_1':"DataCite",
                              'docStandards_10':"MiAIRR",
                              'docStandards_11':"MIBBI",
@@ -535,7 +535,7 @@ HCS_MCsubquestions = {
                              'docStandards_8':"MIxS",
                              'docStandards_9':"Darwin Core"
                              },
-                             
+
             "lsfIdent_":{'lsfIdent_1':"LHC",
                          'lsfIdent_10':"SIS18",
                          'lsfIdent_11':"ESR",
@@ -548,7 +548,7 @@ HCS_MCsubquestions = {
                          'lsfIdent_8':"European XFEL",
                          'lsfIdent_9':"UNILAC"
                          },
-                         
+
             "pubMetadata_":{'pubMetadata_0':"none",
                             'pubMetadata_1':"all of them",
                             'pubMetadata_21':"name of data set",
@@ -575,12 +575,12 @@ HCS_MCsubquestions = {
                             'pubMetadata_92':"logs / statistics",
                             'pubMetadata_93':"registration procedures"
                             },
-                            
-            "pubMethod_":{'pubMethod_1':"supplementary to \n journal publication", 
-                          'pubMethod_2':"in repository", 
+
+            "pubMethod_":{'pubMethod_1':"supplementary to \n journal publication",
+                          'pubMethod_2':"in repository",
                           'pubMethod_3':"data journal"
                           },
-                          
+
             "pubMotivation_":{'pubMotivation_1':"reusability",
                               'pubMotivation_2':"visibility",
                               'pubMotivation_3':"publication statistics",
@@ -589,8 +589,8 @@ HCS_MCsubquestions = {
                               'pubMotivation_6':"collaboration",
                               'pubMotivation_7':"financial benefits"
                               },
-                              
-            "pubObstaclesA_":{'pubObstaclesA_0':"no obstacles",    
+
+            "pubObstaclesA_":{'pubObstaclesA_0':"no obstacles",
                              'pubObstaclesA_1':"costs too high",
                              'pubObstaclesA_2':"lack of time / personnel",
                              'pubObstaclesA_3':"lack of incentives",
@@ -599,7 +599,7 @@ HCS_MCsubquestions = {
                              'pubObstaclesA_6':"legal / ethical concerns",
                              'pubObstaclesA_7':"technical support needed"
                              },
-                              
+
             "pubObstaclesB_":{'pubObstaclesB_0':"no data to publish",
                               'pubObstaclesB_1':"costs too high",
                               'pubObstaclesB_2':"lack of time / personnel",
@@ -608,8 +608,8 @@ HCS_MCsubquestions = {
                               'pubObstaclesB_5':"technical barriers",
                               'pubObstaclesB_6':"legal / ethical concerns",
                               'pubObstaclesB_7':"technical support needed"
-                              }, 
-            
+                              },
+
             "servNeeds_sub_":{'servNeeds_sub_0':"no need for support",
                               'servNeeds_sub_1':"data publication",
                               'servNeeds_sub_2':"research data reuse",
@@ -631,32 +631,32 @@ HCS_MCsubquestions = {
 #######################################################
 
 HCS_orderedCats = {
-        "yearsInResearch":['No degree', 
-                           'Less than 1 year', 
-                           '1 to 3 years', 
-                           '4 to 6 years', 
-                           '7 to 10 years', 
+        "yearsInResearch":['No degree',
+                           'Less than 1 year',
+                           '1 to 3 years',
+                           '4 to 6 years',
+                           '7 to 10 years',
                            'More than 10 years'],
-        "careerLevel":['Student', 
-                       'PhD candidate', 'Postdoc', 
-                       'Research Associate', 
-                       'Principal Investigator', 
-                       'Technical Staff', 
+        "careerLevel":['Student',
+                       'PhD candidate', 'Postdoc',
+                       'Research Associate',
+                       'Principal Investigator',
+                       'Technical Staff',
                        'Other'],
         "dataInPublication":['< 100 MB',
-                             '100 MB - 1000 MB (1 GB)', 
-                             '1 GB - 10 GB', 
-                             '10 GB - 100 GB', 
+                             '100 MB - 1000 MB (1 GB)',
+                             '1 GB - 10 GB',
+                             '10 GB - 100 GB',
                              '100 GB - 1000 GB (1 TB)',
                              '> 1 TB',
                              'I don\'t know'],
-        "experimentDuration_sub":['Less', 
-                                  'As much', 
-                                  'More', 
+        "experimentDuration_sub":['Less',
+                                  'As much',
+                                  'More',
                                   'I don\'t know'],
-        "dataAnalDuration_sub":['Less', 
-                                  'As much', 
-                                  'More', 
+        "dataAnalDuration_sub":['Less',
+                                  'As much',
+                                  'More',
                                   'I don\'t know'],
  'dataAmount_lsf': [0.0, 5.0, 10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 45.0, 50.0, 55.0, 60.0, 65.0,
                     70.0, 75.0, 80.0, 85.0, 90.0, 95.0, 100.0],
@@ -2193,7 +2193,7 @@ HCS_orderedCats = {
 
 # This what will be displayed in selection widgets and titles
 HCSquestions_long = {
-                "EN" : {        
+                "EN" : {
                         "PERBG1/_":"Which Helmholtz center do you typically work in?",
                         "PERBG2/_":"Please select the Helmholtz research field you associate yourself with.",
                         "PERBG3/_":"Please select your principle research area.",
@@ -2278,7 +2278,7 @@ HCSquestions_long = {
                     }
 # These are used as displays on selection and for titles
 HCSquestions = { # shortened
-                "EN" : {        
+                "EN" : {
                         "PERBG1/_":"Helmholtz center participants typically work in",
                         "PERBG2/_":"Helmholtz research field participants associate with.",
                         "PERBG3/_":"Principle research area of participants.",
@@ -2406,31 +2406,32 @@ corr_chart_allowed = [
 "careerLevel",
 "orcid",
 "fairFamiliarity",
-"dataAmount_lsf",
 "dataInPublication",
-"dataGatherTime",
 "experimentDuration_sub",
 "dataAnalDuration_sub",
 "longtermStorage",
-"pubAmount",
 "docStructured",
-"docDefSchema"]
+"docDefSchema",
+]
 
 multi_chart_allowed = [
 "dataGenMethod_",
 "lsfIdent_",
-"dataFormats_", 
-"pubMethod_", 
-"pubMotivation_", 
-"pubObstacles_", 
-"pubMetadata_", 
-"pubStorage_", 
-"docMethod_", 
-"docMetadata_", 
-"docMotivation_", 
-"docStandards_", 
+"dataFormats_",
+"pubMethod_",
+"pubMotivation_",
+"pubObstacles_",
+"pubMetadata_",
+"pubStorage_",
+"docMethod_",
+"docMetadata_",
+"docMotivation_",
+"docStandards_",
 "docObstacles_",
 "servNeeds_sub_"
+"dataAmount_lsf",
+"dataGatherTime",
+"pubAmount",
 ]
 
 
@@ -2481,11 +2482,11 @@ FILTER_OPTIONS = {
         "Physics",
         "Psychology"],
     "CareerLevel" :
-        ['Student', 
-        'PhD candidate', 
-        'Postdoc', 
-        'Research Associate', 
-        'Principal Investigator', 
-        'Technical Staff', 
+        ['Student',
+        'PhD candidate',
+        'Postdoc',
+        'Research Associate',
+        'Principal Investigator',
+        'Technical Staff',
         'Other']
 }

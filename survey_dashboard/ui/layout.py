@@ -19,6 +19,7 @@ from jinja2 import Environment, FileSystemLoader
 from survey_dashboard.core.config import (
     LANGUAGE,
     PANEL_CONFIG,
+    DEFAULT_QUESTIONS,
     get_template_path,
     get_assets_path
 )
@@ -34,6 +35,9 @@ from survey_dashboard.i18n.text_display import (
 from survey_dashboard.hmc_layout.hmc_custom_layout import (
     hmc_custom_css_accordion,
 )
+from survey_dashboard.data.hcs_clean_dictionaries import (
+    corr_chart_allowed
+)
 
 
 class LayoutManager:
@@ -41,6 +45,7 @@ class LayoutManager:
 
     def __init__(self):
         """Initialize layout manager and configure Panel."""
+        self.correlation_row = None  # Will be set during layout creation
         self.setup_panel_config()
         self.setup_template()
         self.setup_overview_icons()
@@ -113,7 +118,19 @@ class LayoutManager:
             sizing_mode="stretch_width"
         )
 
-        # Correlation section
+        # Determine initial visibility of correlation section
+        # Check if both default questions are correlation-compatible
+        default_q1 = DEFAULT_QUESTIONS["exploration"]["bar1"]
+        default_q2 = DEFAULT_QUESTIONS["exploration"]["bar2"]
+
+        try:
+            initial_visible = (default_q1 in corr_chart_allowed and
+                             default_q2 in corr_chart_allowed)
+        except:
+            # If we can't determine compatibility, hide by default
+            initial_visible = False
+
+        # Correlation section (conditionally visible)
         fig_corr, leg_corr = correlation_chart
         correlation_row = pn.Column(
             md_text_corrchart[LANGUAGE],
@@ -124,7 +141,8 @@ class LayoutManager:
                 pn.layout.VSpacer(),
                 sizing_mode="stretch_width"
             ),
-            sizing_mode="stretch_width"
+            sizing_mode="stretch_width",
+            visible=initial_visible  # Set initial visibility based on default questions
         )
 
         # Combined question explorer section
@@ -135,7 +153,7 @@ class LayoutManager:
             sizing_mode="stretch_width"
         )
 
-        return question_ex_sec
+        return question_ex_sec, correlation_row  # Return both section and correlation reference
 
     def create_accordion_layout(self, sections):
         """Create the main accordion layout."""
@@ -159,14 +177,20 @@ class LayoutManager:
     def create_complete_layout(self, control_groups, overview_charts, exploration_charts,
                              correlation_chart, methods_tools_tabs):
         """Create the complete dashboard layout."""
+        # Create question explorer section and capture correlation_row reference
+        question_explorer_section, correlation_row = self.create_question_explorer_section(
+            control_groups, exploration_charts, correlation_chart
+        )
+
+        # Store correlation_row for later access by callbacks
+        self.correlation_row = correlation_row
+
         # Create all sections
         sections = {
             "global_filters": self.create_global_filters_section(control_groups),
             "overview": self.create_overview_section(overview_charts),
             "methods_tools": methods_tools_tabs,
-            "question_explorer": self.create_question_explorer_section(
-                control_groups, exploration_charts, correlation_chart
-            )
+            "question_explorer": question_explorer_section
         }
 
         # Create accordion
@@ -175,7 +199,16 @@ class LayoutManager:
         # Main layout container
         layout = pn.Column(accordion, sizing_mode="stretch_both")
 
-        return layout
+        return layout  # Return only layout - no breaking change to app.py
+
+    def get_correlation_row(self):
+        """
+        Get reference to the correlation row for callback binding.
+
+        Returns:
+            Panel Column containing the correlation plot section, or None if not yet created.
+        """
+        return self.correlation_row
 
     def setup_template_variables(self, layout):
         """Setup template with layout and variables."""

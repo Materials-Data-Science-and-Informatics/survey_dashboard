@@ -26,7 +26,8 @@ from survey_dashboard.i18n.text_display import (
 )
 from survey_dashboard.data.hcs_clean_dictionaries import (
     FILTER_OPTIONS,
-    BARCHART_ALLOWED
+    BARCHART_ALLOWED,
+    corr_chart_allowed
 )
 
 
@@ -36,10 +37,64 @@ class WidgetFactory:
     def __init__(self, data_processor):
         """Initialize widget factory with data processor for question mapping."""
         self.data_processor = data_processor
-        self.questions = [
-            self.data_processor.map_qkey_to_question(key)
-            for key in BARCHART_ALLOWED
-        ]
+
+        # Create question list with visual indicators for correlation-compatible questions
+        # Also maintain a mapping from display text to internal key
+        self.questions = []
+        self.question_to_key = {}  # Maps display text (with ★) -> internal key
+
+        for key in BARCHART_ALLOWED:
+            question_text = self.data_processor.map_qkey_to_question(key)
+
+            # Add ★ indicator for correlation-compatible questions
+            if key in corr_chart_allowed:
+                display_text = f"★ {question_text}"
+            else:
+                display_text = question_text
+
+            self.questions.append(display_text)
+            self.question_to_key[display_text] = key
+
+    def _get_display_text_for_key(self, key):
+        """
+        Get the display text (with ★ if applicable) for a given question key.
+
+        Args:
+            key: Internal question key (e.g., 'careerLevel')
+
+        Returns:
+            Display text with ★ prefix if correlation-compatible
+        """
+        question_text = self.data_processor.map_qkey_to_question(key)
+        if key in corr_chart_allowed:
+            return f"★ {question_text}"
+        return question_text
+
+    def get_question_key(self, display_text):
+        """
+        Get the internal key for a question from its display text.
+        Handles both decorated (★) and plain text.
+
+        Args:
+            display_text: Question text as shown in dropdown (may have ★)
+
+        Returns:
+            Internal question key (e.g., 'careerLevel')
+        """
+        return self.question_to_key.get(display_text)
+
+    def is_correlation_compatible(self, display_text):
+        """
+        Check if a question is correlation-compatible.
+
+        Args:
+            display_text: Question text as shown in dropdown (may have ★)
+
+        Returns:
+            True if the question can be used in correlation plots
+        """
+        key = self.get_question_key(display_text)
+        return key in corr_chart_allowed if key else False
 
     def create_global_filters(self):
         """Create global filter widgets."""
@@ -59,15 +114,23 @@ class WidgetFactory:
 
     def create_question_selectors(self):
         """Create question selector widgets for exploration charts."""
+        # Get default question keys
+        default_key1 = DEFAULT_QUESTIONS["exploration"]["bar1"]
+        default_key2 = DEFAULT_QUESTIONS["exploration"]["bar2"]
+
+        # Find the display text (with ★ if applicable) that matches the default key
+        default_value1 = self._get_display_text_for_key(default_key1)
+        default_value2 = self._get_display_text_for_key(default_key2)
+
         question_select = pn.widgets.Select(
             name=md_text_select_widgets[0][LANGUAGE],
-            value=self.data_processor.map_qkey_to_question(DEFAULT_QUESTIONS["exploration"]["bar1"]),
+            value=default_value1,
             options=self.questions
         )
 
         question_select2 = pn.widgets.Select(
             name=md_text_select_widgets[1][LANGUAGE],
-            value=self.data_processor.map_qkey_to_question(DEFAULT_QUESTIONS["exploration"]["bar2"]),
+            value=default_value2,
             options=self.questions
         )
 

@@ -88,7 +88,8 @@ DEFAULT_QUESTIONS = {
 TOOLTIPS = [("Title", "@title"), ("Answer", "@x"), ("Number of Answers", "@y")]
 
 # Widget Configuration
-CHART_TYPES = ['Vertical Bar chart', 'Horizontal Bar chart', 'Pie chart']
+# Note: Pie chart removed due to data structure incompatibilities with multiple filters
+CHART_TYPES = ['Vertical Bar chart', 'Horizontal Bar chart']
 
 # Word Cloud Content Configuration
 WORDCLOUD_CONTENT = {

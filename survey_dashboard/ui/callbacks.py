@@ -19,15 +19,73 @@ from survey_dashboard.core.charts import ChartManager
 
 class CallbackManager:
     """Manages all callback functions for interactive updates."""
-    
-    def __init__(self, data_processor, chart_manager):
-        """Initialize callback manager with data processor and chart manager."""
+
+    def __init__(self, data_processor, chart_manager, widget_factory):
+        """
+        Initialize callback manager with data processor, chart manager, and widget factory.
+
+        Args:
+            data_processor: DataProcessor instance for data operations
+            chart_manager: ChartManager instance for chart creation
+            widget_factory: WidgetFactory instance for question key lookups (required for validation)
+        """
         self.data_processor = data_processor
         self.chart_manager = chart_manager
-    
+        self.widget_factory = widget_factory
+        self.correlation_row = None  # Will be set via set_correlation_row()
+
+    def set_correlation_row(self, correlation_row):
+        """
+        Store reference to correlation row for visibility toggling.
+
+        Args:
+            correlation_row: Panel Column containing the correlation section
+        """
+        self.correlation_row = correlation_row
+
+    def _check_both_questions_compatible(self, question1_text, question2_text):
+        """
+        Check if both questions are correlation-compatible.
+
+        Args:
+            question1_text: Display text from question selector 1 (may have ★)
+            question2_text: Display text from question selector 2 (may have ★)
+
+        Returns:
+            bool: True if both questions can be used in correlation plot
+
+        Raises:
+            RuntimeError: If widget_factory was not provided during initialization
+        """
+        from survey_dashboard.data.hcs_clean_dictionaries import corr_chart_allowed
+
+        # Fail fast if widget_factory wasn't provided (programming error)
+        if not self.widget_factory:
+            raise RuntimeError(
+                "CallbackManager requires widget_factory for question validation. "
+                "Pass widget_factory to CallbackManager.__init__()"
+            )
+
+        try:
+            # Get internal keys for both questions using the source of truth
+            key1 = self.widget_factory.get_question_key(question1_text)
+            key2 = self.widget_factory.get_question_key(question2_text)
+
+            # Check if both are in the allowed list
+            both_compatible = (key1 in corr_chart_allowed and key2 in corr_chart_allowed)
+
+            # Log validation result for debugging
+            print(f"Correlation compatibility check: '{key1}' + '{key2}' = {both_compatible}")
+
+            return both_compatible
+
+        except Exception as e:
+            # If we can't determine, hide correlation (safe default)
+            print(f"Error checking correlation compatibility: {e}")
+            return False
+
     def update_chart(self, target, event, question_sel, f_choice, m_choice, q_filter, charttype):
         """Update charts based on user selections."""
-        print(event)
         question = question_sel
         data_filters = f_choice.value
         data_filters_method = m_choice.value
@@ -37,20 +95,29 @@ class CallbackManager:
         target.object = fig
 
     def update_correlation_chart(self, target, event, question_sel, question_sel2, f_choice, m_choice):
-        """Update the correlation plot."""
-        print(event)
-        print("correlation_plot")
+        """Update the correlation plot and toggle visibility based on question compatibility."""
         question = question_sel.value
         question2 = question_sel2.value
-        data_filters = f_choice.value
-        data_filters_method = m_choice.value
-        
-        fig_corr = self.chart_manager.create_correlation_plot(question, question2, data_filters, data_filters_method)
-        target.object = fig_corr
+
+        # Check if both questions are correlation-compatible
+        both_compatible = self._check_both_questions_compatible(question, question2)
+
+        # Toggle visibility of correlation section
+        if self.correlation_row is not None:
+            self.correlation_row.visible = both_compatible
+
+        # Only update the plot if both questions are compatible (performance optimization)
+        if both_compatible:
+            data_filters = f_choice.value
+            data_filters_method = m_choice.value
+
+            fig_corr = self.chart_manager.create_correlation_plot(
+                question, question2, data_filters, data_filters_method
+            )
+            target.object = fig_corr
 
     def update_wordcloud(self, target, event, f_choice, m_choice, content):
         """Update word cloud visualizations."""
-        print(event)
         data_filters = f_choice.value
         data_filters_method = m_choice.value
 

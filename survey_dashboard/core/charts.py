@@ -175,10 +175,10 @@ class ChartManager:
         df, ydata_spec, display_options = self.data_processor.select_data(
             question, data_filters, data_filters_method
         )
-        
+
         y_keys = ydata_spec.data["y_keys"]
         fill_colors = ydata_spec.data["colors"]
-        
+
         if chart_type == "Vertical Bar chart":
             fig = bokeh_barchart(
                 df,
