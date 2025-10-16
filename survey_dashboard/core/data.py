@@ -85,7 +85,6 @@ class DataProcessor:
         clean_question = question.replace("★ ", "")
         key = HCS_QUESTIONS_REVERT[lang][clean_question]
         if key in HCS_MCList:
-            print(f"Multiple Choice,{key}")
             # for multiple choice this is a list of subquestions
             key_s = key + "/"
             for key in HCS_colnamesDict.keys():

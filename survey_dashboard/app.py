@@ -13,18 +13,14 @@ Simplified entry point for the HMC Survey Dashboard.
 This app.py orchestrates the creation of the dashboard using the new modular structure.
 """
 
-print("Initializing HMC Survey Dashboard...")
-
 # Import core components
 from survey_dashboard.core.data import DataProcessor
 from survey_dashboard.core.charts import ChartManager
 
-# Import UI components  
+# Import UI components
 from survey_dashboard.ui.widgets import WidgetFactory
 from survey_dashboard.ui.layout import LayoutManager
 from survey_dashboard.ui.callbacks import CallbackManager
-
-print("Loading configuration and data...")
 
 # Initialize core components
 data_processor = DataProcessor()
@@ -35,8 +31,6 @@ widget_factory = WidgetFactory(data_processor)
 layout_manager = LayoutManager()
 callback_manager = CallbackManager(data_processor, chart_manager, widget_factory)
 
-print("Creating widgets...")
-
 # Create all widgets
 widgets = widget_factory.create_all_widgets()
 control_groups = widget_factory.get_control_groups(widgets)
@@ -44,8 +38,6 @@ control_groups = widget_factory.get_control_groups(widgets)
 # Get initial filter values
 data_filters = widgets["global_filters"]["research_area"].value
 data_filters_method = widgets["global_filters"]["method"].value
-
-print("Creating visualizations...")
 
 # Create all visualizations using chart manager
 overview_charts = chart_manager.create_overview_charts(data_filters, data_filters_method)
@@ -62,8 +54,6 @@ correlation_chart = chart_manager.create_correlation_chart(
     data_filters_method
 )
 methods_tools_tabs, wordcloud_panes = chart_manager.create_wordcloud_tabs(data_filters, data_filters_method)
-
-print("Setting up callbacks...")
 
 # Create update callbacks
 callbacks = callback_manager.create_update_callbacks(widgets)
@@ -134,8 +124,6 @@ def bind_callbacks():
             "value"
         )
 
-print("Creating layout...")
-
 # Create complete layout
 layout = layout_manager.create_complete_layout(
     control_groups=control_groups,
@@ -149,13 +137,7 @@ layout = layout_manager.create_complete_layout(
 correlation_row = layout_manager.get_correlation_row()
 callback_manager.set_correlation_row(correlation_row)
 
-print("Setting up template...")
-
 # Setup template and make servable
 template = layout_manager.setup_template_variables(layout)
 bind_callbacks()
-
-print("Dashboard ready! Making servable...")
 template = layout_manager.make_servable()
-
-print("HMC Survey Dashboard initialized successfully!")

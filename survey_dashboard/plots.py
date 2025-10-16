@@ -184,7 +184,7 @@ def rek_set_attr(obj: object, key: str, val:object) -> None:
     """
     Recursively assigns to a given object and a key in dot notation a given value of any form
 
-    Example: 
+    Example:
     1.
     rek_set_attr(figure, title, 'my-title')
     figure.title= 'my-title'
@@ -192,6 +192,10 @@ def rek_set_attr(obj: object, key: str, val:object) -> None:
     rek_set_attr(figure, axis.xaxis.label.size, 10)
     figure.axis.xaxis.label.size = 10
     """
+    # Skip legend properties if the plot has no legend
+    if key.startswith('legend.') and hasattr(obj, 'legend') and not obj.legend:
+        return
+
     if not '.' in key:
         return setattr(obj, key, val)
     else:

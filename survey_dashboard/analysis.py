@@ -249,7 +249,7 @@ def prepare_data_research_field(
 
             # now fill research area specifics
             for area in research_areas:
-                area_counts = df[df[key2] == area][key]
+                area_counts = df[df[key2] == area][key].copy()
                 area_counts.replace(to_replace=True, value=xtick, inplace=True)
                 area_counts.replace(to_replace=False, value=None, inplace=True)
                 area_counts = area_counts.value_counts()

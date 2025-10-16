@@ -73,15 +73,10 @@ class CallbackManager:
 
             # Check if both are in the allowed list
             both_compatible = (key1 in corr_chart_allowed and key2 in corr_chart_allowed)
-
-            # Log validation result for debugging
-            print(f"Correlation compatibility check: '{key1}' + '{key2}' = {both_compatible}")
-
             return both_compatible
 
         except Exception as e:
             # If we can't determine, hide correlation (safe default)
-            print(f"Error checking correlation compatibility: {e}")
             return False
 
     def update_chart(self, target, event, question_sel, f_choice, m_choice, q_filter, charttype):
