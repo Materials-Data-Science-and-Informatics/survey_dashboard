@@ -156,7 +156,7 @@
       href="https://helmholtz-metadaten.de/favicon/favicon.ico"
     />
     <meta name="msapplication-config" content="/favicon/browserconfig.xml" />
-    
+
     <!-- Style added for title banner-->
     <style>
       .banner {
@@ -166,7 +166,7 @@
         background-repeat: no-repeat;
         align-items: flex-end !important;
       }
-      
+
       .d-flex {
         display: flex !important;
       }
@@ -200,7 +200,7 @@
       }
 
       .infobox2 {
-        
+
         border-style:solid;
         border-width: 2px;
         color: #000000;
@@ -212,7 +212,7 @@
       .highlight {
         color:#14c8ff;
       }
-    
+
     </style>
     <!---->
 
@@ -886,8 +886,9 @@
                     <span></span>
                     <span></span>
                   </button>
-                 
-                  To be included later
+
+
+                  <!-- To be included later
                   <div>
                     <ul class="flex">
                       <li class="ml-2">
@@ -907,14 +908,14 @@
                         </a>
                       </li>
                     </ul>
-                  </div>
-                  
+                  </div> -->
+
                 </div>
-                
-               
+
+
             </div>
 
-            <div
+            <!-- <div
               class="absolute hidden pr-6 mt-2 hmc-langswitch__container lg:pr-12 xl:block"
             >
               <div>
@@ -937,14 +938,14 @@
                   </li>
                 </ul>
               </div>
-            </div>
-          </div>  
+            </div> -->
+          </div>
 
 
         </div>
       </header>
-      
-      <main class="pb-20 bg-gray-100">   
+
+      <main class="pb-20 bg-gray-100">
 
         <!-- TITLE IMAGE: UGLY SOLUTION
         needs to be adjusted as soon as we have an image and URL for the preferred background image-->
@@ -954,20 +955,20 @@
             <span class="text-2xl sm:text-3xl font-display font-bold uppercase text-white" style="display: inline-block; align-self: flex-end;">
             {{ app_title }}
             </span>
-           
+
             <img src="./en_files/SurveyExplorerLogoInverted.png" style="margin-left:auto; height: 13rem">
-           
+
           </div>
         </div>
         <div class="pt-10 pb-20 lg:pt-20">
           <section>
             <div class="container mx-auto mb-24">
-              
+
               <p style="margin-left:36px; margin-bottom:2.5rem;">
                 Wer sind die Datenstakeholder in Helmholtz? Welche Tools nutzen sie? Welche Hindernisse liegen auf dem Weg zu besseren Metadaten?
                 Dies sind nur einige der Fragen, die wir mit unserem HMC Community Survey 2021 adressiert haben. Auf dieser Seite können Sie die Ergebnisse der Umfrage interaktiv erforschen und einen tieferen Einblick in die Daten erlangen.
               </p>
-              
+
               <p style="margin-left: 36px; margin-bottom:12px; margin-top: 2.5rem;">
                 Filtern Sie die angezeigten Daten unter <b>Globale Datafilter</b> und erforschen Sie
                 <ul style="margin-left: 72px;font-size: 17px; list-style-type: disc;">
@@ -1008,25 +1009,25 @@
               </div>
               <div class="flex flex-wrap">
                 <div class="infobox2" style="min-width: 1200px; margin-top: 5rem; margin-left: 24px; border-color: #002864;">
-                 
+
                   <p style="margin-bottom: 0px">
                     <b style="color: #002864;">DISCLAIMER</b><br>Die angezeigten Daten sind mit Sorgfalt zu betrachten. Einige Antworten könnten losgelöst vom Kontext
-                    Verzerrungen ausgesetzt sein. Einige Fragen wurden abhängig vom Forschungsbereich der Befragten gestellt. 
+                    Verzerrungen ausgesetzt sein. Einige Fragen wurden abhängig vom Forschungsbereich der Befragten gestellt.
                     <a href="https://doi.org/10.3289/HMC_publ_05" target="_blank">Für nähere Informationen beachten Sie bitte unsere
                     Umfragepublikation.</a>
                     </p>
-                  
+
                 </div>
-                
+
               </div>
-              
+
             </div>
           </section>
 
           <section>
             <div class="container mx-auto mb-12">
                 {% block contents %}
-                <div class="flex flex-col w-full lg:space-x-4 lg:flex-row"> 
+                <div class="flex flex-col w-full lg:space-x-4 lg:flex-row">
                 <br>
                 {% for doc in docs %}
                 {{ embed(doc) if doc.elementid }}
@@ -1152,7 +1153,7 @@
                     target="_blank"
                   >
                     <img src="./en_files/github-mark-white.png" width="24px" height="24px">
-                    
+
                   </a>
                 </li>
               </ul>
@@ -1978,5 +1979,5 @@
       })();
     </script>
     <!-- End Matomo Code -->
-  
+
   {% endblock %}
