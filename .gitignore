@@ -107,7 +107,8 @@ celerybeat.pid
 
 # Environments
 .env
-.env
+.env.local.example
+.env.local
 .venv
 env/
 venv/
@@ -117,6 +118,8 @@ venv.bak/
 
 # Deployment files (may contain sensitive server info)
 DEPLOYMENT.md
+LOCAL_TESTING.md
+test-local.sh
 
 # Spyder project settings
 .spyderproject
