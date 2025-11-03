@@ -39,5 +39,6 @@ USER appuser
 # Expose the application port
 EXPOSE 5006
 
-# Run the application in production mode using the updated script
-CMD ["survey-dashboard", "--production", "--host", "0.0.0.0", "--port", "5006"]
+# Run the application in production mode
+# Use python -m to run the module directly since we installed with --no-root
+CMD ["python", "-m", "survey_dashboard.scripts", "--production", "--host", "0.0.0.0", "--port", "5006"]
