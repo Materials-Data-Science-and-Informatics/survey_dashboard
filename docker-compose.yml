@@ -1,0 +1,61 @@
+# Docker Compose configuration for Survey Dashboard
+# Orchestrates nginx reverse proxy and Panel application containers
+
+version: '3.8'
+
+services:
+  # Panel application container
+  dashboard:
+    build: .
+    # Builds from Dockerfile in current directory
+    # Uses multi-stage build to create optimized production image
+
+    expose:
+      - "5006"
+    # Exposes port 5006 to other containers (not to host machine)
+    # Only accessible within Docker network - nginx can reach it
+
+    restart: unless-stopped
+    # Automatically restart if container crashes
+    # Persists across system reboots unless manually stopped
+
+    environment:
+      - PYTHONUNBUFFERED=1
+      # Ensures Python output is sent directly to logs (not buffered)
+      # Makes 'docker-compose logs' show real-time output
+
+    # Uncomment to mount local code for development
+    # volumes:
+    #   - ./survey_dashboard:/app/survey_dashboard
+
+  # Nginx reverse proxy container
+  nginx:
+    image: nginx:latest
+    # Uses official nginx image from Docker Hub
+    # No custom build needed - just mount our config
+
+    ports:
+      - "80:80"
+      # Maps host port 80 to container port 80
+      # This is the ONLY port exposed to the internet
+      # Users access dashboard via http://yourdomain.com (port 80)
+
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      # Mounts our nginx config into the container
+      # :ro = read-only (nginx cannot modify our files)
+      # Changes to config files are reflected immediately
+
+    depends_on:
+      - dashboard
+      # Ensures dashboard container starts before nginx
+      # Nginx needs dashboard to be available for proxying
+
+    restart: unless-stopped
+    # Same restart policy as dashboard
+
+networks:
+  default:
+    # Docker Compose automatically creates a default network
+    # Both containers join this network and can communicate
+    # Service names (dashboard, nginx) work as DNS hostnames

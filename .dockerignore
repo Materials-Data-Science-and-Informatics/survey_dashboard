@@ -1,0 +1,82 @@
+# .dockerignore - Excludes files from Docker build context
+# Reduces build time, image size, and prevents leaking sensitive data
+
+# Version control
+.git/
+.gitignore
+.github/
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+.poetry/
+
+# Environment variables (SECURITY: never include secrets in images)
+.env
+.env.*
+
+# Documentation
+# Keep README.md for Poetry package installation
+# *.md  # Commented out to allow README.md
+docs/
+LICENSE
+
+# Development and testing
+.pre-commit-config.yaml
+.ropeproject/
+tests/
+test_*.py
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Docker files (don't need these inside the image)
+Dockerfile
+Dockerfile.*
+docker-compose.yml
+docker-compose.*.yml
+.dockerignore
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+*.egg
+.eggs/
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+tmp/
+temp/
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
