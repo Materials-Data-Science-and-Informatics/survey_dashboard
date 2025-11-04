@@ -29,6 +29,7 @@ from survey_dashboard.i18n.text_display import (
     md_text_barchart,
     md_text_corrchart,
     md_text_title,
+    md_dashboard_title,
     accordion_titles,
     md_text_descriptions_icons
 )
@@ -214,6 +215,7 @@ class LayoutManager:
         """Setup template with layout and variables."""
         self.template.add_panel("App", layout)
         self.template.add_variable("app_title", md_text_title[LANGUAGE])
+        self.template.add_variable("dashboard_title", md_dashboard_title[LANGUAGE])
         self.template.add_variable("image_url", "./en_files/Banner.png")
 
         return self.template

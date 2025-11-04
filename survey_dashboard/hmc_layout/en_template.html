@@ -165,7 +165,7 @@
         background-size: cover;
         height: 320px;
         background-repeat: no-repeat;
-        align-items: flex-end !important;
+        /*align-items: flex-end !important;*/
       }
 
       .d-flex {
@@ -947,11 +947,17 @@
 
       <main class="pb-20 bg-gray-100">
 
-        <div class="banner flex-row d-flex" style="background-image: url(./en_files/Banner2.png);">
-          <div class="container mx-auto mb-12" style="display: flex;padding-left: 72px;">
-            <span class="text-2xl sm:text-3xl font-display font-bold uppercase text-white" style="display: inline-block; align-self: flex-end;">
-            {{ app_title }}
-            </span>
+        <div class="banner" style="background-image: url(./en_files/Banner2.png);">
+          <div class="container mx-auto" style="display:flex;flex-direction:row;padding-top: 72px;">
+            <div class="flex flex-col" style="justify-content: center;">
+              <div class="text-2xl sm:text-3xl font-display font-bold text-white" style="display: inline-block; align-self: flex-start; ">
+              {{ app_title }}
+              </div>
+              <div class="text-2xl sm:text-3xl font-display font-bold text-white" style="display: inline-block; align-self: flex-start;">
+              {{ dashboard_title }}
+              </div>
+            </div>
+
 
             <img src="./en_files/SurveyExplorerLogoInverted.png" style="margin-left:auto; height: 13rem">
 

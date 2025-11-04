@@ -12,11 +12,13 @@
 This is the central place for all text from the dashboard which needs to be translated
 """
 
-md_text_title = {'EN': 'HMC Survey Data Explorer', 'DE': 'HMC Survey Data Explorer'}
+md_text_title = {'EN': 'Survey Data Explorer: ', 'DE': 'HMC Survey Data Explorer'}
+
+md_dashboard_title = {'EN': 'HMC Community Survey 2021', 'DE': 'HMC Community Survey 2021'}
 
 # Description
 md_text_description = {'EN': ("Explorer interactively the HMC 2021 Survey results. "
-    "The overview sections displays some main results, while you can apply some global filters to these. " 
+    "The overview sections displays some main results, while you can apply some global filters to these. "
     "Find out what methods, tools, software and standards are applied by others in your research area. "
     "The question explorer allows for in detail analysis of a specific question and simple correlations of two questions. "
     "Interact with the visualizations and widgets on the left to explorer the data.\n"
@@ -39,7 +41,7 @@ md_text_descriptions_icons = {
 }
 
 
-## Global data filters\n 
+## Global data filters\n
 md_text_global_filter = {'EN': ("Apply filters to displayed data according to research areas and data generation method"),
                          'DE': ("Wende Filter auf die Resultate an um nur Daten bestimmter "
                          "Forschungsfelder und Erzeugungsmethode dazustellen.")}
@@ -52,10 +54,10 @@ md_text_overview = {'EN': "Birds eye view of survey results related to research 
                     'DE': "Übersicht mit hervorgehobene Fragen zum Forschungsdatenmanagement"}
 
 
-# Tools and Methods\n 
+# Tools and Methods\n
 
-md_text_tools_tabs = {'methods': {'EN': 'Data generation methods', 'DE': 'Datengenerierungsmethoden'}, 
-                      'software': {'EN': 'Main software in use', 'DE': 'Haupt Software in Benutzung'}, 
+md_text_tools_tabs = {'methods': {'EN': 'Data generation methods', 'DE': 'Datengenerierungsmethoden'},
+                      'software': {'EN': 'Main software in use', 'DE': 'Haupt Software in Benutzung'},
                       'repositories': {'EN': 'Repositories data published in', 'DE': 'Repositorien mit Datenpublikationen'}}
 
 md_text_tools_used = {'EN': ("Discover the scientific methods, used software and repositories of our communities."),
