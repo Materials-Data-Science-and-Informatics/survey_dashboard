@@ -62,6 +62,7 @@ def run_app():
         "--port", args.port,
         "--address", args.host if args.production else "localhost",
         "--static-dirs", f"en_files={static_dir}",
+        "--index", "app",  # Serve app.py at the root of prefix instead of /app
     ]
 
     # Production-specific settings
@@ -78,11 +79,12 @@ def run_app():
 
     # Add URL prefix if VIRTUAL_PATH is set (for serving from subpath)
     # This tells Panel to prepend the path to all generated URLs (static files, WebSockets, etc.)
+    # With --index flag, the app is served at the root of the prefix (not /app)
     if virtual_path:
         cmd.extend(["--prefix", virtual_path])
         print(f"Using URL prefix: {virtual_path}")
         if args.production:
-            print(f"Dashboard will be accessible at: http://{args.host}:{args.port}{virtual_path}")
+            print(f"Dashboard will be accessible at: http://{args.host}:{args.port}{virtual_path}/")
 
     print(f"Running: {' '.join(cmd)}")
 
