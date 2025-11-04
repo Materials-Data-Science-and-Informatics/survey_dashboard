@@ -1,93 +1,229 @@
 # Survey Dashboard
 
-A dashboard to display survey data in an interactive way.
+A dashboard to display survey data in an interactive way using Panel and Bokeh.
 
 ## Overview
 
-This repository contains a dashboard using Panel and Bokeh, developed to display data from
-HMC surveys in an interactive exploratory way. It is designed such that the code for the interactive
-visualizations might be reused for other projects.
-Example of a deployed version can be found [here](https://dashboard.survey.helmholtz-metadaten.de/survey_dashboard)
+This repository contains an interactive dashboard developed to display data from HMC surveys in an exploratory way. The dashboard is designed to be reusable for other survey visualization projects.
 
-Some impressions:
+**Live Demo:** [https://dashboard.survey.helmholtz-metadaten.de/2021community](https://dashboard.survey.helmholtz-metadaten.de/2021community)
+
+### Screenshots
+
 ![dashboard_overview](https://user-images.githubusercontent.com/24694833/230306080-9ca68ff8-5b8b-4ac4-b2fa-51e2c5361c7d.png)
 ![dashboard_methods](https://user-images.githubusercontent.com/24694833/230306091-637188a9-359e-4ea0-8432-4d05a1ccc68f.png)
 ![Dashboard_survey_data_explorer](https://user-images.githubusercontent.com/24694833/230306099-4cf71bda-0990-4f9d-be14-9a65812e7ac4.png)
 
+## Features
+
+- **Interactive Visualizations**: Explore survey data through dynamic charts and plots
+- **Multiple Languages**: Support for English and German (configurable via environment variables)
+- **Dockerized Deployment**: Production-ready Docker setup with HTTPS support
+- **Responsive Design**: Works across different screen sizes
+- **Self-hosted Fonts**: Uses HIFIS DIN fonts for consistent branding
+
 ## Installation
 
 ### Prerequisites
+
 - Python 3.12 or higher
-- Poetry (recommended) or pip
+- Poetry (recommended for development)
+- Docker & Docker Compose (for production deployment)
 
-### Using Poetry (Recommended)
+### Local Development Setup
 
-After downloading the git repository, install the dependencies using Poetry:
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Materials-Data-Science-and-Informatics/survey_dashboard.git
+   cd survey_dashboard
+   ```
 
-```shell
-poetry install
-```
+2. **Install dependencies using Poetry:**
+   ```bash
+   poetry install
+   ```
 
-### Using pip
+3. **Run the development server:**
+   ```bash
+   poetry run survey-dashboard
+   ```
 
-Alternatively, you can install directly from the repository:
+   The dashboard will be available at `http://localhost:5006/2021community/`
 
-```shell
+### Alternative: Using pip
+
+```bash
 pip install .
+python -m survey_dashboard.scripts
 ```
 
 ## Usage
 
 ### Development Mode
 
-For development, you can run the app directly using Panel serve:
+The easiest way to run the dashboard in development mode:
 
-```shell
-# Using Poetry
+```bash
 poetry run survey-dashboard
-
-# Using Python directly
-panel serve app.py --port 5006 --show --autoreload
 ```
 
-The `--autoreload` flag enables automatic reloading when you make changes to the code, which is useful during development.
+This starts the server with:
+- Auto-reload on code changes
+- Browser opens automatically
+- Development-friendly error messages
 
 ### Manual Panel Serve
 
-If you need more control over the server configuration:
+For more control over server configuration:
 
-```shell
-panel serve app.py --port 5006 --static-dirs en_files=./survey_dashboard/hmc_layout/static/en_files --show
+```bash
+panel serve survey_dashboard/app.py \
+  --port 5006 \
+  --static-dirs en_files=./survey_dashboard/hmc_layout/static/en_files \
+  --prefix /2021community \
+  --show
 ```
 
-### Access the Dashboard
+### Environment Variables
 
-* Navigate to `http://localhost:5006/` in your browser after starting the server.
+- `VIRTUAL_PATH` - URL path prefix (default: `/2021community`)
+- `LANGUAGE` - Dashboard language: `EN` or `DE` (default: `EN`)
 
-## Deployment
+## Production Deployment
 
-To embed the dashboard into any website, first you have to host a bokeh server with this application somewhere and then you can embed it with bokehs `sever_document` function [see](https://docs.bokeh.org/en/latest/docs/user_guide/embed.html#app-documents)
+This project includes Docker support for production deployment with automatic HTTPS using Let's Encrypt.
 
-Do steps under `usage` above, but for a public exposed URL, or what ever is used for deployment.
-The Language verison of the dashboard can be set with the environment variable: 'L
+### Docker Deployment
 
+1. **Configure environment variables:**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your domain and settings
+   ```
 
-Add the code from 'script' to you website:
+2. **Build and start containers:**
+   ```bash
+   docker compose up -d --build
+   ```
 
-```python
-from bokeh.embed import server_document
-script = server_document("url_to_running_server")
-script
+3. **Access your dashboard:**
+   ```
+   https://your-domain.com/2021community/
+   ```
+
+### Deployment Architecture
+
+The deployment uses:
+- **nginx-proxy**: Automatic reverse proxy with virtual host routing
+- **acme-companion**: Automatic Let's Encrypt SSL certificate management
+- **Dashboard container**: Panel/Bokeh application server
+
+See `docker-compose.yml` and `Dockerfile` for detailed configuration.
+
+## Project Structure
+
+```
+survey_dashboard/
+├── survey_dashboard/          # Main application code
+│   ├── app.py                # Main Panel application
+│   ├── scripts.py            # CLI entry point
+│   ├── data/                 # Data processing modules
+│   ├── ui/                   # UI components and layout
+│   ├── i18n/                 # Internationalization
+│   └── hmc_layout/           # Templates and static assets
+│       ├── en_template.html  # English template
+│       ├── de_template.html  # German template
+│       └── static/           # CSS, JS, images
+├── docs/                     # Documentation
+│   └── refactoring/          # Architectural documentation
+├── docker-compose.yml        # Docker orchestration
+├── Dockerfile               # Container build instructions
+├── .env.example             # Environment template
+└── pyproject.toml           # Python dependencies
 ```
 
-## Copyright and Licence
+## Development
 
-See [LICENSE](./LICENSE).
+### Running Tests
 
-### Main used libraries and dependencies
+```bash
+poetry run pytest
+```
 
-The following libraries are used directly (i.e. not only transitively) in this project:
+### Code Style
 
+This project uses:
+- Black for code formatting
+- Flake8 for linting
+- MyPy for type checking
+
+### Making Changes
+
+1. Create a feature branch
+2. Make your changes
+3. Test locally with `poetry run survey-dashboard`
+4. Test with Docker if deployment-related
+5. Submit a pull request
+
+## Documentation
+
+Detailed documentation can be found in the `docs/refactoring/` directory:
+- Architectural overview
+- Module structure
+- Development guide
+- Migration guide
+
+## Troubleshooting
+
+### Port Already in Use
+
+If port 5006 is already in use:
+```bash
+lsof -ti:5006 | xargs kill -9
+```
+
+### Docker Issues
+
+Check container logs:
+```bash
+docker compose logs -f dashboard
+```
+
+Rebuild without cache:
+```bash
+docker compose build --no-cache
+```
+
+### Font Loading Issues
+
+Clear browser cache (Ctrl+Shift+Del) or test in incognito mode.
+
+## Technology Stack
+
+### Core Framework
+- **Panel** (1.7.5) - High-level app and dashboarding solution
+- **Bokeh** (3.7.3) - Interactive visualization library
+- **Python** (3.12+) - Programming language
+
+### Data Processing
+- **Pandas** (2.3.2) - Data manipulation
+- **NumPy** (2.3.2) - Numerical computing
+
+### Visualization
+- **Matplotlib** (3.10.6) - Plotting library
+- **WordCloud** (1.9.4) - Word cloud generation
+
+### Web Server
+- **Tornado** (6.5.2) - Async web framework (used by Bokeh)
+
+### Deployment
+- **Docker** - Containerization
+- **nginx-proxy** - Automatic reverse proxy
+- **acme-companion** - Let's Encrypt automation
+
+## License
+
+See [LICENSE](./LICENSE) for details.
 
 ## Acknowledgements
 
@@ -98,7 +234,41 @@ The following libraries are used directly (i.e. not only transitively) in this p
 </div>
 <br />
 
-This project was developed at the Institute for Materials Data Science and Informatics
-(IAS-9) of the Jülich Research Center and funded by the Helmholtz Metadata Collaboration
-(HMC), an incubator-platform of the Helmholtz Association within the framework of the
-Information and Data Science strategic initiative.
+This project was developed at the **Institute for Materials Data Science and Informatics (IAS-9)** of the Forschungszentrum Jülich and funded by the **Helmholtz Metadata Collaboration (HMC)**, an incubator-platform of the Helmholtz Association within the framework of the Information and Data Science strategic initiative.
+
+## Citation
+
+If you use this dashboard in your research, please cite:
+
+```bibtex
+@software{survey_dashboard,
+  title = {Survey Dashboard},
+  author = {Bröder, Jens and Gerlich, Silke Christine and Hofmann, Volker},
+  year = {2024},
+  url = {https://github.com/Materials-Data-Science-and-Informatics/survey_dashboard},
+  organization = {Forschungszentrum Jülich GmbH}
+}
+```
+
+## Contributing
+
+Contributions are welcome! Please:
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Ensure all tests pass
+6. Submit a pull request
+
+For major changes, please open an issue first to discuss what you would like to change.
+
+## Support
+
+For questions or issues:
+- **GitHub Issues**: [Report a bug or request a feature](https://github.com/Materials-Data-Science-and-Informatics/survey_dashboard/issues)
+- **Email**: Contact the maintainers (see repository contributors)
+
+---
+
+**Last Updated:** November 2024
