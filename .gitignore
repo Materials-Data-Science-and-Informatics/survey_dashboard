@@ -1,6 +1,6 @@
 # custom
 *.csv
-survey_dashboard/hmc_layout/static/en_files/fonts/
+#survey_dashboard/hmc_layout/static/en_files/fonts/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -117,8 +117,6 @@ venv.bak/
 
 # Deployment files (may contain sensitive server info)
 DEPLOYMENT.md
-LOCAL_TESTING.md
-test-local.sh
 
 # Spyder project settings
 .spyderproject
