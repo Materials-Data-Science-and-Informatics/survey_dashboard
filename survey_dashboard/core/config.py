@@ -36,7 +36,7 @@ SIZING_MODE = "stretch_width"
 def get_data_path():
     """Get the path to the data file relative to this module"""
     this_folder = Path(__file__).parent.parent
-    return this_folder / "data" / "responses_cleaned_mapped_to_publish.csv"
+    return this_folder / "data" / "hmc_survey_2021_data.csv"
 
 DATAFILE_PATH = str(get_data_path())
 

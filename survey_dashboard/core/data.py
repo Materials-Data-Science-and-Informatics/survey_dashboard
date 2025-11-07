@@ -50,7 +50,8 @@ class DataProcessor:
     
     def __init__(self):
         """Initialize the data processor with survey data."""
-        self.survey_data = pd.read_csv(DATAFILE_PATH)
+        # Read CSV, skipping comment lines that start with #
+        self.survey_data = pd.read_csv(DATAFILE_PATH, comment='#')
         # Rename columns to human readable names
         self.survey_data.rename(columns=HCS_colnamesDict, inplace=True)
         

@@ -1,5 +1,5 @@
 # custom
-*.csv
+responses_cleaned_mapped_to_publish.csv
 #survey_dashboard/hmc_layout/static/en_files/fonts/
 
 # Byte-compiled / optimized / DLL files
