@@ -6,7 +6,7 @@ authors = [{name = "Jens Broeder", email = "j.broeder@fz-juelich.de"},
 {name = "Silke Christine Gerlich", email = "s.gerlich@fz-juelich.de"},
 {name = "Volker Hofmann", email = "v.hofmann@fz-juelich.de"}]
 readme = "README.md"
-license = {file = "LICENSE.txt"}
+license = {file = "LICENSE"}
 classifiers = [
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Information Technology",
@@ -31,6 +31,8 @@ classifiers = [
 keywords = ["dashboard", "data visualization", "survey data", "categorical data", 
 "interactive visualization", "bokeh", "panel"]
 
+[project.scripts]
+survey-dashboard = "survey_dashboard.scripts:run_app"
 
 [tool.poetry]
 name = "survey-dashboard"
@@ -67,17 +69,20 @@ keywords = ["dashboard", "data visualization", "survey data", "categorical data"
 
 
 [tool.poetry.dependencies]
-python = "^3.8"
-pandas = "^1.4.1"
-bokeh = "^2.4.3"
-wordcloud = "^1.8.2.2"
-panel = "^0.13.1"
+python = "^3.12.3"
+panel = "^1.7.5"
+watchfiles = "^1.1.0"
+pandas = "^2.3.2"
+wordcloud = "^1.9.4"
+bokeh = "^3.7.3"
+matplotlib = "^3.10.6"
 
-[tool.poetry.dev-dependencies]
-pre-commit = "^2.17.0"
-pytest = "^7.0.1"
-pytest-cov = "^3.0.0"
-pdoc = "^10.0.3"
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^4.3.0"
+pytest = "^8.4.1"
+pytest-cov = "^6.2.1"
+pdoc = "^15.0.4"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

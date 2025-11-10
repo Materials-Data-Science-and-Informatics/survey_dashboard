@@ -1,0 +1,146 @@
+# Docker Compose configuration for Survey Dashboard
+# Orchestrates nginx reverse proxy and Panel application containers
+
+version: '3.8'
+
+services:
+  # Panel application container
+  dashboard:
+    build: .
+    # Builds from Dockerfile in current directory
+    # Uses multi-stage build to create optimized production image
+
+    expose:
+      - "5006"
+    # Exposes port 5006 to other containers (not to host machine)
+    # Only accessible within Docker network - nginx can reach it
+
+    restart: unless-stopped
+    # Automatically restart if container crashes
+    # Persists across system reboots unless manually stopped
+
+    environment:
+      - PYTHONUNBUFFERED=1
+      # Ensures Python output is sent directly to logs (not buffered)
+      # Makes 'docker-compose logs' show real-time output
+      - VIRTUAL_HOST=${HOST}
+      # Tells nginx-proxy which domain should route to this container
+      # nginx-proxy watches Docker and auto-configures when it sees this variable
+      - VIRTUAL_PATH=${VIRTUAL_PATH}
+      # Restricts access to only this specific path on the domain
+      # Example: VIRTUAL_PATH=/survey-dashboard means only /survey-dashboard/* is accessible
+      # All other paths on this domain return 404
+      - VIRTUAL_PROTO=http
+      # Protocol nginx-proxy uses to communicate with this container
+      # Uses HTTP inside Docker network (fast, safe), HTTPS for external traffic
+      - LETSENCRYPT_HOST=${HOST}
+      # Tells acme-companion to get SSL certificate for this domain
+      # acme-companion watches Docker and auto-requests certificates when it sees this
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
+      # Email for Let's Encrypt certificate notifications
+      # Used for expiry warnings and security notices about your certificates
+
+    # Uncomment to mount local code for development
+    # volumes:
+    #   - ./survey_dashboard:/app/survey_dashboard
+
+  # Nginx reverse proxy container with auto-configuration
+  nginx-proxy:
+    container_name: nginx-proxy
+    image: nginxproxy/nginx-proxy:latest
+    # Auto-configuring reverse proxy that watches Docker containers
+    # Automatically generates nginx config based on container environment variables
+
+    ports:
+      - "80:80"
+      # HTTP port - used for ACME challenges and auto-redirect to HTTPS
+      - "443:443"
+      # HTTPS port - secure encrypted connections
+
+    volumes:
+      # nginx-proxy auto-generates configuration based on container env vars
+      # Custom per-domain configs can be placed in ./nginx/vhost.d/
+      - ./nginx/certs:/etc/nginx/certs:ro
+      # SSL certificates storage (read-only for nginx-proxy)
+      # acme-companion writes certificates here, nginx-proxy reads them
+      - ./nginx/vhost.d:/etc/nginx/vhost.d
+      # Per-domain custom nginx configurations
+      # Files named after domains (e.g., survey.example.com) are included in that domain's config
+      - ./nginx/html:/usr/share/nginx/html
+      # Web root for serving ACME challenge files during Let's Encrypt verification
+      # acme-companion creates challenge files here, nginx-proxy serves them
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      # Docker socket for auto-discovery of containers
+      # nginx-proxy watches for containers with VIRTUAL_HOST env var
+      # Read-only for security (can observe but not control Docker)
+
+    depends_on:
+      - dashboard
+      # Ensures dashboard container starts before nginx-proxy
+      # nginx-proxy needs dashboard to be available for proxying
+
+    restart: unless-stopped
+    # Same restart policy as dashboard
+
+    labels:
+      - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=true"
+      # Identifies this container as the nginx instance for acme-companion to manage
+      # acme-companion will reload this container when SSL certificates are updated
+
+  # Let's Encrypt certificate management container
+  letsencrypt:
+    container_name: acme-companion
+    image: nginxproxy/acme-companion
+    # ACME protocol client for automatic Let's Encrypt certificate management
+    # Watches for containers with LETSENCRYPT_HOST environment variable
+
+    environment:
+      - NGINX_PROXY_CONTAINER=nginx-proxy
+      # Tells acme-companion which nginx container to reload when certificates update
+      # Must match the container_name of nginx-proxy service
+      - DEFAULT_EMAIL=${LETSENCRYPT_EMAIL}
+      # Default email for Let's Encrypt certificate registration and notifications
+      # Individual containers can override with their own LETSENCRYPT_EMAIL
+      # Used for certificate expiry warnings and security notices
+
+    volumes:
+      - ./nginx/certs:/etc/nginx/certs:rw
+      # SSL certificates storage (read-write for acme-companion)
+      # acme-companion writes new certificates here, nginx-proxy reads them
+      # Note: :rw (not :ro like nginx-proxy) because acme-companion must write certs
+      - ./nginx/vhost.d:/etc/nginx/vhost.d
+      # Per-domain custom nginx configurations
+      # acme-companion may add temporary configs for ACME challenge handling
+      - ./nginx/html:/usr/share/nginx/html
+      # Web root for ACME challenge files
+      # acme-companion creates challenge files here, nginx-proxy serves them to Let's Encrypt
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # Docker socket for container discovery and nginx reload
+      # Watches for containers with LETSENCRYPT_HOST environment variable
+      # Sends reload signal to nginx-proxy when certificates update
+      - acme-data:/etc/acme.sh
+      # Named volume for Let's Encrypt account data (NOT a directory)
+      # Stores account credentials, must persist across container restarts
+      # Losing this data means re-registering with Let's Encrypt
+
+    depends_on:
+      - nginx-proxy
+      # Ensures nginx-proxy starts before acme-companion
+      # acme-companion needs nginx-proxy to be running to reload it when certificates update
+
+    restart: unless-stopped
+    # Automatically restart if container crashes
+    # Persists across system reboots unless manually stopped
+    # Critical for certificate renewal - must stay running to renew certs every 90 days
+
+networks:
+  default:
+    # Docker Compose automatically creates a default network
+    # Both containers join this network and can communicate
+    # Service names (dashboard, nginx) work as DNS hostnames
+
+volumes:
+  acme-data:
+    # Named volume for Let's Encrypt account credentials
+    # Docker manages this volume's lifecycle (persists across container removals)
+    # Only destroyed if explicitly deleted with: docker volume rm survey-dashboard_acme-data
