@@ -14,7 +14,6 @@ Command line scripts for the survey dashboard.
 """
 
 import argparse
-import os
 import subprocess
 import sys
 from pathlib import Path
@@ -44,10 +43,6 @@ def run_app():
     )
     args = parser.parse_args()
 
-    # Read URL prefix from environment (set by Docker Compose VIRTUAL_PATH)
-    # This is needed when the dashboard is served from a subpath (e.g., /2021community)
-    virtual_path = os.environ.get("VIRTUAL_PATH", "").strip()
-
     # Get the directory containing app.py (same directory as scripts.py)
     script_dir = Path(__file__).parent
     app_path = script_dir / "app.py"
@@ -76,15 +71,6 @@ def run_app():
         # Development mode - open browser automatically
         cmd.append("--show")
         print("Starting HMC Survey Dashboard in DEVELOPMENT mode...")
-
-    # Add URL prefix if VIRTUAL_PATH is set (for serving from subpath)
-    # This tells Panel to prepend the path to all generated URLs (static files, WebSockets, etc.)
-    # With --index flag, the app is served at the root of the prefix (not /app)
-    if virtual_path:
-        cmd.extend(["--prefix", virtual_path])
-        print(f"Using URL prefix: {virtual_path}")
-        if args.production:
-            print(f"Dashboard will be accessible at: http://{args.host}:{args.port}{virtual_path}/")
 
     print(f"Running: {' '.join(cmd)}")
 
