@@ -1,4 +1,38 @@
 hmc_custom_css_accordion ='''
+/* Apply HIFIS DIN font to all panel components */
+.bk-root,
+.bk-panel-models-accordion,
+.bk-panel-models-card,
+.bk-panel-models-card-header,
+.bk-panel-models-card-button,
+.bk-panel-models-card-title,
+.bk-panel-models-card-content,
+.bk-panel-models-markup,
+.bk-panel-models-markup-html,
+.bk-panel-models-layout-Column,
+.bk-panel-models-layout-row,
+.bk-input,
+.bk-btn,
+.bk.card,
+.bk.accordion,
+.bk.card-header,
+.bk.accordion-header,
+.bk.card-button,
+.bk.card-title,
+select,
+option,
+input,
+textarea,
+.bk-input-group,
+.bk-input select,
+.bk-input option,
+.choices,
+.choices__inner,
+.choices__list,
+.choices__item {
+  font-family: 'HIFIS DIN', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+}
+
 .bk.card {
   border: 1px solid rgba(0,0,0,.125);
   border-radius: 0.25rem;
