@@ -1,8 +1,8 @@
 [project]
 name = "survey-dashboard"
-version = "0.1.0"
+version = "2.0.0"
 description = "A Dashboard displaying survey data in an interactive way and allow for interactive exploration."
-authors = [{name = "Jens Broeder", email = "j.broeder@fz-juelich.de"}, 
+authors = [{name = "Jens Broeder", email = "j.broeder@fz-juelich.de"},
 {name = "Silke Christine Gerlich", email = "s.gerlich@fz-juelich.de"},
 {name = "Volker Hofmann", email = "v.hofmann@fz-juelich.de"}]
 readme = "README.md"
@@ -28,7 +28,7 @@ classifiers = [
         "Topic :: Scientific/Engineering :: Visualization",
 
 ]
-keywords = ["dashboard", "data visualization", "survey data", "categorical data", 
+keywords = ["dashboard", "data visualization", "survey data", "categorical data",
 "interactive visualization", "bokeh", "panel"]
 
 [project.scripts]
