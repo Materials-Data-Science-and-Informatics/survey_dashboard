@@ -4,13 +4,19 @@ An interactive dashboard for exploring survey data, built with Panel and Bokeh.
 
 **Live Demo:** [https://2021.dashboard.survey.helmholtz-metadaten.de/](https://2021.dashboard.survey.helmholtz-metadaten.de/)
 
+
+### Screenshots
+
+![dashboard_overview](https://user-images.githubusercontent.com/24694833/230306080-9ca68ff8-5b8b-4ac4-b2fa-51e2c5361c7d.png)
+![dashboard_methods](https://user-images.githubusercontent.com/24694833/230306091-637188a9-359e-4ea0-8432-4d05a1ccc68f.png)
+![Dashboard_survey_data_explorer](https://user-images.githubusercontent.com/24694833/230306099-4cf71bda-0990-4f9d-be14-9a65812e7ac4.png)
+
 ## Features
 
 - Interactive filtering and data exploration
 - Real-time chart updates with multiple visualization types
 - Correlation analysis between survey questions
 - Word cloud visualizations for methods and tools
-- Bilingual support (English/German)
 - Production-ready Docker deployment with HTTPS
 
 ## Quick Start
