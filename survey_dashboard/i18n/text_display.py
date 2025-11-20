@@ -12,7 +12,7 @@
 This is the central place for all text from the dashboard which needs to be translated
 """
 
-md_text_title = {'EN': 'Survey Data Explorer: ', 'DE': 'HMC Survey Data Explorer'}
+md_text_title = {'EN': 'Community Survey Explorer', 'DE': 'HMC Survey Data Explorer'}
 
 md_dashboard_title = {'EN': 'HMC Community Survey 2021', 'DE': 'HMC Community Survey 2021'}
 

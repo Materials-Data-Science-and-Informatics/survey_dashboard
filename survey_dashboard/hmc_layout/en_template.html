@@ -1084,7 +1084,6 @@
           <section>
             <div class="container mx-auto mb-12">
                 {% block contents %}
-                <div class="flex flex-col w-full lg:space-x-4 lg:flex-row">
                 <br>
                 {% for doc in docs %}
                 {{ embed(doc) if doc.elementid }}
@@ -1134,16 +1133,11 @@
                 </script>
 
                 {{ plot_script | indent(8) }}
-                <div class="container mx-auto mb-24">
-                    <div class="row">
-                      <div class="col-sm">
-                        {{ embed(roots.App) }}
-                      </div>
-                    </div>
-                  </div>
+                <div class="w-full">
+                    {{ embed(roots.App) }}
+                </div>
                 {% endblock %}
             </div>
-          </div>
           </section>
         </div>
       </main>
