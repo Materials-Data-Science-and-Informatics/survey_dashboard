@@ -1083,9 +1083,8 @@
           </section>
 
           <section>
-            <div class="container mx-auto mb-12">
+            <div class="container mx-auto mb-12" style="margin-top: -3rem;">
                 {% block contents %}
-                <br>
                 {% for doc in docs %}
                 {{ embed(doc) if doc.elementid }}
                 {% for root in doc.roots %}
