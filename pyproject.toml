@@ -1,6 +1,6 @@
 [project]
 name = "survey-dashboard"
-version = "2.0.3"
+version = "2.0.4"
 description = "A Dashboard displaying survey data in an interactive way and allow for interactive exploration."
 authors = [{name = "Jens Broeder", email = "j.broeder@fz-juelich.de"},
 {name = "Silke Christine Gerlich", email = "s.gerlich@fz-juelich.de"},
